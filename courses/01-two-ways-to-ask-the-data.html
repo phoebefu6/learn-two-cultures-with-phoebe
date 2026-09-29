@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 1 of 6. Leo Breiman's 2001 paper, read from the page: the black box of nature, the data modelling culture that fills it with an equation, the algorithmic culture that leaves it shut and measures predictions, and why a consultant ended up in the 2 percent. Build-along on 569 real biopsies.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Two ways to ask the data - learn two cultures with phoebe">
+<meta property="og:description" content="Session 1 of 6. Same black box, two questions: what is inside it, or what comes out next? Breiman 2001 in his own words, then both cultures fitted on the same real biopsies.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/01-two-ways-to-ask-the-data.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Two ways to ask the data - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 1 of 6. Breiman's two cultures, read from the paper, fitted on real rows.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 1 · Two ways to ask the data - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 1 of 6</div>
+    <h1>Two ways to ask <span class="accent">the data</span></h1>
+    <p class="sub">In 2001 Leo Breiman, a Berkeley statistician who had spent thirteen years as a consultant, told his own profession that it had built almost everything on one habit: assume an equation generated the data, estimate its parameters, and read the answer off the equation. He called that the data modelling culture, guessed it held 98 percent of statisticians, and set beside it a second culture that leaves nature's box shut and judges a model only by how well it predicts rows it has never seen. Four eminent statisticians replied in the same issue, and one of them disagreed with the main thrust outright. Tonight we read the argument from the page, then fit both cultures on the same 569 real biopsies and see what each one lets you say.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders and practitioners</span>
+      <span class="chip audience">Python, scikit-learn</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · The black box and its two cultures</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: both cultures, same biopsies</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Every argument you have heard about "explainable versus accurate", "statistics versus machine learning" or "we need a model the regulator can read" is a descendant of one 33-page paper and its discussion. Six sessions read that argument and the work of three other authors who shaped the field, each at source, and test the claims on real rows instead of taking a side. Two colours run through every figure and every widget: <strong style="color:#7A5C00">ochre for the data modelling culture</strong>, <strong style="color:#6A5ACD">violet for the algorithmic culture</strong>.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Breiman's distinction stated in his own words, precisely enough to classify any model you meet; the three consulting lessons that turned a probabilist into a member of the 2 percent; the hepatitis example that shows why an unchecked model's "important variables" can be fiction; and a script that fits both cultures on the same real biopsies and prints the two numbers each culture is judged by.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Breiman's black box and the two cultures</span>
+      <h2>Nature's box, and two ways to fill it</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Breiman opens with a picture: a vector of inputs x goes into a black box, a response y comes out, and inside the box "nature functions to associate the predictor variables with the response variables". There are two goals, he says: prediction, and information about how nature makes the association. The cultures differ in what they put inside the box.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three boxes in a row, each with x entering on the right and y leaving on the left as in Breiman's figure. The first box is nature, shut. The second, ochre, is the data modelling culture: the box is filled with an equation such as linear regression, logistic regression or the Cox model, and validation is a yes or no from goodness-of-fit tests and residuals. Breiman's estimate: 98 percent of statisticians. The third, violet, is the algorithmic culture: the box stays unknown, an algorithm such as a decision tree or neural net is fitted to predict y, and validation is measured predictive accuracy. His estimate: 2 percent of statisticians, many in other fields.">
+        <defs>
+          <filter id="s1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <pattern id="s1aHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s1aH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s1aL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s1aS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s1aO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s1aP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s1aV { font: 800 20px Inter, sans-serif; fill: #4A3800; }
+          .s1aU { font: 800 20px Inter, sans-serif; fill: #3F3294; }
+          .s1aN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s1aH" x="30" y="26">ONE BLACK BOX, TWO CULTURES</text>
+        <text class="s1aS" x="250" y="26">drawn as Breiman draws it: y comes out on the left, x goes in on the right</text>
+
+        <g filter="url(#s1aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- nature -->
+          <rect x="70" y="70" width="150" height="90" rx="6" transform="rotate(-0.6 145 115)" fill="#ECE5D6" stroke-dasharray="7 5"/>
+          <path d="M256 115 L226 115" marker-end="url(#s1aAr)"/>
+          <path d="M64 115 L36 115" marker-end="url(#s1aAr)"/>
+          <!-- data modelling -->
+          <rect x="360" y="70" width="170" height="90" rx="6" transform="rotate(0.5 445 115)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <path d="M566 115 L536 115" marker-end="url(#s1aAr)"/>
+          <path d="M354 115 L326 115" marker-end="url(#s1aAr)"/>
+          <!-- algorithmic -->
+          <rect x="650" y="70" width="170" height="90" rx="6" transform="rotate(-0.4 735 115)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <path d="M856 115 L826 115" marker-end="url(#s1aAr)"/>
+          <path d="M644 115 L616 115" marker-end="url(#s1aAr)"/>
+          <!-- a gear doodle inside the algorithmic box -->
+          <circle cx="735" cy="100" r="11" stroke="#6A5ACD"/>
+          <path d="M735 84 L735 88 M735 112 L735 116 M719 100 L723 100 M747 100 L751 100" stroke="#6A5ACD"/>
+          <!-- validation stamps -->
+          <rect x="360" y="190" width="170" height="54" rx="8" transform="rotate(-1.2 445 217)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="650" y="190" width="170" height="54" rx="8" transform="rotate(1 735 217)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="70" y="190" width="150" height="54" rx="8" transform="rotate(0.8 145 217)" fill="#FFFFFF" stroke="#D6CDB8"/>
+        </g>
+
+        <text class="s1aL" x="24" y="110">y</text>
+        <text class="s1aL" x="262" y="110">x</text>
+        <text class="s1aL" x="314" y="110">y</text>
+        <text class="s1aL" x="572" y="110">x</text>
+        <text class="s1aL" x="604" y="110">y</text>
+        <text class="s1aL" x="862" y="110">x</text>
+        <text class="s1aH" x="145" y="112" text-anchor="middle">nature</text>
+        <text class="s1aS" x="145" y="130" text-anchor="middle">shut, and stays shut</text>
+        <text class="s1aO" x="445" y="102" text-anchor="middle">linear regression</text>
+        <text class="s1aO" x="445" y="120" text-anchor="middle">logistic regression</text>
+        <text class="s1aO" x="445" y="138" text-anchor="middle">Cox model</text>
+        <text class="s1aP" x="735" y="136" text-anchor="middle">unknown</text>
+        <text class="s1aS" x="735" y="152" text-anchor="middle">trees, neural nets</text>
+
+        <text class="s1aH" x="145" y="58" text-anchor="middle">WHAT IS REALLY THERE</text>
+        <text class="s1aO" x="445" y="58" text-anchor="middle">DATA MODELLING</text>
+        <text class="s1aP" x="735" y="58" text-anchor="middle">ALGORITHMIC</text>
+
+        <text class="s1aS" x="145" y="213" text-anchor="middle">nobody sees inside</text>
+        <text class="s1aS" x="145" y="229" text-anchor="middle">both cultures agree on that</text>
+        <text class="s1aO" x="445" y="212" text-anchor="middle">validation: yes or no</text>
+        <text class="s1aS" x="445" y="230" text-anchor="middle">goodness-of-fit, residuals</text>
+        <text class="s1aP" x="735" y="212" text-anchor="middle">validation: a number</text>
+        <text class="s1aS" x="735" y="230" text-anchor="middle">accuracy on unseen rows</text>
+
+        <text class="s1aV" x="445" y="290" text-anchor="middle">98%</text>
+        <text class="s1aS" x="445" y="308" text-anchor="middle">of all statisticians, his estimate</text>
+        <text class="s1aU" x="735" y="290" text-anchor="middle">2%</text>
+        <text class="s1aS" x="735" y="308" text-anchor="middle">of statisticians, many in other fields</text>
+
+        <text class="s1aN" x="30" y="344">The disagreement is not about the box, which nobody can open. It is about what counts as checking your guess.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bottom row is the whole argument: a yes or no from a fit test, or a measured score on rows the model never saw</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The two definitions, word for word<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The data modelling culture</strong> "starts with assuming a stochastic data model for the inside of the black box", for example that responses are generated by independent draws from <em>response = f(predictors, random noise, parameters)</em>. The parameters are estimated from the data and the model is then used for information, prediction or both. Validation is "yes-no using goodness-of-fit tests and residual examination".</p>
+        <p><strong>The algorithmic modelling culture</strong> "considers the inside of the box complex and unknown". Its approach is to find a function f(x), "an algorithm that operates on x to predict the responses y". Validation is "measured by predictive accuracy".</p>
+        <p>Notice what the distinction is <em>not</em>. It is not linear versus nonlinear, nor old versus new, nor statistics versus computer science. A logistic regression can be used in either culture: as a claim about how nature works, read off its coefficients, or as a predictor whose only credential is its score on held-out rows. Breiman's own test, from his reply to the discussants, is a single question: "are you modeling the inside of the box or not?"</p>
+        <p>The 98 and 2 percent are Breiman's estimate, printed in the figure as "Estimated culture population". Brad Efron replied in the same issue that the prediction culture, "at least around Stanford, is a lot bigger than 2%". Keep the numbers as rhetoric, not as a census.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Which culture are Bayesians in?<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Breiman answered this one himself: "I would include Bayesians in the data modeling culture." A prior and a likelihood are still a claim about what is inside the box. The frequentist versus Bayesian argument is a different fault line that runs through the data modelling culture, not between the two cultures, and it has its own course: <a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/courses/a5-the-prior-argument.html">Bayesian, leader session 5 ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>"What's the model for the data?"</strong> In the late 1970s a prominent Berkeley statistician visited Breiman in Los Angeles. Breiman described the decision tree method he had been building for clients. His friend's first question was the one above. Breiman tells the story as his first tip about what university research was like, and when he returned to Berkeley in 1980 he found that virtually every article in the flagship journals began the same way: "Assume that the data are generated by the following model".</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the consulting projects and five perceptions</span>
+      <h2>How a probabilist ended up in the 2 percent</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Breiman spent seven years as an academic probabilist, resigned, and spent thirteen years as a free-lance consultant before joining Berkeley's statistics department. He says his views came from the problems clients paid him to solve. Two of them are in the paper in detail, and both are built around the same mechanism: set rows aside, and let them grade the model.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two consulting projects drawn as data splits. Top: the EPA ozone project, a rail of seven years of daily data with over 450 meteorological variables; the first five years train the predictor and the last two years are set aside as the test set. Bottom: the chlorine project, 30,000 compounds with known structure and mass spectra, split at random into 25,000 training and 5,000 test; a decision tree built from 1,500 designed yes or no questions reached 95 percent accuracy on both chlorines and nonchlorines.">
+        <defs>
+          <filter id="s1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1bHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s1bH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s1bL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s1bS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s1bB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s1bP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s1bV { font: 800 18px Inter, sans-serif; fill: #3F3294; }
+          .s1bN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s1bH" x="30" y="26">THE OZONE PROJECT, EPA, MID-1970S</text>
+        <text class="s1bS" x="300" y="26">predict tomorrow's ozone in the Los Angeles Basin from today's weather</text>
+
+        <g filter="url(#s1bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- seven years rail -->
+          <rect x="40" y="52" width="540" height="40" rx="4" transform="rotate(-0.3 310 72)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="580" y="52" width="216" height="40" rx="4" transform="rotate(0.4 688 72)" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M580 44 L580 100" stroke="#A8431F" stroke-width="3"/>
+          <!-- sun doodle -->
+          <circle cx="836" cy="72" r="12" stroke="#A8431F"/>
+          <path d="M836 52 L836 56 M836 88 L836 92 M816 72 L820 72 M852 72 L856 72" stroke="#A8431F"/>
+          <!-- chlorine: pile of 30,000 -->
+          <rect x="40" y="190" width="180" height="70" rx="6" transform="rotate(-0.8 130 225)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <path d="M226 212 C270 200 290 196 320 196" marker-end="url(#s1bAr)"/>
+          <path d="M226 240 C270 252 290 256 320 256" marker-end="url(#s1bAr)"/>
+          <rect x="328" y="176" width="150" height="40" rx="4" transform="rotate(0.6 403 196)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="328" y="236" width="150" height="40" rx="4" transform="rotate(-0.6 403 256)" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M484 196 L540 210" marker-end="url(#s1bAr)"/>
+          <!-- a small tree -->
+          <path d="M600 188 L570 222 M600 188 L630 222 M570 222 L556 250 M570 222 L584 250 M630 222 L644 250" stroke="#6A5ACD"/>
+          <circle cx="600" cy="188" r="6" fill="#6A5ACD" stroke="#6A5ACD"/>
+          <path d="M484 256 L680 256" stroke="#A8431F" marker-end="url(#s1bAr)"/>
+        </g>
+
+        <text class="s1bL" x="54" y="77">years 1 to 5: train</text>
+        <text class="s1bS" x="210" y="77">450+ weather variables, daily and hourly</text>
+        <text class="s1bB" x="594" y="77">years 6 and 7: test</text>
+        <text class="s1bS" x="40" y="116">The alert warnings would help more if issued 12 hours ahead; the test years say whether they can be.</text>
+
+        <text class="s1bH" x="30" y="160">THE CHLORINE PROJECT, EPA</text>
+        <text class="s1bS" x="230" y="160">does this compound contain chlorine? read it from its mass spectrum</text>
+        <text class="s1bL" x="54" y="220">30,000 compounds</text>
+        <text class="s1bS" x="54" y="238">known structure</text>
+        <text class="s1bS" x="54" y="252">and mass spectrum</text>
+        <text class="s1bP" x="342" y="200">25,000 train</text>
+        <text class="s1bB" x="342" y="260">5,000 test</text>
+        <text class="s1bS" x="660" y="196">a tree of 1,500 designed</text>
+        <text class="s1bS" x="660" y="212">yes or no questions</text>
+        <text class="s1bV" x="690" y="262">95%</text>
+        <text class="s1bS" x="742" y="262">on both classes</text>
+        <text class="s1bS" x="342" y="298">discriminant analysis was tried first; the variable length of a spectrum defeated it</text>
+
+        <text class="s1bN" x="30" y="322">Neither project asked what equation nature uses. Both asked one question: how often is it right on rows it never saw?</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta block in each project is the set-aside rows, and it is the only part that grades the model</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Five perceptions he took back to the university<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Breiman lists them as the views he held when he left consulting, and they are worth reading slowly because four of them are uncontroversial and one is the whole fight:</p>
+        <ol>
+          <li>(a) Focus on finding a good solution, "that's what consultants get paid for".</li>
+          <li>(b) "Live with the data before you plunge into modeling." Session 3 is about the man who made this a discipline.</li>
+          <li>(c) Search for a model that gives a good solution, "either algorithmic or data".</li>
+          <li>(d) "Predictive accuracy on test sets is the criterion for how good the model is."</li>
+          <li>(e) Computers are an indispensable partner.</li>
+        </ol>
+        <p>Item (c) is the one most people forget: he does not say "use algorithms". He says search both. Item (d) is the one the discussants fought about. D. R. Cox's reply accepts prediction as a test of a theory and then asks what happens when the prediction you need is "under quite different conditions from the data". Session 6 lets that argument run.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The court delay tree, and the judge who read it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>In the late 1970s Breiman studied the causes of delay in criminal trials for the Center for State Courts, using Colorado's computerised court data. The response was the time from arraignment to sentencing. He grew a large decision tree and explained it on an overhead projector to the assembled Colorado judges. One split was on District N, which had longer delays than the others. He said nothing about it. Walking out, he heard one judge say to another: "I knew those guys in District N were dragging their feet."</p>
+        <p>He uses the story to give single trees "an A+" on interpretability and "a B on prediction". Forests reverse the grades, which is the Occam dilemma of Part 3's self-study card.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers what goes wrong when the model becomes the fact</span>
+      <h2>The conclusions are about the model</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Breiman's sharpest sentence is a pair of truisms: "The conclusions are about the model's mechanism, and not about nature's mechanism", and so "if the model is a poor emulation of nature, the conclusions may be wrong." His worked example is a hepatitis dataset of 155 patients, where the measured accuracy of each culture decides whose list of "important variables" deserves any faith.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Error rates on Breiman's hepatitis example, 155 patients, 19 covariates, drawn as three bars. Calling every patient a survivor gives 20.6 percent error. Logistic regression gives 17.4 percent, only 3.2 points better than that baseline. A random forest gives 12.3 percent, almost a 30 percent reduction from the logistic error. Beside the bars: the logistic model's standardised coefficients pointed at variables 7 and 11, while the forest singled out 12 and 17, which turn out to be surrogates for each other.">
+        <defs>
+          <filter id="s1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <pattern id="s1cHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+        </defs>
+        <style>
+          .s1cH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s1cL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s1cS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s1cB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s1cO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s1cP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s1cN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s1cH" x="30" y="26">HEPATITIS, 155 PATIENTS, 19 COVARIATES</text>
+        <text class="s1cS" x="330" y="26">test-set error, 100 runs with a random 10 percent held out · shorter is better</text>
+
+        <g filter="url(#s1cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M250 50 L250 222" stroke="#D6CDB8"/>
+          <!-- bars: width = error x 22 -->
+          <rect x="250" y="62" width="453" height="34" rx="4" transform="rotate(-0.3 476 79)" fill="#FFFFFF" stroke="#665D4B"/>
+          <rect x="250" y="116" width="383" height="34" rx="4" transform="rotate(0.3 441 133)" fill="url(#s1cHc)" stroke="#7A5C00"/>
+          <rect x="250" y="170" width="271" height="34" rx="4" transform="rotate(-0.3 385 187)" fill="url(#s1cHv)" stroke="#6A5ACD"/>
+          <!-- the gap between baseline and logistic -->
+          <path d="M633 104 L703 104" stroke="#A8431F" stroke-width="3"/>
+          <path d="M633 98 L633 110 M703 98 L703 110" stroke="#A8431F"/>
+        </g>
+
+        <text class="s1cL" x="240" y="84" text-anchor="end">everyone survives</text>
+        <text class="s1cO" x="240" y="138" text-anchor="end">logistic regression</text>
+        <text class="s1cP" x="240" y="192" text-anchor="end">random forest</text>
+        <text class="s1cL" x="714" y="84">20.6%</text>
+        <text class="s1cO" x="644" y="138">17.4%</text>
+        <text class="s1cP" x="532" y="192">12.3%</text>
+        <text class="s1cB" x="668" y="122" text-anchor="middle">3.2 points</text>
+        <text class="s1cS" x="250" y="222">32 deaths, 123 survivors: the do-nothing rule already scores 79.4 percent</text>
+
+        <text class="s1cO" x="40" y="258">Logistic, by coefficient size:</text>
+        <text class="s1cS" x="232" y="258">variables 7 and 11 matter; using only those two, error rises to 22.9%</text>
+        <text class="s1cP" x="40" y="278">Forest, by shuffling one at a time:</text>
+        <text class="s1cS" x="258" y="278">12 and 17, each alone 14.3%, and together no better, surrogates</text>
+
+        <text class="s1cN" x="30" y="308">A model barely better than the do-nothing rule has not earned the right to name the important variables.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta gap is everything the logistic model learned beyond "everyone survives", and its variable list rests on it</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why a fit test cannot rescue the model<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The data modelling culture checks its models with goodness-of-fit tests and residual plots, so the obvious reply is "check harder". Breiman's answer comes from three pieces of evidence. He once simulated a seven-dimensional regression with a controlled amount of nonlinearity, and standard goodness-of-fit tests "did not reject linearity until the nonlinearity was extreme". He cites Bickel, Ritov and Stoker: omnibus tests have little power unless the direction of the alternative is specified. And he reports William Cleveland, "one of the fathers of residual analysis", admitting at a 1993 Berkeley seminar that residual analysis could not uncover lack of fit in more than four to five dimensions.</p>
+        <p>His conclusion: "An acceptable residual plot does not imply that the model is a good fit to the data." A yes from a weak test is not evidence, and the measured error on held-out rows is the check he proposes instead. The same passage names what happens when many models pass: several equally good models give different pictures of nature. That is the Rashomon effect, and it has a session of its own in <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a2-equally-good-differently-wrong.html">ML Epistemology, leader session 2 ↗</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The Occam dilemma, and how Breiman dissolves it<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Trees read well and predict moderately; forests of 50 or 100 trees predict very well and cannot be read. "So on interpretability, they rate an F." Breiman calls this the Occam dilemma, then argues it is the wrong question: "The goal is not interpretability, but accurate information." His claim, from the hepatitis and two other medical examples, is that a more accurate model gives <em>more reliable</em> information about which inputs matter, measured by shuffling one input at a time and counting the damage.</p>
+        <p>The claim is contested inside the same issue. Bruce Hoadley, from the credit-scoring company Fair, Isaac, replies that his segmented scorecards are "very accurate and very interpretable", and that regulators require it. Efron replies that "the whole point of science is to open up black boxes". Session 4 tests both claims on real biopsies; session 6 lets the disagreement stand.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The salary study "accepted as gospel".</strong> Breiman recalls a study, several decades before his paper, of gender discrimination in a university's faculty salaries: salary as the response, 25 variables describing academic performance, gender as a binary predictor. The gender coefficient was significant at 5 percent, and that was taken as strong evidence of discrimination. His objection was not to the conclusion but to the order of questions: "Can the data gathered answer the question posed? Is inference justified when your sample is the entire population? Should a data model be used?" The focus, he writes, "was on the model and not on the problem".</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Both cultures, the same 569 biopsies</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">The data is the UCI Breast Cancer Wisconsin (Diagnostic) set: 569 fine needle aspirate biopsies, 30 measurements of the cell nuclei in each digitized image, and a diagnosis of malignant or benign. scikit-learn ships it as <code>load_breast_cancer</code>, which is byte-for-byte the UCI file. Seven steps fit one model from each culture on the same fixed split and print the two numbers each culture is judged by. Every output below is what the code prints.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn pipeline. 569 biopsies, 212 malignant and 357 benign, are split once with seed 2001 into 398 training rows and 171 held-out rows. The training rows feed two models: an ochre logistic regression that prints 31 readable numbers and a violet random forest of 100 trees that holds 1,673 yes or no questions. Both are graded on the same 171 held-out rows against the base rate of 62.6 percent: the regression gets 170 right, the forest 167, and they disagree on 3 biopsies.">
+        <defs>
+          <filter id="s1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s1dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s1dH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s1dL { font: 700 11.5px Inter, sans-serif; fill: #241F14; }
+          .s1dS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s1dB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s1dW { font: 800 11.5px Inter, sans-serif; fill: #FFFFFF; }
+          .s1dN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s1dH" x="30" y="26">ONE SPLIT, TWO CULTURES, ONE GRADER</text>
+
+        <g filter="url(#s1dSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the pile -->
+          <rect x="30" y="80" width="120" height="80" rx="6" transform="rotate(-1 90 120)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <!-- split -->
+          <path d="M156 110 L206 80" marker-end="url(#s1dAr)"/>
+          <path d="M156 130 L206 190" marker-end="url(#s1dAr)"/>
+          <rect x="212" y="56" width="120" height="44" rx="6" transform="rotate(0.6 272 78)" fill="#FFFFFF"/>
+          <rect x="212" y="176" width="120" height="44" rx="6" transform="rotate(-0.6 272 198)" fill="#FBEDE6" stroke="#A8431F"/>
+          <!-- two models -->
+          <path d="M338 70 L398 52" marker-end="url(#s1dAr)"/>
+          <path d="M338 86 L398 122" marker-end="url(#s1dAr)"/>
+          <rect x="404" y="30" width="170" height="44" rx="8" transform="rotate(-0.5 489 52)" fill="#7A5C00" stroke="#7A5C00"/>
+          <rect x="404" y="104" width="170" height="44" rx="8" transform="rotate(0.5 489 126)" fill="#6A5ACD" stroke="#6A5ACD"/>
+          <!-- grading -->
+          <path d="M580 52 C640 60 650 150 680 170" marker-end="url(#s1dAr)"/>
+          <path d="M580 126 C620 140 640 160 680 178" marker-end="url(#s1dAr)"/>
+          <path d="M338 198 L680 198" stroke="#A8431F" marker-end="url(#s1dAr)"/>
+          <rect x="688" y="150" width="170" height="80" rx="8" transform="rotate(0.4 773 190)" fill="#FFFFFF" stroke="#A8431F"/>
+        </g>
+
+        <text class="s1dL" x="44" y="112">569 biopsies</text>
+        <text class="s1dS" x="44" y="128">212 malignant</text>
+        <text class="s1dS" x="44" y="142">357 benign</text>
+        <text class="s1dL" x="224" y="82">398 to fit</text>
+        <text class="s1dB" x="224" y="202">171 held out</text>
+        <text class="s1dS" x="212" y="240">split once, seed 2001</text>
+        <text class="s1dW" x="416" y="50">logistic regression</text>
+        <text class="s1dW" x="416" y="65">31 readable numbers</text>
+        <text class="s1dW" x="416" y="124">forest of 100 trees</text>
+        <text class="s1dW" x="416" y="139">1,673 yes/no questions</text>
+        <text class="s1dB" x="700" y="170">graded on the 171</text>
+        <text class="s1dL" x="700" y="188">regression 170</text>
+        <text class="s1dL" x="700" y="204">forest 167</text>
+        <text class="s1dS" x="700" y="220">base rate 62.6%</text>
+
+        <text class="s1dN" x="30" y="258">The held-out rows are touched once, at the end. Everything upstream sees only the 398.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta path from the split to the grader is the one that must never pass through either model</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Load the biopsies and look at the classes.</strong> 30 numeric measurements per biopsy; the label is 1 for benign and 0 for malignant, scikit-learn's convention.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · load</span>import numpy as np
+from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+X, y = data.data, data.target        # y: 1 = benign, 0 = malignant
+print(X.shape, np.bincount(y))       # (569, 30) [212 357]</div>
+      </div>
+      <div class="step">
+        <p><strong>Split once, stratified, and never again.</strong> Thirty percent of each class is set aside with a fixed seed. These are the same 171 rows the session 4 bench grades on.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the held-out rows</span>rng = np.random.default_rng(2001)
+test = []
+for cls in (0, 1):
+    idx = np.flatnonzero(y == cls)
+    test += list(rng.permutation(idx)[: round(0.30 * len(idx))])
+test = np.array(sorted(test))
+train = np.setdiff1d(np.arange(len(y)), test)
+print(len(train), len(test))         # 398 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Write down the line both cultures must clear.</strong> Calling every biopsy benign is a model too. Any score has to be read against it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the base rate</span>base = max(y[test].mean(), 1 - y[test].mean())
+print(f"base rate {base:.3f}")       # 0.626</div>
+      </div>
+      <div class="step">
+        <p><strong>The data modelling culture: a logistic regression.</strong> Standardise on the training rows only, fit, then grade on the held-out rows. <code>C=1.0</code> is scikit-learn's default penalty; the tight tolerance makes the coefficients match the bench to two decimals.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · ochre</span>from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+sc = StandardScaler().fit(X[train])
+lr = LogisticRegression(C=1.0, tol=1e-10, max_iter=10000)
+lr.fit(sc.transform(X[train]), y[train])
+lr_pred = lr.predict(sc.transform(X[test]))
+print("logistic", (lr_pred == y[test]).sum(), "of", len(test))   # logistic 170 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>The algorithmic culture: a random forest.</strong> One hundred trees, each grown on a bootstrap of the training rows with a random subset of features tried at every split. How that works is taught in <a href="https://phoebefu6.github.io/learn-ensemble-methods-with-phoebe/courses/02-random-forests.html">Ensemble Methods, session 2 ↗</a>; tonight only its score and its size matter.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · violet</span>from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(n_estimators=100, random_state=0)
+rf.fit(X[train], y[train])
+rf_pred = rf.predict(X[test])
+print("forest  ", (rf_pred == y[test]).sum(), "of", len(test))   # forest   167 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>The second number: what each model lets you say.</strong> The regression hands you one signed number per feature. The forest hands you a count of questions nobody will read.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the explainability readout</span>coef = sorted(zip(lr.coef_[0], data.feature_names), key=lambda t: -abs(t[0]))[:3]
+for w, name in coef:
+    print(f"{name:22s} {w:+.2f}")
+# worst texture          -1.33
+# radius error           -1.08
+# worst symmetry         -1.07
+
+nodes = sum(t.tree_.node_count - t.tree_.n_leaves for t in rf.estimators_)
+print("forest yes/no questions:", nodes)      # forest yes/no questions: 1673</div>
+      </div>
+      <div class="step">
+        <p><strong>Where exactly do the cultures differ?</strong> Count the biopsies on which the two models give different answers, then re-run the forest with five seeds. The forest's own seed moves its score by about as much as the gap between the cultures.</p>
+        <div class="prompt-box good"><span class="label">★ Step 7 · the disagreement</span>print("disagree:", (lr_pred != rf_pred).sum())     # disagree: 3
+
+for s in range(5):
+    r = RandomForestClassifier(n_estimators=100, random_state=s).fit(X[train], y[train])
+    print(s, (r.predict(X[test]) == y[test]).sum())
+# 0 167 · 1 167 · 2 168 · 3 168 · 4 168</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Read the sign before the size.</strong> A negative coefficient here leans towards malignant, because the label codes benign as 1. The regression's largest coefficient is on <em>worst texture</em>, not on any of the size measurements a pathologist would name first. Session 2 finds out why, and it is not because texture matters most.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Read Breiman's sections 1 to 5</strong> (about eight pages of Statistical Science 16(3)). Mark every sentence where he is describing a practice and every sentence where he is describing a person. The paper is sharper on practices.</li>
+      <li><strong>Classify three models you use at work</strong> with Breiman's one question: is anyone modelling the inside of the box? Write one sentence each on how the model is validated.</li>
+      <li><strong>Run the build-along with <code>random_state</code> from 0 to 19</strong> and write down the forest's lowest and highest score. Keep the range; session 4 needs it.</li>
+      <li><strong>Print all 30 regression coefficients</strong> next to each feature's correlation with the label. Count how many point the opposite way. Bring the count.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 1 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">1 · A team fits a logistic regression, never reads its coefficients, and judges it only by accuracy on a held-out month. Which culture are they in?</p>
+      <button class="qopt" type="button">A · Data modelling, because logistic regression is a data model</button>
+      <button class="qopt" type="button">B · Neither, because the two cultures are about statistics versus computer science</button>
+      <button class="qopt" type="button">C · Algorithmic: nobody is claiming the equation is what is inside nature's box, and validation is measured predictive accuracy, which is Breiman's own test of "are you modeling the inside of the box or not?"</button>
+      <button class="qopt" type="button">D · Data modelling, because any model with coefficients is interpretable</button>
+      <p class="qwhy">The cultures are defined by what you claim about the box and how you validate, not by the algorithm's name. The same logistic regression is a data model when its coefficients are read as nature's mechanism and checked with fit tests, and an algorithmic model when it is just a predictor graded on unseen rows.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">2 · On the hepatitis data, why does Breiman distrust the logistic regression's list of important variables?</p>
+      <button class="qopt" type="button">A · Its error, 17.4 percent, is only 3.2 points better than calling every patient a survivor (20.6 percent); a model that has learned that little has not earned the right to name the important variables, and using its top two alone makes the error worse, 22.9 percent</button>
+      <button class="qopt" type="button">B · Because logistic regression cannot handle 19 covariates</button>
+      <button class="qopt" type="button">C · Because the forest had more parameters and therefore more information</button>
+      <button class="qopt" type="button">D · Because the coefficients were not statistically significant</button>
+      <p class="qwhy">The argument runs through measured accuracy: "Weak predictive accuracy can lead to questionable conclusions." Significance was never the problem; the model's weak grip on the data was, and nobody would have noticed without a predictive check.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">3 · In the build-along the regression gets 170 of 171 and the forest 167. What is the honest reading?</p>
+      <button class="qopt" type="button">A · The data modelling culture has been proved superior</button>
+      <button class="qopt" type="button">B · Breiman was wrong about forests</button>
+      <button class="qopt" type="button">C · The forest should be discarded because it is unreadable</button>
+      <button class="qopt" type="button">D · On this data the two cultures disagree on only 3 biopsies and the forest's own seed moves it between 167 and 168, so the accuracy gap is small; what separates them clearly is the second number, 31 readable coefficients against 1,673 yes or no questions</button>
+      <p class="qwhy">One dataset settles nothing about a culture. Breiman himself says "I am not against data models per se", and the best model "could be an algorithmic model, or maybe a data model, or maybe a combination". Session 4 moves the levers and watches the ordering change.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Breiman (2001), Statistical Modeling: The Two Cultures, sections 1 to 5, 9 and 11</span><span class="note">Statistical Science 16(3), 199-231; read at source, every quotation on the page checked against the published text</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The ozone, chlorine, court delay and hepatitis examples</span><span class="note">All figures (450 variables, 30,000 compounds, 95 percent, 20.6 / 17.4 / 12.3 percent) quoted from the paper</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The 98 and 2 percent</span><span class="note">Breiman's own estimate, labelled so in the paper; Efron disputes it in the same issue</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The build-along on UCI Breast Cancer Wisconsin (Diagnostic)</span><span class="note">Wolberg, Mangasarian, Street and Street (1993), UCI Machine Learning Repository, doi 10.24432/C5DW2B, CC BY 4.0; every printed output produced by the code on scikit-learn 1.9.0</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The Rashomon effect and the discussants' replies</span><span class="note">Named here, taught elsewhere: multiplicity in ML Epistemology, the four comments in session 6</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The one question</b><span>"Are you modeling the inside of the box or not?" Breiman's own test for which culture you are in.</span></div>
+      <div class="cheat-item"><b>Data modelling</b><span>Assume an equation generated y from x. Validate with fit tests and residuals: a yes or no.</span></div>
+      <div class="cheat-item"><b>Algorithmic</b><span>Leave the box shut. Find f(x) that predicts y. Validate with accuracy on unseen rows: a number.</span></div>
+      <div class="cheat-item"><b>The conclusions are about the model</b><span>Not about nature. A poor emulation gives conclusions that may be wrong.</span></div>
+      <div class="cheat-item"><b>Beat the base rate first</b><span>Hepatitis: everyone survives 20.6 percent error, logistic 17.4. Biopsies: benign for all is 62.6 percent right.</span></div>
+      <div class="cheat-item"><b>Two numbers per model</b><span>Held-out accuracy, and what it lets you say: 31 coefficients, or 1,673 unread questions.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The regression you just fitted is 99.4 percent right on unseen biopsies, and several of its coefficients point the wrong way. Session 2 reads George Box, who wrote in 1976 that "all models are wrong" and in 1979 put the famous sentence in a section heading, and turns "some are useful" into three checks you can run on a model you already have.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 1 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← Course home</a> &nbsp;·&nbsp; <a href="02-all-models-are-wrong.html">Next: All models are wrong, some are useful →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

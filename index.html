@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Six sessions on how data science thinks, read from the papers that argued it: Breiman's two cultures and the four replies, Box on useful models, Tukey on exploring before confirming, Donoho's fifty years. Then both cultures tested on 569 real biopsies in your browser. Free, by Phoebe Fu.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Learn The Two Cultures with Phoebe">
+<meta property="og:description" content="A readable regression and an unreadable forest on the same 569 real biopsies: 170 against 167 correct of 171, and 31 numbers against 1,647 questions. The history of an argument, tested.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn The Two Cultures with Phoebe">
+<meta name="twitter:description" content="Breiman, Box, Tukey and Donoho, read at source, then both cultures computed live on real biopsies.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Learn The Two Cultures with Phoebe</title>
+<link rel="stylesheet" href="assets/style.css?v=1">
+<style>
+
+  .stats-row { display: flex; gap: 2.4rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .stat b { display: block; font-size: 2.1rem; font-weight: 800; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: .72rem; opacity: .85; text-transform: uppercase; letter-spacing: .09em; font-weight: 600; }
+
+  .course-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .course-card {
+    border: 1px solid var(--hairline);
+    border-top: 4px solid var(--diff, var(--indigo));
+    border-radius: var(--radius);
+    padding: 1.2rem 1.3rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: #fff;
+    transition: box-shadow .15s ease, border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .course-card:hover { border-color: var(--indigo-soft); border-top-color: var(--diff, var(--indigo)); box-shadow: 0 8px 28px rgba(var(--shadow-rgb),.16); transform: translateY(-3px); }
+  .course-card .cicon { font-size: 1.7rem; line-height: 1; }
+  .course-card .cnum { font-size: .72rem; font-weight: 700; color: var(--indigo); text-transform: uppercase; letter-spacing: .1em; }
+  .course-card h3 { font-size: 1.05rem; font-weight: 800; line-height: 1.3; }
+  .course-card p { font-size: .85rem; color: var(--muted); flex: 1; }
+  .course-card .meta { display: flex; gap: .4rem; flex-wrap: wrap; }
+
+  .diff-legend { display: flex; gap: 1rem; margin-top: 1.6rem; font-size: .74rem; color: var(--muted); font-weight: 600; flex-wrap: wrap; }
+  .diff-legend i { display: inline-block; width: .85rem; height: .35rem; border-radius: 999px; margin-right: .35rem; vertical-align: middle; }
+
+  .paths { margin-top: 2.6rem; }
+  .paths h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .3rem; }
+  .paths .plede { color: var(--muted); font-size: .92rem; margin-bottom: .8rem; }
+  .path { display: flex; gap: .55rem; align-items: center; padding: .75rem 0; border-bottom: .5px solid var(--hairline); flex-wrap: wrap; }
+  .path:last-child { border-bottom: none; }
+  .path b { min-width: 15.5rem; font-size: .9rem; }
+  .path .pstep { background: var(--indigo-50); color: var(--indigo); border-radius: 999px; padding: .16rem .68rem; font-weight: 700; font-size: .8rem; text-decoration: none; transition: all .12s ease; }
+  .path .pstep:hover { background: var(--indigo); color: #fff; }
+  .path .parr { color: var(--faint); font-weight: 700; }
+
+  .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .9rem; margin-top: .9rem; }
+  .culture { border-radius: var(--radius); padding: 1rem 1.2rem; border: 1px solid var(--hairline); border-top-width: 5px; }
+  .culture.dm { border-top-color: var(--indigo); background: var(--indigo-50); }
+  .culture.alg { border-top-color: var(--vio); background: var(--vio-50); }
+  .culture h3 { font-size: 1rem; font-weight: 800; margin-bottom: .3rem; }
+  .culture.dm h3 { color: var(--indigo-deep); }
+  .culture.alg h3 { color: var(--vio-deep); }
+  .culture p { font-size: .88rem; color: var(--ink); }
+
+  .mm-section { margin-top: 1.6rem; }
+  .mm-section h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: .2rem; }
+  .mm-section .mm-lede { color: var(--muted); font-size: .92rem; margin-bottom: .4rem; }
+  .mm-wrap { border: 1px solid var(--hairline); border-radius: var(--radius); background: linear-gradient(180deg,#fff,var(--indigo-50)); padding: .6rem; overflow-x: auto; }
+  .mm-svg { width: 100%; height: auto; display: block; max-width: 60rem; margin: 0 auto; min-width: 34rem; }
+  .mm-link { cursor: pointer; text-decoration: none; }
+  .mm-node rect { transition: opacity .15s ease, filter .15s ease; }
+  .mm-node text { pointer-events: none; }
+  .mm-link:hover .mm-node rect { filter: brightness(1.06); }
+  .mm-edge { transition: opacity .15s ease; }
+
+  .not-this { border: 1px solid var(--hairline); border-left: 4px solid var(--clay); border-radius: var(--radius); background: #fff; padding: 1.1rem 1.3rem; margin-top: 1.2rem; }
+  .not-this h3 { font-size: .95rem; font-weight: 800; margin-bottom: .5rem; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn with Phoebe · Data Science</div>
+    <h1>Learn <span class="accent">The Two Cultures</span> with Phoebe</h1>
+    <p class="sub">In 2001 Leo Breiman told statisticians there were two ways to learn from data: assume an equation generated it and read the answer off the equation, or leave nature's box shut and judge a model only by how well it predicts rows it has never seen. Four eminent statisticians replied in the same issue, and they did not agree. Twenty-five years on, every argument about explainable versus accurate, statistics versus machine learning, or "a model the regulator can read" is a descendant of that exchange. Six sessions read it at source, together with George Box on useful models, John Tukey on exploring before you confirm, and David Donoho's fifty years of data science, then put both cultures on the same 569 real biopsies in your browser and count.</p>
+    <div class="stats-row">
+      <div class="stat"><b data-count="6">6</b><span>sessions</span></div>
+      <div class="stat"><b data-count="5">5</b><span>papers read at source</span></div>
+      <div class="stat"><b data-count="569">569</b><span>real biopsies</span></div>
+      <div class="stat"><b data-count="171">171</b><span>held out, graded once</span></div>
+      <div class="stat"><b data-count="45">45</b><span>min per session</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>The six sessions 📜 <span style="font-size:.85rem;font-weight:600;color:var(--muted)">· from one black box to a choice you can defend</span></h2>
+      <p class="plede">Two colours run through every figure and widget, so each culture always looks the same.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="culture dm"><h3>The data modelling culture</h3><p>Assume a stochastic model generated the data, estimate its parameters, read nature's mechanism off the equation. Validated by goodness-of-fit: a yes or no.</p></div>
+      <div class="culture alg"><h3>The algorithmic culture</h3><p>Treat the inside of the box as unknown, find a function that predicts y from x, and trust it only as far as its accuracy on unseen rows: a number.</p></div>
+    </div>
+
+    <div class="course-grid">
+      <a class="course-card" href="courses/01-two-ways-to-ask-the-data.html" style="--diff:#FB923C">
+        <span class="cicon">📦</span>
+        <span class="cnum">Session 1 · advanced</span>
+        <h3>Two ways to ask the data</h3>
+        <p>Breiman's black box, the two cultures in his own words, the consulting projects that made him one of the 2 percent, and the hepatitis example where an unchecked model names the wrong variables. Build-along: both cultures on the same biopsies.</p>
+        <span class="meta"><span class="pill amber">▶ Start here</span></span>
+      </a>
+      <a class="course-card" href="courses/02-all-models-are-wrong.html" style="--diff:#FB923C">
+        <span class="cicon">🧭</span>
+        <span class="cnum">Session 2 · advanced</span>
+        <h3>All models are wrong, some are useful</h3>
+        <p>Where Box actually wrote it: the idea twice in 1976, the sentence as a 1979 section heading. What "useful" means as three checks you can run, and a regression that is 99.4 percent right with coefficients that point the wrong way.</p>
+        <span class="meta"><span class="pill">tigers, not mice</span></span>
+      </a>
+      <a class="course-card" href="courses/03-explore-first-confirm-once.html" style="--diff:#FB923C">
+        <span class="cicon">🔎</span>
+        <span class="cnum">Session 3 · advanced</span>
+        <h3>Explore first, confirm once</h3>
+        <p>Tukey's 1962 case that data analysis is a science, exploratory work as detective work, and the discipline that keeps a confirmation honest: rows nobody touched until the end.</p>
+        <span class="meta"><span class="pill">the untouched set</span></span>
+      </a>
+      <a class="course-card" href="courses/04-the-two-cultures-bench.html" style="--diff:#F87171">
+        <span class="cicon">⚖️</span>
+        <span class="cnum">Session 4 · bench night</span>
+        <h3>The two-cultures bench</h3>
+        <p>A logistic regression and a random forest fitted in your browser on 569 real biopsies. Held-out accuracy and explanation size side by side, the base rate, a break button, and a peek switch that lies.</p>
+        <span class="meta"><span class="pill amber">★ the bench</span></span>
+      </a>
+      <a class="course-card" href="courses/05-fifty-years-of-data-science.html" style="--diff:#FB923C">
+        <span class="cicon">🗺️</span>
+        <span class="cnum">Session 5 · advanced</span>
+        <h3>Fifty years of data science</h3>
+        <p>Donoho's 2017 history from Tukey to today, the common task framework he calls the secret sauce of machine learning, and the six divisions of greater data science, where both cultures share one division.</p>
+        <span class="meta"><span class="pill">the secret sauce</span></span>
+      </a>
+      <a class="course-card" href="courses/06-which-culture-is-this-question.html" style="--diff:#FB923C">
+        <span class="cicon">🤝</span>
+        <span class="cnum">Session 6 · advanced</span>
+        <h3>Which culture is this question?</h3>
+        <p>Cox, Efron, Hoadley and Parzen in their own words, Breiman's rejoinder, and a way to choose a culture per problem that keeps their disagreement intact rather than pretending it was settled.</p>
+        <span class="meta"><span class="pill amber">🔒 final passport stamp</span></span>
+      </a>
+    </div>
+
+    <div class="diff-legend">
+      <span><i style="background:#FB923C"></i>advanced</span>
+      <span><i style="background:#F87171"></i>bench night</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>Your passport 🎫</h2>
+      <p class="plede">Clear all three quiz questions in a session and it gets stamped. Six stamps means you can classify any model by culture, say what its validation does and does not license, keep a confirmation honest, and argue both sides of the 2001 exchange. Stamps live in this browser only.</p>
+    </div>
+    <div class="pp-strip"></div>
+  </section>
+
+  <section class="section">
+    <div class="not-this">
+      <h3>What this is not, so you land in the right place 🧭</h3>
+      <table class="clean">
+        <tr><th>If your question is</th><th>Go here instead</th></tr>
+        <tr><td>Why should I believe this model's test score, and what does a benchmark license?</td><td><a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/">ML Epistemology ↗</a></td></tr>
+        <tr><td>Many models fit equally well and tell different stories. Which one do I trust?</td><td><a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a2-equally-good-differently-wrong.html">ML Epistemology, leader session 2 ↗</a></td></tr>
+        <tr><td>Frequentist or Bayesian, and how do I choose a prior?</td><td><a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/courses/a5-the-prior-argument.html">Bayesian, leader session 5 ↗</a></td></tr>
+        <tr><td>How does a random forest actually work?</td><td><a href="https://phoebefu6.github.io/learn-ensemble-methods-with-phoebe/courses/02-random-forests.html">Ensemble Methods, session 2 ↗</a></td></tr>
+        <tr><td>How do I read the numbers my team brings me?</td><td><a href="https://phoebefu6.github.io/learn-data-literacy-with-phoebe/">Data Literacy ↗</a></td></tr>
+        <tr><td>How do I turn a business worry into a question data can answer?</td><td><a href="https://phoebefu6.github.io/learn-data-thinking-with-phoebe/">Data Thinking ↗</a></td></tr>
+        <tr><td><strong>Where did the split between statistics and machine learning come from, what did each side actually claim, and how do I choose for a given problem?</strong></td><td><strong>you are in the right place</strong></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths">
+      <h2>Choose your path 🗺️</h2>
+      <p class="plede">Three doors into the same conviction: a model is a claim, and the way it is checked decides what it lets you say.</p>
+      <div class="path"><b>🧑‍💼 I sign off on models, I do not build them</b>
+        <a class="pstep" href="courses/01-two-ways-to-ask-the-data.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-all-models-are-wrong.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-which-culture-is-this-question.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">the two cultures, what useful means, and which one your question needs</span>
+      </div>
+      <div class="path"><b>🛠️ I build models and want the history behind my habits</b>
+        <a class="pstep" href="courses/01-two-ways-to-ask-the-data.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/03-explore-first-confirm-once.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-the-two-cultures-bench.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-fifty-years-of-data-science.html">5</a>
+        <span style="font-size:.82rem;color:var(--muted)">the split, the untouched test set, the bench, and the framework that made it a field</span>
+      </div>
+      <div class="path"><b>📜 The whole argument</b>
+        <a class="pstep" href="courses/01-two-ways-to-ask-the-data.html">1</a><span class="parr">→</span>
+        <a class="pstep" href="courses/02-all-models-are-wrong.html">2</a><span class="parr">→</span>
+        <a class="pstep" href="courses/03-explore-first-confirm-once.html">3</a><span class="parr">→</span>
+        <a class="pstep" href="courses/04-the-two-cultures-bench.html">4</a><span class="parr">→</span>
+        <a class="pstep" href="courses/05-fifty-years-of-data-science.html">5</a><span class="parr">→</span>
+        <a class="pstep" href="courses/06-which-culture-is-this-question.html">6</a>
+        <span style="font-size:.82rem;color:var(--muted)">four authors, one bench, and a choice you can defend</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="paths" style="margin-top:0">
+      <h2>What is honest here 🧾</h2>
+      <p class="plede">The pages quote the papers themselves. Where a famous line could not be read in its original, the page says so and labels it reported.</p>
+    </div>
+    <table class="clean">
+      <tr><th>Claim</th><th>Status</th></tr>
+      <tr><td>Breiman 2001, and the comments by Cox, Efron, Hoadley and Parzen with Breiman's rejoinder</td><td><strong>Read at source,</strong> Statistical Science 16(3), all 33 pages</td></tr>
+      <tr><td>Box: "Since all models are wrong" (1976) and "All models are wrong but some are useful" (1979)</td><td><strong>Read at source,</strong> JASA 71(356) and Robustness in Statistics, Academic Press. The "essentially" version of 1987 is <strong>reported</strong></td></tr>
+      <tr><td>Tukey 1962, The Future of Data Analysis</td><td><strong>Read at source,</strong> all 67 pages. The 1977 book and the 1980 paper on exploratory and confirmatory analysis are <strong>reported</strong></td></tr>
+      <tr><td>Donoho 2017, 50 Years of Data Science</td><td><strong>Read at source,</strong> Journal of Computational and Graphical Statistics 26(4)</td></tr>
+      <tr><td>Every number on the bench</td><td><strong>Really computed</strong> in your browser from the 569 real rows of UCI Breast Cancer Wisconsin (Diagnostic), and reproduced exactly by an independent Python run</td></tr>
+      <tr><td>"Culture X wins"</td><td><strong>Not claimed.</strong> One dataset, nearly linearly separable; the pages teach the disagreement, not a verdict</td></tr>
+    </table>
+  </section>
+
+  <section class="section mm-section">
+    <h2>The knowledge map 🧠</h2>
+    <p class="mm-lede">The whole argument at a glance - hover a session to spotlight its concepts, click any node to jump in.</p>
+    <div class="mm-wrap"><div id="mindmap"></div></div>
+  </section>
+
+  <footer class="pagefoot">
+    <span>learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span>Neighbours on the shelf: <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/">ML Epistemology ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/">Bayesian ↗</a> &nbsp;·&nbsp; <a href="https://phoebefu6.github.io/learn-ensemble-methods-with-phoebe/">Ensemble Methods ↗</a></span>
+  </footer>
+
+</main>
+
+<script>
+window.MINDMAP_DATA = {"title": "The Two\nCultures", "centerColor": "#4A3800", "sessions": [{"label": "Two ways to ask\nthe data", "href": "courses/01-two-ways-to-ask-the-data.html", "color": "#FB923C", "concepts": [{"label": "Nature's black box", "href": "courses/01-two-ways-to-ask-the-data.html"}, {"label": "Fill it or leave it shut", "href": "courses/01-two-ways-to-ask-the-data.html"}, {"label": "The model is not nature", "href": "courses/01-two-ways-to-ask-the-data.html"}]}, {"label": "All models are\nwrong, some useful", "href": "courses/02-all-models-are-wrong.html", "color": "#FB923C", "concepts": [{"label": "Which paper said it", "href": "courses/02-all-models-are-wrong.html"}, {"label": "Three checks for useful", "href": "courses/02-all-models-are-wrong.html"}, {"label": "Tigers, not mice", "href": "courses/02-all-models-are-wrong.html"}]}, {"label": "Explore first,\nconfirm once", "href": "courses/03-explore-first-confirm-once.html", "color": "#FB923C", "concepts": [{"label": "Tukey's science of data", "href": "courses/03-explore-first-confirm-once.html"}, {"label": "Detective, then judge", "href": "courses/03-explore-first-confirm-once.html"}, {"label": "The untouched set", "href": "courses/03-explore-first-confirm-once.html"}]}, {"label": "The two-cultures\nbench", "href": "courses/04-the-two-cultures-bench.html", "color": "#F87171", "concepts": [{"label": "Two numbers per culture", "href": "courses/04-the-two-cultures-bench.html"}, {"label": "The break and the peek", "href": "courses/04-the-two-cultures-bench.html"}, {"label": "Gaps inside seed noise", "href": "courses/04-the-two-cultures-bench.html"}]}, {"label": "Fifty years of\ndata science", "href": "courses/05-fifty-years-of-data-science.html", "color": "#FB923C", "concepts": [{"label": "Tukey to Donoho", "href": "courses/05-fifty-years-of-data-science.html"}, {"label": "Common task framework", "href": "courses/05-fifty-years-of-data-science.html"}, {"label": "Six divisions of GDS", "href": "courses/05-fifty-years-of-data-science.html"}]}, {"label": "Which culture is\nthis question?", "href": "courses/06-which-culture-is-this-question.html", "color": "#FB923C", "concepts": [{"label": "Four replies, no verdict", "href": "courses/06-which-culture-is-this-question.html"}, {"label": "Questions to ask first", "href": "courses/06-which-culture-is-this-question.html"}, {"label": "Using both cultures", "href": "courses/06-which-culture-is-this-question.html"}]}]};
+</script>
+<script src="assets/mindmap.js?v=1"></script>
+<script src="assets/app.js?v=1"></script>
+</body>
+</html>

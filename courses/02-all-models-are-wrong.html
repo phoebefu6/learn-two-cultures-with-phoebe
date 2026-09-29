@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 2 of 6. George Box, read at source: where the famous sentence really appears (1976 has the idea twice, 1979 has the exact words as a heading, 1987 is reported), what useful means as three checks you can run, and a real regression that is 99.4 percent right with 7 coefficients pointing the wrong way. Build-along on 569 real biopsies.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="All models are wrong, some are useful - learn two cultures with phoebe">
+<meta property="og:description" content="Session 2 of 6. Box's sentence traced to the page it is printed on, turned into three checks for useful, then tested on a model that is right 170 times out of 171 and still wrong about 7 of its own coefficients.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/02-all-models-are-wrong.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="All models are wrong, some are useful - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 2 of 6. Box at source, three checks for useful, and a wrong model that predicts well.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 2 · All models are wrong, some are useful - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 2 of 6</div>
+    <h1>All models are wrong, <span class="accent">some are useful</span></h1>
+    <p class="sub">It is the most quoted sentence in statistics, and most people who quote it could not tell you where it is printed. George Box wrote the idea twice in 1976, put the exact words in a section heading in 1979, and a softer "essentially" version is widely credited to a 1987 book. Tonight we read the first two at source, turn "some are useful" into three checks you can actually run, and then meet a real regression that gets 170 of 171 unseen biopsies right while 7 of its 30 coefficients point against their own feature. Is that a tiger or a mouse? It depends entirely on what you want the model for.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders and practitioners</span>
+      <span class="chip audience">Python, scikit-learn</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Box, and what useful means</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a useful model that is wrong</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Session 1 ended on a puzzle: the logistic regression was 99.4 percent right on biopsies it had never seen, and its biggest coefficient sat on texture rather than on any of the size measurements a pathologist would name first. Box is the statistician who gave the data modelling culture its best defence against exactly that kind of embarrassment. His defence is not "the model is right". It is "the model is wrong, so be precise about where". The colours are unchanged: <strong style="color:#7A5C00">ochre for the data modelling culture</strong>, <strong style="color:#6A5ACD">violet for the algorithmic culture</strong>.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The correct citation for "all models are wrong", with the page number, and the two versions people confuse it with; Box's own test for a model, "Is the model illuminating and useful?"; three operational checks for useful that you can run on any model at work tomorrow; and a script that finds the 7 coefficients in a 99.4 percent model that you must never read as facts about nature.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers where Box wrote it</span>
+      <h2>One idea, three printings</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Ask a room where "all models are wrong, but some are useful" comes from and you will hear three different years. All three are partly right, which is why the argument never ends. The fix is to separate the idea, the exact sentence and the popular version, and to say which of them has actually been read.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A timeline with three printings. 1976, Science and Statistics in JASA volume 71, page 792: the words Since all models are wrong appear twice, in section 2.3 Parsimony and section 2.4 Worrying Selectively, but not the famous sentence; read at source. 1979, Robustness in Statistics edited by Launer and Wilkinson, page 202: the exact sentence All models are wrong but some are useful is a section heading; read at source, highlighted. 1987, Box and Draper, Empirical Model-Building and Response Surfaces: Essentially, all models are wrong, but some are useful; reported only, not read.">
+        <defs>
+          <filter id="s2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2aH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s2aL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s2aS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s2aB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s2aO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s2aV { font: 800 18px Inter, sans-serif; fill: #4A3800; }
+          .s2aN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s2aH" x="30" y="26">ONE IDEA, THREE PRINTINGS</text>
+        <text class="s2aS" x="230" y="26">which words appear where, and whether anyone here has read the page</text>
+
+        <g filter="url(#s2aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the time rail -->
+          <path d="M40 100 L836 100" stroke="#9C7A1E" marker-end="url(#s2aAr)"/>
+          <circle cx="150" cy="100" r="8" fill="#FBF5E3" stroke="#7A5C00"/>
+          <circle cx="440" cy="100" r="9" fill="#A8431F" stroke="#A8431F"/>
+          <circle cx="730" cy="100" r="8" fill="#FFFFFF" stroke="#D6CDB8" stroke-dasharray="4 3"/>
+          <!-- open-book doodle -->
+          <path d="M800 40 C812 34 824 34 836 40 C848 34 860 34 872 40 L872 64 C860 58 848 58 836 64 C824 58 812 58 800 64 Z" stroke="#9C7A1E"/>
+          <path d="M836 40 L836 64" stroke="#9C7A1E"/>
+          <!-- cards -->
+          <rect x="25" y="124" width="250" height="120" rx="8" transform="rotate(-0.8 150 184)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="315" y="124" width="250" height="120" rx="8" transform="rotate(0.6 440 184)" fill="#FBEDE6" stroke="#A8431F"/>
+          <rect x="605" y="124" width="250" height="120" rx="8" transform="rotate(-0.5 730 184)" fill="#FFFFFF" stroke="#D6CDB8" stroke-dasharray="7 5"/>
+          <!-- badges -->
+          <rect x="85" y="256" width="130" height="24" rx="12" transform="rotate(1.2 150 268)" fill="#FFFFFF" stroke="#7A5C00"/>
+          <rect x="375" y="256" width="130" height="24" rx="12" transform="rotate(-1 440 268)" fill="#FFFFFF" stroke="#7A5C00"/>
+          <rect x="675" y="256" width="110" height="24" rx="12" transform="rotate(1.4 730 268)" fill="#FFFFFF" stroke="#D6CDB8" stroke-dasharray="4 3"/>
+        </g>
+
+        <text class="s2aV" x="150" y="80" text-anchor="middle">1976</text>
+        <text class="s2aV" x="440" y="80" text-anchor="middle">1979</text>
+        <text class="s2aV" x="730" y="80" text-anchor="middle">1987</text>
+
+        <text class="s2aL" x="150" y="148" text-anchor="middle">Science and Statistics</text>
+        <text class="s2aS" x="150" y="166" text-anchor="middle">JASA 71(356), p.792</text>
+        <text class="s2aO" x="150" y="190" text-anchor="middle">"Since all models are wrong"</text>
+        <text class="s2aS" x="150" y="210" text-anchor="middle">twice: 2.3 Parsimony and</text>
+        <text class="s2aS" x="150" y="226" text-anchor="middle">2.4 Worrying Selectively</text>
+
+        <text class="s2aL" x="440" y="148" text-anchor="middle">Robustness in Statistics</text>
+        <text class="s2aS" x="440" y="166" text-anchor="middle">Launer and Wilkinson (eds), p.202</text>
+        <text class="s2aB" x="440" y="190" text-anchor="middle">ALL MODELS ARE WRONG</text>
+        <text class="s2aB" x="440" y="206" text-anchor="middle">BUT SOME ARE USEFUL</text>
+        <text class="s2aS" x="440" y="226" text-anchor="middle">the exact sentence, as a heading</text>
+
+        <text class="s2aL" x="730" y="148" text-anchor="middle">Empirical Model-Building</text>
+        <text class="s2aS" x="730" y="166" text-anchor="middle">Box and Draper, a book</text>
+        <text class="s2aL" x="730" y="190" text-anchor="middle">"Essentially, all models</text>
+        <text class="s2aL" x="730" y="206" text-anchor="middle">are wrong, but some are useful."</text>
+        <text class="s2aS" x="730" y="226" text-anchor="middle">widely quoted</text>
+
+        <text class="s2aO" x="150" y="272" text-anchor="middle">read at source</text>
+        <text class="s2aO" x="440" y="272" text-anchor="middle">read at source</text>
+        <text class="s2aS" x="730" y="272" text-anchor="middle">reported</text>
+
+        <text class="s2aN" x="30" y="312">The idea is 1976, the exact sentence is 1979, and the "essentially" version is 1987 and was not read here.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta card is the only place the famous sentence has been found word for word, and it is a heading, not a conclusion</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What the 1976 paper actually says<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Box's 1976 paper, "Science and Statistics", appeared in the Journal of the American Statistical Association, volume 71. Read at source, it does <em>not</em> contain the sentence on the mugs. It contains the idea, twice, on the same page, p.792, and each time the words "all models are wrong" are the first half of an argument about what to do next.</p>
+        <p>Section 2.3, Parsimony: "Since all models are wrong the scientist cannot obtain a 'correct' one by excessive elaboration." He adds that "overelaboration and overparameterization is often the mark of mediocrity". Section 2.4, Worrying Selectively: "Since all models are wrong the scientist must be alert to what is importantly wrong. It is inappropriate to be concerned about mice when there are tigers abroad."</p>
+        <p>The exact sentence arrives three years later, as a section heading on p.202 of Box's chapter "Robustness in the Strategy of Scientific Model Building", in the 1979 volume <em>Robustness in Statistics</em> edited by R. L. Launer and G. N. Wilkinson. The chapter was also issued as a Wisconsin technical report in May 1979; that copy is reported, not read. Box and Draper's 1987 book <em>Empirical Model-Building and Response Surfaces</em> is widely quoted as saying "Essentially, all models are wrong, but some are useful" (reported: the book was not opened for these pages).</p>
+        <p>So when a colleague cites the sentence, the precise citation is Box 1979, p.202. When they want the argument behind it, send them to 1976, p.792: that is where the useful part, the tigers and the mice, is written out.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>1976 in context: Fisher, iteration and "mathematistry"<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The 1976 paper is not about models in the abstract. Box illustrates it with R. A. Fisher's work at Rothamsted, and his claim is that good statistics comes from exactly that kind of close contact with a real scientific problem. He describes science as "a motivated iteration" between theory and practice and draws it as a feedback loop, which is where Part 2's figure starts.</p>
+        <p>Two lines carry the attitude. The statistician knows that "in nature there never was a normal distribution, there never was a straight line", and yet useful results follow from assuming both. And "we cannot know that any statistical technique we develop is useful unless we use it." For theory that has lost contact with practice he coins a word, "mathematistry".</p>
+        <p>Read beside Breiman, this is the data modelling culture at its most self-aware. Box never claims the equation in the box is nature's. He claims that a deliberately wrong equation, criticised against data again and again, is how science makes progress.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The ideal gas law.</strong> Box's own example sits on the page after the heading, p.203. The law PV = RT "is not exactly true for any real gas, but it frequently provides a useful approximation and furthermore its structure is informative". Every chemistry student is taught a model that is false for every gas in the room, because the three things it relates, and the way they trade off, are the right three things. "For such a model there is no need to ask the question 'Is the model true?'. If 'truth' is to be the 'whole truth' the answer must be 'No'."</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what useful means operationally</span>
+      <h2>Three checks for useful</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Box's replacement for "is it true?" is one line from the 1979 chapter: "The only question of interest is 'Is the model illuminating and useful?'." He also says how to get there: model building "must be accomplished by iteration", a tentative model, a tentative analysis, then criticism using residual diagnostic checks, and round again. What he does not give is a checklist. Here is one, built from his words and Breiman's.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Box's iteration drawn as a loop of four boxes: tentative model, tentative analysis, criticism using residual diagnostic checks, then revise the model and go round again, labelled a motivated iteration, Box 1976. Criticism is highlighted. From criticism an arrow leads to three gates stacked on the right. Gate 1, violet: beats the base rate on rows it never saw, Breiman's perception d. Gate 2, ochre: wrong only where the decision does not care, Box's tigers and mice. Gate 3, ochre: its structure tells you something, Box's word illuminating, as with the ideal gas law. Passing all three leads to useful for this decision; failing a gate leads back round the loop to revise. The three gates are a synthesis, not a rule either author wrote.">
+        <defs>
+          <filter id="s2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2bH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s2bL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s2bS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s2bB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s2bO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s2bP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s2bN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s2bH" x="30" y="26">BOX'S LOOP, WITH THREE GATES ON THE WAY OUT</text>
+        <text class="s2bS" x="360" y="26">the loop is Box's; the gates are a synthesis of Box and Breiman</text>
+
+        <g filter="url(#s2bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the loop -->
+          <rect x="50" y="60" width="180" height="46" rx="8" transform="rotate(-0.8 140 83)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="290" y="60" width="180" height="46" rx="8" transform="rotate(0.7 380 83)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="290" y="200" width="180" height="46" rx="8" transform="rotate(-0.6 380 223)" fill="#FBEDE6" stroke="#A8431F"/>
+          <rect x="50" y="200" width="180" height="46" rx="8" transform="rotate(0.8 140 223)" fill="#FFFFFF" stroke="#7A5C00"/>
+          <path d="M234 83 L284 83" marker-end="url(#s2bAr)"/>
+          <path d="M380 110 L380 194" marker-end="url(#s2bAr)"/>
+          <path d="M286 223 L236 223" marker-end="url(#s2bAr)"/>
+          <path d="M140 196 L140 112" marker-end="url(#s2bAr)"/>
+          <!-- magnifier doodle on criticism -->
+          <circle cx="446" cy="219" r="7" stroke="#A8431F"/>
+          <path d="M451 224 L458 231" stroke="#A8431F"/>
+          <!-- out to the gates -->
+          <path d="M474 212 C500 196 500 110 514 94" marker-end="url(#s2bAr)"/>
+          <!-- gates -->
+          <rect x="520" y="56" width="320" height="64" rx="8" transform="rotate(0.5 680 88)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="520" y="136" width="320" height="64" rx="8" transform="rotate(-0.5 680 168)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="520" y="216" width="320" height="64" rx="8" transform="rotate(0.4 680 248)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <path d="M680 122 L680 132" marker-end="url(#s2bAr)"/>
+          <path d="M680 202 L680 212" marker-end="url(#s2bAr)"/>
+          <path d="M680 282 L680 294" marker-end="url(#s2bAr)"/>
+          <rect x="600" y="298" width="160" height="30" rx="15" transform="rotate(-1 680 313)" fill="#FFFFFF" stroke="#7A5C00"/>
+          <!-- fail path back to revise -->
+          <path d="M540 284 C420 336 200 330 145 252" stroke="#665D4B" stroke-dasharray="6 5" marker-end="url(#s2bAr)"/>
+        </g>
+
+        <text class="s2bL" x="140" y="88" text-anchor="middle">tentative model</text>
+        <text class="s2bL" x="380" y="88" text-anchor="middle">tentative analysis</text>
+        <text class="s2bB" x="370" y="227" text-anchor="middle">criticism</text>
+        <text class="s2bL" x="140" y="228" text-anchor="middle">revise the model</text>
+        <text class="s2bS" x="380" y="266" text-anchor="middle">residual diagnostic checks, Box 1979</text>
+        <text class="s2bO" x="260" y="150" text-anchor="middle">a motivated iteration</text>
+        <text class="s2bS" x="260" y="168" text-anchor="middle">Box 1976, drawn as a loop</text>
+
+        <text class="s2bP" x="536" y="78">1 · beats the base rate</text>
+        <text class="s2bS" x="536" y="96">on rows it never saw</text>
+        <text class="s2bS" x="536" y="112">Breiman's perception (d)</text>
+        <text class="s2bO" x="536" y="158">2 · wrong only where it does not matter</text>
+        <text class="s2bS" x="536" y="176">the decision does not care about the error</text>
+        <text class="s2bS" x="536" y="192">Box: tigers, not mice</text>
+        <text class="s2bO" x="536" y="238">3 · its structure tells you something</text>
+        <text class="s2bS" x="536" y="256">Box's word, "illuminating"</text>
+        <text class="s2bS" x="536" y="272">like PV = RT, wrong yet informative</text>
+        <text class="s2bO" x="680" y="318" text-anchor="middle">useful, for this decision</text>
+
+        <text class="s2bS" x="300" y="342" text-anchor="middle">fails a gate: back round the loop</text>
+
+        <text class="s2bN" x="30" y="366">The gates are a synthesis, not a rule Box or Breiman wrote. Each one names a question, not a threshold.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - criticism is where "useful" gets decided, and the three gates are what criticism should be asking</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The three checks, and where each one comes from<span class="mini">5 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A synthesis, not a quotation. Neither Box nor Breiman wrote this list; it is built from their words so that "useful" becomes something you can test rather than assert.</p>
+        <ol>
+          <li><strong>It beats the base rate on rows it never saw.</strong> Breiman's perception (d): "Predictive accuracy on test sets is the criterion for how good the model is." A model that cannot beat the do-nothing rule on unseen rows is not useful for anything, whatever its coefficients say. This is the algorithmic culture's check, and a data modeller loses nothing by running it.</li>
+          <li><strong>It is wrong only where the decision does not care.</strong> Box's "importantly wrong": every model is wrong somewhere, so the question is whether the wrongness sits under the decision you are about to make. A tiger for one use can be a mouse for another; Part 3 shows the same coefficient being both.</li>
+          <li><strong>Its structure tells you something.</strong> Box's "illuminating". The ideal gas law earns its place because its structure is informative, not because it is exact. A model whose structure you cannot read, or whose structure you should not read, can still pass checks 1 and 2, but it does not pass this one.</li>
+        </ol>
+        <p>Notice what is missing: a high R squared on the training rows, every coefficient significant, a clean goodness-of-fit test. None of those is on the list, and Part 3's real world story shows a model failing nearly all of them and still winning.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Cox in 2001: the ideal, and the lower bound<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>D. R. Cox, replying to Breiman in the same issue of Statistical Science, states the data modelling ideal in one sentence: "Descriptively appealing and transparent methods with a firm model base are the ideal." That is check 3 raised to a principle.</p>
+        <p>He is also honest about its cost. The significance tests and confidence intervals the culture reports "are often lower bounds to real uncertainty", because they are computed as if the model were right. Box's line and Cox's line are the same warning from two directions: the model is wrong, so the uncertainty it reports about itself is too small.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Tukey, quoting Martin Wilk, 1962<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Fourteen years before Box's paper, John Tukey quoted his colleague Martin Wilk in "The Future of Data Analysis" (p.7): "The hallmark of good science is that it uses models and 'theory' but never believes them." It is the shortest statement of the whole attitude, and session 3 reads the rest of Tukey's paper.</p>
+        <p>One fault line this session leaves alone: frequentist versus Bayesian runs inside the data modelling culture, not between the cultures. Breiman: "I would include Bayesians in the data modeling culture." That argument lives in <a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/courses/a5-the-prior-argument.html">Bayesian, leader session 5 ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>When the prediction is not where the data was.</strong> Cox's reply names the case where check 2 bites hardest. He accepts that some problems suit a directly empirical approach, short term economic forecasting and real-time flood forecasting among them, then warns: "Often the prediction is under quite different conditions from the data." His examples are forecasting the v-CJD epidemic in the UK and predicting the effect on US cancer incidence of reducing medical X-rays by 10 percent. In both, the question is about a world the data never contained, and an error that was a mouse on the historical rows can be the tiger that decides the answer.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers worrying selectively on real biopsies</span>
+      <h2>Tiger or mouse?</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Back to session 1's regression. With all 30 features it gets 170 of 171 held-out biopsies right, 99.4 percent. And 7 of its 30 coefficients point against their own feature's correlation with "benign" on the training rows. They are not the size features. They are mean compactness, mean symmetry, smoothness error, compactness error, concavity error, fractal dimension error and worst compactness. The model is wrong about them. Whether that matters is Box's question.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 392" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Weight sharing drawn as coefficient bars on one scale. Left panel: worst area alone in a one-feature model carries a standardised coefficient of minus 4.41 and gets 158 of 171 held-out biopsies right; its correlation with benign is minus 0.74. Right panel: in the full 30-feature model, which gets 170 of 171, the same size signal is split across six near-duplicate features with small coefficients: mean radius minus 0.27, mean perimeter minus 0.24, mean area minus 0.31, worst radius minus 0.84, worst perimeter minus 0.61, worst area minus 0.85. Below them, highlighted, mean compactness has a coefficient of plus 0.57 although its correlation with benign is minus 0.59: the sign points the other way. 21 feature pairs correlate above 0.9.">
+        <defs>
+          <filter id="s2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+        </defs>
+        <style>
+          .s2cH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s2cL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s2cS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s2cB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s2cO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s2cV { font: 800 18px Inter, sans-serif; fill: #4A3800; }
+          .s2cN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s2cH" x="30" y="26">ONE SIGNAL, SIX SHARES, ONE FLIP</text>
+        <text class="s2cS" x="280" y="26">standardised logistic coefficients, one scale for both panels · negative leans malignant</text>
+
+        <g filter="url(#s2cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- panels -->
+          <rect x="24" y="44" width="380" height="306" rx="10" transform="rotate(-0.3 214 197)" fill="#FFFFFF" stroke="#D6CDB8"/>
+          <rect x="430" y="44" width="426" height="306" rx="10" transform="rotate(0.3 643 197)" fill="#FFFFFF" stroke="#D6CDB8"/>
+          <!-- nucleus doodle -->
+          <circle cx="366" cy="74" r="14" stroke="#9C7A1E"/>
+          <circle cx="370" cy="71" r="5" stroke="#9C7A1E"/>
+          <!-- left: worst area alone, scale 70px per unit -->
+          <path d="M370 110 L370 300" stroke="#D6CDB8"/>
+          <rect x="61" y="150" width="309" height="40" rx="4" transform="rotate(-0.4 215 170)" fill="url(#s2cHc)" stroke="#7A5C00"/>
+          <!-- right: six size features in the full model -->
+          <path d="M700 100 L700 324" stroke="#D6CDB8"/>
+          <rect x="681" y="110" width="19" height="18" rx="3" transform="rotate(-2 690 119)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="683" y="140" width="17" height="18" rx="3" transform="rotate(2 691 149)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="678" y="170" width="22" height="18" rx="3" transform="rotate(-1.5 689 179)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="641" y="200" width="59" height="18" rx="3" transform="rotate(1 670 209)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="657" y="230" width="43" height="18" rx="3" transform="rotate(-1 678 239)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="641" y="260" width="59" height="18" rx="3" transform="rotate(1.2 670 269)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <!-- bracket: near-twins share it -->
+          <path d="M752 112 C760 112 760 116 760 124 L760 186 C760 192 764 194 768 194 C764 194 760 196 760 202 L760 266 C760 274 760 278 752 278" stroke="#9C7A1E"/>
+          <!-- separator -->
+          <path d="M446 288 L840 288" stroke="#ECE5D6" stroke-dasharray="5 4"/>
+          <!-- the flip -->
+          <rect x="700" y="298" width="40" height="18" rx="3" transform="rotate(-2 720 307)" fill="#FBEDE6" stroke="#A8431F"/>
+        </g>
+
+        <text class="s2cO" x="40" y="68">worst area alone</text>
+        <text class="s2cS" x="40" y="86">1 feature, 158 of 171 held out</text>
+        <text class="s2cV" x="66" y="222">-4.41</text>
+        <text class="s2cS" x="66" y="240">one feature carries the whole size signal</text>
+        <text class="s2cS" x="66" y="258">correlation with benign -0.74</text>
+        <text class="s2cS" x="370" y="316" text-anchor="middle">0</text>
+
+        <text class="s2cO" x="446" y="68">the same size signal, full 30-feature model</text>
+        <text class="s2cS" x="446" y="86">170 of 171 held out · 21 pairs correlate above 0.9</text>
+        <text class="s2cL" x="630" y="123" text-anchor="end">mean radius</text>
+        <text class="s2cL" x="630" y="153" text-anchor="end">mean perimeter</text>
+        <text class="s2cL" x="630" y="183" text-anchor="end">mean area</text>
+        <text class="s2cL" x="630" y="213" text-anchor="end">worst radius</text>
+        <text class="s2cL" x="630" y="243" text-anchor="end">worst perimeter</text>
+        <text class="s2cL" x="630" y="273" text-anchor="end">worst area</text>
+        <text class="s2cS" x="708" y="123">-0.27</text>
+        <text class="s2cS" x="708" y="153">-0.24</text>
+        <text class="s2cS" x="708" y="183">-0.31</text>
+        <text class="s2cS" x="708" y="213">-0.84</text>
+        <text class="s2cS" x="708" y="243">-0.61</text>
+        <text class="s2cS" x="708" y="273">-0.85</text>
+        <text class="s2cS" x="776" y="190">near-twins</text>
+        <text class="s2cS" x="776" y="204">share it</text>
+        <text class="s2cB" x="630" y="311" text-anchor="end">mean compactness</text>
+        <text class="s2cB" x="748" y="311">+0.57</text>
+        <text class="s2cS" x="446" y="338">correlation with benign -0.59: the sign points the other way</text>
+
+        <text class="s2cN" x="30" y="378">Prediction does not care how the weight is split. Reading one coefficient as a fact about nature does.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta bar is a coefficient doing repair work for its neighbours, not describing its own feature</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The same flip is a mouse and a tiger<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>For prediction, a mouse.</strong> The model is 170 of 171 on biopsies it never saw, well above the 62.6 percent base rate, so it passes check 1. Nobody deciding "send this biopsy for a second read" is harmed by how the weight is split between radius, perimeter and area, because the prediction uses them all together.</p>
+        <p><strong>For reading mechanism, a tiger.</strong> Read mean compactness off the model and you would report that compact nuclei lean benign, +0.57. On the training rows the feature's correlation with benign is -0.59: more compact nuclei are more often malignant. The coefficient is not describing compactness; it is correcting its neighbours. The model fails check 3 for that sentence, and check 2 for any decision built on it.</p>
+        <p>This is Box's "importantly wrong" made concrete: the error is the same seven numbers either way. What changes is the decision sitting on top of them. The honest report says both halves: "useful for prediction; do not read these seven coefficients".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a coefficient can take the wrong sign<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Radius, perimeter and area are three ways of measuring one thing. On the training rows mean radius and mean perimeter correlate at 0.998, mean radius and mean area at 0.990, worst radius and worst perimeter at 0.993, worst radius and worst area at 0.987. Across all 30 features, 21 pairs correlate above 0.9 in absolute value.</p>
+        <p>When features are near-duplicates, the fit can trade weight between them almost freely, and a feature can take whatever sign best corrects the others rather than one that describes itself. Alone, worst area carries a coefficient of -4.41; in the full model it carries -0.85, and the rest of the size signal is spread over five siblings. With Box's parsimony in mind, the fix is not a cleverer reading of 31 numbers. It is fewer features: the build-along refits on the dataset creators' 3 and gets 4 numbers, 0 sign surprises and 167 of 171.</p>
+        <p>The broader fact that many equally good models can tell different stories about the same data is the Rashomon effect, and it has its own session: <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a2-equally-good-differently-wrong.html">ML Epistemology, leader session 2 ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Hoadley's Fat Scorecard.</strong> Bruce Hoadley, replying to Breiman from the credit scoring company Fair, Isaac, describes a scorecard problem where every model with 27 to 36 characteristics had the same test performance. The 27-characteristic model had 162 score weights with p-values from 0.0001 to 0.984, only one of them below 0.05. "The confidence intervals for the 162 score weights were useless." And it slightly outperformed a 2,000-weight neural network. Wrong by the textbook, useful by the test: it failed every significance check and passed check 1.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A useful model that is wrong</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Same data, same split, same regression as session 1. Five steps find the seven flipped coefficients, show the near-duplicates that cause them, and refit on the three features the dataset's creators chose, to see what parsimony costs in accuracy and buys in readability. Every output below is what the code prints on scikit-learn 1.9.0.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as five boxes in a row. Step 1, fit all 30 features: 170 of 171 held out. Step 2, count flips, highlighted: 7 of 30 coefficients point against their feature's correlation. Step 3, correlations: radius and perimeter 0.998, 21 pairs above 0.9. Step 4, worst area alone: coefficient minus 4.41, 158 of 171. Step 5, the creators' 3 features: 4 numbers, 0 flips, 167 of 171.">
+        <defs>
+          <filter id="s2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s2dH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s2dL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s2dS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s2dB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s2dO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s2dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s2dN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s2dH" x="30" y="26">FIVE STEPS FROM 99.4 PERCENT TO A MODEL YOU CAN READ</text>
+
+        <g filter="url(#s2dSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="70" width="144" height="90" rx="8" transform="rotate(-1 92 115)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="194" y="70" width="144" height="90" rx="8" transform="rotate(1.2 266 115)" fill="#FBEDE6" stroke="#A8431F"/>
+          <rect x="368" y="70" width="144" height="90" rx="8" transform="rotate(-0.8 440 115)" fill="#FFFFFF" stroke="#7A5C00"/>
+          <rect x="542" y="70" width="144" height="90" rx="8" transform="rotate(1 614 115)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="716" y="70" width="144" height="90" rx="8" transform="rotate(-1.2 788 115)" fill="#7A5C00" stroke="#7A5C00"/>
+          <path d="M166 115 L190 115" marker-end="url(#s2dAr)"/>
+          <path d="M340 115 L364 115" marker-end="url(#s2dAr)"/>
+          <path d="M514 115 L538 115" marker-end="url(#s2dAr)"/>
+          <path d="M688 115 L712 115" marker-end="url(#s2dAr)"/>
+          <!-- magnifier doodle above the correlations -->
+          <circle cx="440" cy="48" r="8" stroke="#9C7A1E"/>
+          <path d="M446 54 L454 62" stroke="#9C7A1E"/>
+        </g>
+
+        <text class="s2dO" x="92" y="96" text-anchor="middle">1 · fit all 30</text>
+        <text class="s2dS" x="92" y="118" text-anchor="middle">held out</text>
+        <text class="s2dL" x="92" y="136" text-anchor="middle">170 of 171</text>
+
+        <text class="s2dB" x="266" y="96" text-anchor="middle">2 · count flips</text>
+        <text class="s2dB" x="266" y="118" text-anchor="middle">7 of 30</text>
+        <text class="s2dS" x="266" y="136" text-anchor="middle">against their own</text>
+        <text class="s2dS" x="266" y="150" text-anchor="middle">correlation</text>
+
+        <text class="s2dO" x="440" y="96" text-anchor="middle">3 · correlations</text>
+        <text class="s2dS" x="440" y="118" text-anchor="middle">radius, perimeter</text>
+        <text class="s2dL" x="440" y="134" text-anchor="middle">0.998</text>
+        <text class="s2dS" x="440" y="150" text-anchor="middle">21 pairs above 0.9</text>
+
+        <text class="s2dO" x="614" y="96" text-anchor="middle">4 · worst area</text>
+        <text class="s2dS" x="614" y="118" text-anchor="middle">alone: -4.41</text>
+        <text class="s2dL" x="614" y="136" text-anchor="middle">158 of 171</text>
+
+        <text class="s2dW" x="788" y="94" text-anchor="middle">5 · creators' 3</text>
+        <text class="s2dW" x="788" y="112" text-anchor="middle">4 numbers</text>
+        <text class="s2dW" x="788" y="130" text-anchor="middle">0 flips</text>
+        <text class="s2dW" x="788" y="148" text-anchor="middle">167 of 171</text>
+
+        <text class="s2dN" x="30" y="198">Same split as session 1. Giving up three biopsies buys a model with no coefficient you must not read.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta step is the one most teams never run, and it is a single line of code</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Rebuild session 1's split and regression.</strong> Same seed, same 398 training rows and 171 held-out rows. A small helper fits a standardised logistic regression on any list of columns, because steps 4 and 5 refit on fewer features.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · fit all 30</span>import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+data = load_breast_cancer()
+X, y = data.data, data.target            # y: 1 = benign, 0 = malignant
+names = list(data.feature_names)
+rng = np.random.default_rng(2001)        # session 1's split, unchanged
+test = []
+for cls in (0, 1):
+    idx = np.flatnonzero(y == cls)
+    test += list(rng.permutation(idx)[: round(0.30 * len(idx))])
+test = np.array(sorted(test))
+train = np.setdiff1d(np.arange(len(y)), test)
+
+def fit(cols):
+    sc = StandardScaler().fit(X[train][:, cols])
+    m = LogisticRegression(C=1.0, tol=1e-10, max_iter=10000)
+    m.fit(sc.transform(X[train][:, cols]), y[train])
+    right = (m.predict(sc.transform(X[test][:, cols])) == y[test]).sum()
+    return m, right
+
+lr, right = fit(list(range(30)))
+print("held out", right)                 # held out 170</div>
+      </div>
+      <div class="step">
+        <p><strong>Count the flips.</strong> For each feature, compare the sign of its correlation with benign on the training rows against the sign of its coefficient. A disagreement means the coefficient is not describing its own feature.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the sign check</span>r = np.array([np.corrcoef(X[train][:, j], y[train])[0, 1] for j in range(30)])
+w = lr.coef_[0]
+flips = [j for j in range(30) if r[j] * w[j] &lt; 0]
+print(len(flips))
+for j in flips:
+    print(f"{names[j]:24s} corr {r[j]:+.2f}   coef {w[j]:+.2f}")
+# 7
+# mean compactness         corr -0.59   coef +0.57
+# mean symmetry            corr -0.33   coef +0.17
+# smoothness error         corr +0.07   coef -0.23
+# compactness error        corr -0.25   coef +0.71
+# concavity error          corr -0.20   coef +0.25
+# fractal dimension error  corr -0.06   coef +0.39
+# worst compactness        corr -0.58   coef +0.13</div>
+      </div>
+      <div class="step">
+        <p><strong>Find the near-duplicates.</strong> Correlate the size features with each other, then count every pair above 0.9 in absolute value. This is the mechanism behind step 2.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the twins</span>c = np.corrcoef(X[train].T)
+for a, b in [("mean radius", "mean perimeter"), ("mean radius", "mean area"),
+             ("worst radius", "worst perimeter"), ("worst radius", "worst area")]:
+    print(f"{a} vs {b}: {c[names.index(a), names.index(b)]:.3f}")
+print("pairs above 0.9:", sum(abs(c[i, j]) &gt; 0.9 for i in range(30) for j in range(i + 1, 30)))
+# mean radius vs mean perimeter: 0.998
+# mean radius vs mean area: 0.990
+# worst radius vs worst perimeter: 0.993
+# worst radius vs worst area: 0.987
+# pairs above 0.9: 21</div>
+      </div>
+      <div class="step">
+        <p><strong>Watch the weight being shared.</strong> Print the six size coefficients from the full model, then fit worst area on its own. The signal that six features split between them, one feature carries alone.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · one feature alone</span>for n in ("mean radius", "mean perimeter", "mean area",
+          "worst radius", "worst perimeter", "worst area"):
+    j = names.index(n)
+    print(f"{n:16s} coef {w[j]:+.2f}   corr {r[j]:+.2f}")
+one, right1 = fit([names.index("worst area")])
+print(f"worst area alone: coef {one.coef_[0][0]:+.2f}, held out {right1}")
+# mean radius      coef -0.27   corr -0.72
+# mean perimeter   coef -0.24   corr -0.74
+# mean area        coef -0.31   corr -0.71
+# worst radius     coef -0.84   corr -0.77
+# worst perimeter  coef -0.61   corr -0.78
+# worst area       coef -0.85   corr -0.74
+# worst area alone: coef -4.41, held out 158</div>
+      </div>
+      <div class="step">
+        <p><strong>Refit on the creators' 3.</strong> The dataset's own documentation reports its best separating plane used worst area, worst smoothness and mean texture. Fit those three on our split and check every sign against its correlation.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · parsimony</span>three = [names.index(n) for n in ("worst area", "worst smoothness", "mean texture")]
+lr3, right3 = fit(three)
+print("three held out", right3)
+print(f"intercept {lr3.intercept_[0]:+.2f}")
+for j, v in zip(three, lr3.coef_[0]):
+    print(f"{names[j]:16s} coef {v:+.2f}   corr {r[j]:+.2f}")
+# three held out 167
+# intercept +0.30
+# worst area       coef -4.63   corr -0.74
+# worst smoothness coef -1.36   corr -0.42
+# mean texture     coef -1.02   corr -0.42</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Price the trade, do not hide it.</strong> The 30-feature model is 170 of 171 with 7 coefficients you must not read; the 3-feature model is 167 of 171 with 4 numbers that all agree with their correlations. Three biopsies on 171 is a real cost, and whether it is worth paying depends on whether anyone will read the coefficients. Write the answer down before choosing, not after.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Read Box 1976, section 2</strong> (JASA 71, starting p.791). Underline both "Since all models are wrong" sentences and write down what each one tells the scientist to do next.</li>
+      <li><strong>List the tigers and the mice for one of your own models.</strong> Two columns: the ways it is wrong that would change a decision, and the ways it is wrong that would not. Name the decision at the top of the page.</li>
+      <li><strong>Run the flips check on your model.</strong> Step 2's three lines work on any linear model with a numeric target or a 0/1 label. Count the sign disagreements and mark which features they sit on.</li>
+      <li><strong>Drop all but one size feature and watch the flips.</strong> Keep worst area, remove the other five size features, refit, and rerun step 2. Note which of the seven flips disappear, which remain, and what happens to the held-out score. Your numbers will differ from any you have seen tonight; that is the exercise.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 2 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Which text contains the exact sentence "All models are wrong but some are useful"?</p>
+      <button class="qopt" type="button">A · Box 1976, "Science and Statistics", section 2.4</button>
+      <button class="qopt" type="button">B · Box 1979, "Robustness in the Strategy of Scientific Model Building", where it is a section heading on p.202; the 1976 paper has the idea twice as "Since all models are wrong", but not the sentence</button>
+      <button class="qopt" type="button">C · Box and Draper 1987, read at source</button>
+      <button class="qopt" type="button">D · Breiman 2001, in his reply to Cox</button>
+      <p class="qwhy">The idea is 1976 (twice, p.792), the exact sentence is 1979 (a heading, p.202), and the "Essentially, all models are wrong, but some are useful" version is credited to Box and Draper 1987, reported rather than read.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · A manager asks what "useful" means for a model, operationally. Which answer can you actually test?</p>
+      <button class="qopt" type="button">A · A high R squared on the training rows</button>
+      <button class="qopt" type="button">B · It passes a goodness-of-fit test</button>
+      <button class="qopt" type="button">C · Every coefficient is significant at 5 percent</button>
+      <button class="qopt" type="button">D · Three checks: it beats the base rate on rows it never saw; it is wrong only where the decision does not care; and its structure tells you something</button>
+      <p class="qwhy">Training fit says nothing about unseen rows, and significance can fail while the model wins: Hoadley's 162-weight scorecard had only one p-value below 0.05 and still slightly outperformed a 2,000-weight neural network. The three checks are a synthesis of Breiman's perception (d) and Box's "importantly wrong" and "illuminating".</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · The 30-feature regression is 99.4 percent right on held-out biopsies and 7 of its coefficients point against their feature's correlation. What can you honestly say?</p>
+      <button class="qopt" type="button">A · Use it to predict, yes; read mechanism from those coefficients, no. Near-duplicate features share and trade weight, so a flipped coefficient is correcting its neighbours, not describing its own feature</button>
+      <button class="qopt" type="button">B · The model is broken, because a wrong sign means a wrong model</button>
+      <button class="qopt" type="button">C · Compact nuclei protect against malignancy, because mean compactness has a positive coefficient</button>
+      <button class="qopt" type="button">D · 99.4 percent proves every coefficient is right</button>
+      <p class="qwhy">The same seven numbers are a mouse for prediction and a tiger for reading mechanism. Mean compactness is +0.57 in the model and -0.59 in its correlation with benign; refitting on the creators' 3 gives 0 flips at 167 of 171.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Box (1976), Science and Statistics, sections 2.3 and 2.4</span><span class="note">JASA 71(356), 791-799; read at source, both "Since all models are wrong" sentences checked on p.792, and the famous sentence confirmed absent</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Box (1979), Robustness in the Strategy of Scientific Model Building</span><span class="note">In Launer and Wilkinson (eds), Robustness in Statistics, 201-236; read at source, the heading on p.202 and the ideal gas passage on p.203</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Box and Draper (1987), Empirical Model-Building and Response Surfaces</span><span class="note">Reported only: the "Essentially, all models are wrong" wording is widely quoted and was not read here</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Cox's and Hoadley's comments on Breiman (2001)</span><span class="note">Statistical Science 16(3); read at source, Cox p.217 and the Fat Scorecard p.222</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Tukey (1962), quoting Martin Wilk</span><span class="note">The Future of Data Analysis, Annals of Mathematical Statistics 33(1), p.7; read at source</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The build-along on UCI Breast Cancer Wisconsin (Diagnostic)</span><span class="note">Wolberg, Mangasarian, Street and Street (1993), doi 10.24432/C5DW2B, CC BY 4.0; every printed output produced by the code on scikit-learn 1.9.0</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The citation</b><span>Exact sentence: Box 1979, p.202, a heading. The idea: Box 1976, p.792, twice. The "essentially" version: 1987, reported.</span></div>
+      <div class="cheat-item"><b>Box's question</b><span>Not "is it true?" but "Is the model illuminating and useful?"</span></div>
+      <div class="cheat-item"><b>Worry selectively</b><span>Every model is wrong. Ask what is importantly wrong for this decision: tigers, not mice.</span></div>
+      <div class="cheat-item"><b>Three checks for useful</b><span>Beats the base rate on unseen rows; wrong only where the decision does not care; structure tells you something.</span></div>
+      <div class="cheat-item"><b>Run the sign check</b><span>Compare each coefficient's sign with its feature's correlation. 7 of 30 disagree on a 99.4 percent model.</span></div>
+      <div class="cheat-item"><b>Parsimony has a price</b><span>30 features: 170 of 171, 7 flips. The creators' 3: 167 of 171, 0 flips, 4 numbers.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Box says criticise the model against the data. John Tukey, in 1962, asked who looks at the data before any model exists, and how you keep that looking from contaminating the check at the end. Session 3 reads "The Future of Data Analysis" at source and builds the discipline in two moves: explore freely on the training rows, then confirm once, on rows nobody has touched.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 2 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="01-two-ways-to-ask-the-data.html">← Prev: Two ways to ask the data</a> &nbsp;·&nbsp; <a href="03-explore-first-confirm-once.html">Next: Explore first, confirm once →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 5 of 6. David Donoho's 50 Years of Data Science, read from the page: from Tukey 1962 through the exhortations of Chambers, Cleveland and Breiman, to the common task framework he calls the secret sauce of machine learning, and the six divisions of greater data science. Build-along: run a sealed referee and a leaderboard on 569 real biopsies.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Fifty years of data science - learn two cultures with phoebe">
+<meta property="og:description" content="Session 5 of 6. Donoho 2017 in his own words: a sealed test set, a referee, a leaderboard, and why the kept best of 20 submissions is optimistic. Then build the whole framework on real biopsies.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/05-fifty-years-of-data-science.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fifty years of data science - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 5 of 6. Donoho's common task framework, read at source and run on real rows.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 5 · Fifty years of data science - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 5 of 6</div>
+    <h1>Fifty years of <span class="accent">data science</span></h1>
+    <p class="sub">In 2015, for the John Tukey centennial, the statistician David Donoho wrote a history of the field that starts from Tukey's 1962 paper and ends with a forecast for 2065. It was published in 2017 as "50 Years of Data Science". Along the way he reads Breiman's two cultures, renames them, and makes one claim sharper than anything else in the paper: that the real engine of machine learning was never an algorithm. It was a way of organising a contest, with public training data, many competitors, and a referee holding test rows nobody else can see. Tonight we read his argument at source, then build that referee ourselves on the same 569 biopsies and find out what a leaderboard does to the people who climb it.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders and practitioners</span>
+      <span class="chip audience">Python, scikit-learn</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Donoho: Tukey to the secret sauce</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: run a common task framework</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Four sessions in, you have Breiman's two cultures, Box's useful wrong models, Tukey's explore-then-confirm discipline, and a bench that put both cultures on the same rows. Donoho's paper is the one that ties them into a history. It is also the one that names the institution most practitioners live inside without noticing: the shared dataset, the held-back test set, and the leaderboard. As always, <strong style="color:#7A5C00">ochre is the data modelling culture</strong> and <strong style="color:#6A5ACD">violet is the algorithmic culture</strong>; Donoho's own names for them are "generative" and "predictive".</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The fifty-year arc from Tukey to Donoho with the right dates on it; the three ingredients of a common task framework, precisely enough to spot one at work; the six divisions of what Donoho calls greater data science, and where both of Breiman's cultures sit inside them; and a working referee with a sealed test set, a sorted leaderboard, and a measured demonstration of why the best of 20 submissions is not an honest score.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the fifty years from Tukey to Donoho</span>
+      <h2>From Tukey's paper to Donoho's</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Donoho's paper was prepared for the Tukey centennial and opens from Tukey's 1962 "The Future of Data Analysis", the paper session 3 read at source. What follows is a chain of statisticians telling their own profession to widen, each in print, each largely ignored. Donoho's twist is his explanation of why the widening finally happened.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A timeline from 1962 to 2017, drawn to scale. 1962: Tukey, The Future of Data Analysis, marked in terracotta as the starting point. 1993: Chambers, Greater or Lesser Statistics. 2001: Cleveland's action plan with six areas and allocations. 2001: Breiman's two cultures, which Donoho renames generative and predictive. 2015: the Tukey centennial preprint. 2017: the published paper in the Journal of Computational and Graphical Statistics 26(4), 745 to 766. A terracotta arc runs from 2017 back to 1962: the published paper opens from Tukey's.">
+        <defs>
+          <filter id="s5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="51" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5aH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s5aL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s5aS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s5aB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s5aO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s5aP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s5aN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s5aH" x="30" y="20">FIFTY YEARS, SIX DATES</text>
+        <text class="s5aB" x="440" y="20" text-anchor="middle">Donoho 2017 opens from Tukey 1962</text>
+
+        <g filter="url(#s5aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the arc back to the origin -->
+          <path d="M790 50 C640 22 240 22 92 50" stroke="#A8431F" stroke-dasharray="6 5" marker-end="url(#s5aAr)"/>
+          <!-- axis -->
+          <path d="M60 132 L850 132"/>
+          <!-- a paper sheet doodle at the start -->
+          <rect x="24" y="118" width="22" height="28" rx="2" transform="rotate(-4 35 132)" fill="#FFFFFF"/>
+          <path d="M29 126 L41 126 M29 132 L41 132 M29 138 L37 138" stroke="#665D4B" stroke-width="1.4"/>
+          <!-- leaders above -->
+          <path d="M85 104 L85 126" stroke="#A8431F"/>
+          <path d="M579 104 L579 126"/>
+          <path d="M782 104 L782 126"/>
+          <!-- leaders below -->
+          <path d="M478 138 L478 164"/>
+          <path d="M579 138 L579 164" stroke="#8B7FD9"/>
+          <path d="M757 138 L757 164"/>
+          <!-- nodes -->
+          <circle cx="85" cy="132" r="7" fill="#A8431F" stroke="#A8431F"/>
+          <circle cx="478" cy="132" r="6" fill="#FFFFFF"/>
+          <circle cx="579" cy="132" r="6" fill="url(#s5aHc)"/>
+          <circle cx="757" cy="132" r="6" fill="#FFFFFF"/>
+          <circle cx="782" cy="132" r="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="s5aB" x="85" y="68">1962 · Tukey</text>
+        <text class="s5aL" x="85" y="84">The Future of Data Analysis</text>
+        <text class="s5aS" x="85" y="98">where Donoho starts</text>
+
+        <text class="s5aH" x="586" y="68" text-anchor="end">2001 · Cleveland</text>
+        <text class="s5aS" x="586" y="84" text-anchor="end">an action plan, six areas</text>
+        <text class="s5aS" x="586" y="98" text-anchor="end">with allocations</text>
+
+        <text class="s5aH" x="860" y="68" text-anchor="end">2017 · published</text>
+        <text class="s5aS" x="860" y="84" text-anchor="end">JCGS 26(4), 745-766</text>
+
+        <text class="s5aH" x="485" y="180" text-anchor="end">1993 · Chambers</text>
+        <text class="s5aS" x="485" y="196" text-anchor="end">Greater or Lesser Statistics</text>
+        <text class="s5aS" x="485" y="210" text-anchor="end">an exhortation</text>
+
+        <text class="s5aH" x="572" y="180">2001 · Breiman</text>
+        <text class="s5aS" x="572" y="196">renamed by Donoho:</text>
+        <text class="s5aO" x="572" y="211">generative</text>
+        <text class="s5aP" x="652" y="211">predictive</text>
+
+        <text class="s5aH" x="764" y="180">2015 · preprint</text>
+        <text class="s5aS" x="764" y="196">Tukey centennial</text>
+
+        <text class="s5aN" x="30" y="238">Forty years of telling the profession to widen, then one paper explaining why the widening finally happened.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the dates are to scale: three exhortations sit in the last third, and the terracotta arc is Donoho reaching back to 1962</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Three exhortations, and why they did not work<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Tukey, 1962.</strong> The starting line is a confession, read at source in session 3: "For a long time I have thought I was a statistician, interested in inferences from the particular to the general. But as I have watched mathematical statistics evolve, I have had cause to wonder and to doubt." Data analysis, he argued, was "a science, one defined by a ubiquitous problem rather than by a concrete subject."</p>
+        <p><strong>Chambers, 1993.</strong> Chambers' "Greater or Lesser Statistics, A Choice for Future Research" put the choice in its title: widen to everything involved in learning from data, or stay narrow. Quoted here via Donoho.</p>
+        <p><strong>Cleveland, 2001.</strong> William Cleveland's "Data Science: An Action Plan for Expanding the Technical Areas of the Field of Statistics" went further and wrote a budget. Six areas, with the share of a department's effort each should get, as Donoho quotes them:</p>
+        <ul>
+          <li>Multidisciplinary investigations, 25 percent</li>
+          <li>Models and methods for data, 20 percent</li>
+          <li>Computing with data, 15 percent</li>
+          <li>Pedagogy, 15 percent</li>
+          <li>Tool evaluation, 5 percent</li>
+          <li>Theory, 20 percent</li>
+        </ul>
+        <p><strong>Breiman, 2001.</strong> The paper sessions 1 to 4 read. Donoho renames the cultures "generative" and "predictive" and says so in footnotes, so when you read him, generative means Breiman's data modelling culture and predictive means the algorithmic one. His reading of the discussion: Cox and Efron objected, Hoadley engaged enthusiastically.</p>
+        <p>Donoho's point is that the exhortations had little effect on their own. What made a wider field concrete was code: the S language, then R, then shared workflows that let people actually compute with data rather than be told they should. Keep that in mind for Part 2, because the common task framework is the same kind of explanation: an institution, not an idea, did the work.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>A list Donoho attributes to Tukey, and a lesson in checking quotes<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Right after his quotations from Tukey's 1962 paper, Donoho quotes a list that begins "Four major influences act on data analysis today": formal theories, computers and display devices, larger bodies of data, and quantification. It reads like Tukey and sits among genuine Tukey quotations. A full-text search of the whole 1962 paper, pages 1 to 67, read at source for these sessions, does not find it.</p>
+        <p>That does not mean Donoho invented it. Tukey wrote a great deal, and the list may come from a later paper. It means the attribution is <em>unconfirmed</em>, so it can be quoted only as "a list Donoho attributes to Tukey". The same paper says "Since John Tukey's coining of the term 'exploratory data analysis' (EDA)"; also true in spirit, but the words "exploratory data analysis" as a named practice are not in the 1962 paper either. They arrive with the 1977 book (reported).</p>
+        <p>The professional habit this teaches: a secondary source quoting a primary one is a pointer, not a check. When a quotation matters to your argument, open the primary text, and when you cannot, say which source you are trusting.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A department budget nobody adopted.</strong> Cleveland's 2001 plan is unusual among manifestos because it is a spending plan: a quarter of the effort on multidisciplinary investigations, 15 percent on computing with data, and only 20 percent on theory. Hold it next to what a statistics department of the time taught and you can see why Donoho calls these papers exhortations. They told the field where to go. The fields that went there, he argues, got there by writing software and running contests.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the common task framework</span>
+      <h2>The secret sauce is a referee</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The term is Mark Liberman's; Donoho gives it the strongest line in his paper: "It is no exaggeration to say that the combination of a predictive modeling culture together with CTF is the 'secret sauce' of machine learning." And he says the framework "is the single idea from machine learning and data science that is most lacking attention in today's statistical training."</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 344" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The common task framework as a machine. On the left, (a) a public training dataset with features and a class label. Arrows run to (b) three competitors at doodled desks, each inferring a prediction rule. Their submissions go into (c) a scoring referee, which runs each rule against a sequestered test set, drawn in terracotta with a lock, that no competitor sees. The referee reports scores automatically to a leaderboard. A dashed arrow loops from the leaderboard back to the competitors: they see the score, tweak and resubmit, so the leaderboard itself becomes a grader people can climb.">
+        <defs>
+          <filter id="s5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5bHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5bH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s5bL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s5bS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s5bB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s5bP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s5bN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s5bH" x="30" y="24">THE COMMON TASK FRAMEWORK</text>
+        <text class="s5bS" x="240" y="24">three ingredients, as Donoho lists them from Liberman</text>
+
+        <g filter="url(#s5bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- (a) training data -->
+          <rect x="30" y="90" width="130" height="120" rx="6" transform="rotate(-0.8 95 150)" fill="url(#s5bHv)" stroke="#6A5ACD"/>
+          <path d="M164 120 L232 94" marker-end="url(#s5bAr)"/>
+          <path d="M164 150 L232 162" marker-end="url(#s5bAr)"/>
+          <path d="M164 180 L232 230" marker-end="url(#s5bAr)"/>
+          <!-- (b) three desks -->
+          <circle cx="265" cy="70" r="8"/>
+          <path d="M240 92 L310 92 M248 92 L248 114 M302 92 L302 114 M265 78 L265 92"/>
+          <circle cx="265" cy="140" r="8"/>
+          <path d="M240 162 L310 162 M248 162 L248 184 M302 162 L302 184 M265 148 L265 162"/>
+          <circle cx="265" cy="210" r="8"/>
+          <path d="M240 232 L310 232 M248 232 L248 254 M302 232 L302 254 M265 218 L265 232"/>
+          <!-- submissions -->
+          <path d="M316 92 L424 130" marker-end="url(#s5bAr)"/>
+          <path d="M316 162 L424 166" marker-end="url(#s5bAr)"/>
+          <path d="M316 232 L424 202" marker-end="url(#s5bAr)"/>
+          <!-- (c) referee -->
+          <rect x="430" y="90" width="190" height="155" rx="8" transform="rotate(0.4 525 167)" fill="#FFFFFF"/>
+          <rect x="444" y="140" width="164" height="70" rx="5" transform="rotate(-0.6 526 175)" fill="#FBEDE6" stroke="#A8431F"/>
+          <!-- the lock on the sealed rows -->
+          <path d="M517 132 L535 132 L535 147 L517 147 Z" fill="#FFFFFF" stroke="#A8431F"/>
+          <path d="M521 132 L521 127 C521 121 531 121 531 127 L531 132" stroke="#A8431F"/>
+          <!-- scores out -->
+          <path d="M624 168 L676 168" marker-end="url(#s5bAr)"/>
+          <!-- leaderboard -->
+          <rect x="680" y="90" width="170" height="155" rx="8" transform="rotate(-0.5 765 167)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <path d="M716 134 L830 134 M716 160 L818 160 M716 186 L806 186 M716 212 L790 212" stroke="#8B7FD9"/>
+          <!-- the climb -->
+          <path d="M765 250 C765 300 300 305 274 262" stroke-dasharray="6 5" marker-end="url(#s5bAr)"/>
+        </g>
+
+        <text class="s5bL" x="30" y="66">(a) training data</text>
+        <text class="s5bS" x="30" y="80">public, labelled</text>
+        <text class="s5bS" x="30" y="230">features + a class label</text>
+
+        <text class="s5bL" x="236" y="54">(b) competitors</text>
+
+        <text class="s5bL" x="430" y="82">(c) scoring referee</text>
+        <text class="s5bH" x="525" y="116" text-anchor="middle">runs every submission</text>
+        <text class="s5bB" x="526" y="172" text-anchor="middle">sequestered test set</text>
+        <text class="s5bS" x="526" y="190" text-anchor="middle">rows no competitor sees</text>
+        <text class="s5bS" x="525" y="232" text-anchor="middle">reports the score itself</text>
+
+        <text class="s5bP" x="765" y="116" text-anchor="middle">leaderboard</text>
+        <text class="s5bS" x="700" y="138">1</text>
+        <text class="s5bS" x="700" y="164">2</text>
+        <text class="s5bS" x="700" y="190">3</text>
+        <text class="s5bS" x="700" y="216">4</text>
+
+        <text class="s5bS" x="520" y="312" text-anchor="middle">see the score, tweak, resubmit</text>
+
+        <text class="s5bN" x="30" y="334">The leaderboard is itself a grader: resubmit often enough and the scores start to learn the sealed rows.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta rows are the whole trick: nobody who builds a rule can see them, and the dashed loop is how that protection leaks</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The three ingredients, and Liberman's three lessons<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>As Donoho sets it out, a common task framework has exactly three parts:</p>
+        <ol>
+          <li>(a) A publicly available training dataset, with a list of features and a class label for each observation.</li>
+          <li>(b) A set of enrolled competitors whose common task is to infer a prediction rule from the training data.</li>
+          <li>(c) A scoring referee, to which competitors submit their rules. The referee runs each rule against a test set that is sequestered behind a wall, and reports the score automatically.</li>
+        </ol>
+        <p>Take away any one and it stops working. Without (a) nobody can enter; without (b) there is no pressure; without (c) every team grades itself, and session 3 showed what a small peek at the confirmatory rows does to a score.</p>
+        <p>Liberman's experience, as Donoho reports it, came down to three lessons. Error rates decline by a fixed percentage each year, towards an asymptote. Progress comes from many small improvements, not a breakthrough: "a change of 1% can be a reason to break out the champagne". And shared data gets reused in ways nobody planned.</p>
+        <p>What a benchmark score entitles you to claim is its own question, and it belongs to <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a4-what-a-benchmark-licenses.html">ML Epistemology, leader session 4 ↗</a>. Tonight is only the mechanism.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How the framework was born, as Liberman tells it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This history is reported by Donoho from Liberman, not read at any primary source here, so treat each step as their account. In the 1960s a review led by J. R. Pierce sent US machine translation research "essentially to zero for decades". The way back ran through Jelinek's team at IBM, working from the Canadian Hansards. In the late 1980s DARPA adopted the common task framework for its language research, with NIST as the referee.</p>
+        <p>Notice what the story is about. It is not a better algorithm. It is a funding agency deciding that claims would be settled by a shared dataset and a neutral scorer, rather than by whoever wrote the most persuasive paper.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The Netflix Challenge.</strong> A $1M prize run on the three ingredients: shared training data, enrolled teams, and a held-back set scored by the sponsor. Donoho uses it as the framework's best-known public case, and adds a footnote that is the most useful sentence in the section for anyone who sponsors a contest: the winning algorithm was never implemented. A leaderboard can tell you which rule scores best on the sealed rows. It cannot tell you whether that rule is worth running.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the six divisions of greater data science</span>
+      <h2>A map of the whole field</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Donoho's answer to "what is data science" is a map with six divisions, which he calls greater data science. Its most useful property for tonight is where it puts the argument of the last four sessions: both of Breiman's cultures fit inside one division, and five others surround them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 332" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The six divisions of greater data science drawn as a map. A terracotta ring around everything is Science about Data Science. Inside it, a top row of three divisions: Data Gathering, Preparation, and Exploration, marked with Donoho's hedge that some say 80 percent of the effort goes there; Data Representation and Transformation; Computing with Data. A bottom row: Data Modeling, split into an ochre generative half for Breiman's data modelling culture and a violet predictive half for his algorithmic culture, and Data Visualization and Presentation. Small notes record that Donoho's list puts Modeling fourth and Visualization fifth while his section headings swap them.">
+        <defs>
+          <filter id="s5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="57" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .s5cH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s5cL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s5cS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s5cB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s5cO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s5cP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s5cN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s5cH" x="30" y="22">GREATER DATA SCIENCE, SIX DIVISIONS</text>
+        <text class="s5cS" x="300" y="22">named as Donoho names them; numbers left off on purpose</text>
+
+        <g filter="url(#s5cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the ring: science about data science -->
+          <rect x="20" y="44" width="840" height="252" rx="18" transform="rotate(-0.3 440 170)" stroke="#A8431F" stroke-width="4"/>
+          <path d="M34 37 L230 37 L230 55 L34 55 Z" fill="#FFFFFF" stroke="#FFFFFF"/>
+          <!-- top row -->
+          <rect x="50" y="72" width="250" height="88" rx="8" transform="rotate(-0.5 175 116)" fill="#FFFFFF"/>
+          <rect x="315" y="72" width="250" height="88" rx="8" transform="rotate(0.4 440 116)" fill="#FFFFFF"/>
+          <rect x="580" y="72" width="250" height="88" rx="8" transform="rotate(-0.4 705 116)" fill="#FFFFFF"/>
+          <!-- data modeling, two halves -->
+          <rect x="50" y="176" width="390" height="104" rx="8" transform="rotate(0.3 245 228)" fill="#FFFFFF"/>
+          <rect x="60" y="208" width="182" height="62" rx="6" transform="rotate(-0.6 151 239)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="250" y="208" width="182" height="62" rx="6" transform="rotate(0.6 341 239)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <!-- visualization -->
+          <rect x="455" y="176" width="375" height="104" rx="8" transform="rotate(-0.4 642 228)" fill="#FFFFFF"/>
+          <!-- a small bar chart doodle -->
+          <path d="M740 266 L812 266 M748 266 L748 244 M764 266 L764 232 M780 266 L780 250 M796 266 L796 224" stroke="#665D4B"/>
+        </g>
+
+        <text class="s5cB" x="42" y="50">Science about Data Science</text>
+
+        <text class="s5cL" x="64" y="96">Data Gathering, Preparation,</text>
+        <text class="s5cL" x="64" y="112">and Exploration</text>
+        <text class="s5cS" x="64" y="140">a hedge: "some say" 80 percent</text>
+
+        <text class="s5cL" x="329" y="96">Data Representation</text>
+        <text class="s5cL" x="329" y="112">and Transformation</text>
+
+        <text class="s5cL" x="594" y="96">Computing with Data</text>
+
+        <text class="s5cH" x="64" y="198">Data Modeling</text>
+        <text class="s5cS" x="426" y="198" text-anchor="end">list: 4th · heading: GDS5</text>
+        <text class="s5cO" x="151" y="236" text-anchor="middle">generative</text>
+        <text class="s5cS" x="151" y="254" text-anchor="middle">Breiman's data modelling</text>
+        <text class="s5cP" x="341" y="236" text-anchor="middle">predictive</text>
+        <text class="s5cS" x="341" y="254" text-anchor="middle">Breiman's algorithmic</text>
+
+        <text class="s5cL" x="471" y="206">Data Visualization and Presentation</text>
+        <text class="s5cS" x="471" y="224">list: 5th · heading: GDS4</text>
+
+        <text class="s5cN" x="30" y="320">Both of Breiman's cultures fit inside one division. The ring around everything is the study of doing it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the fight of sessions 1 to 4 lives in one split box; the terracotta ring is the division that studies all the others</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Six divisions, one split box, and a hedge<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The six divisions, by name: Data Gathering, Preparation, and Exploration; Data Representation and Transformation; Computing with Data; Data Modeling; Data Visualization and Presentation; Science about Data Science. Cite them by name, because the published paper numbers them two ways: the list puts Modeling fourth and Visualization fifth, while the section headings that follow read "GDS4: Data Visualization and Presentation" and "GDS5: Data Modeling". Anyone who writes "GDS4" is telling you which of the two they read.</p>
+        <p><strong>Data Modeling holds both cultures.</strong> Donoho's sentence: "Each data scientist in practice uses tools and viewpoints from both of Leo Breiman's modeling cultures". In his map the two-cultures argument is a disagreement inside one division, not a split of the field.</p>
+        <p><strong>The 80 percent is a hedge.</strong> Under the first division Donoho writes "Some say that 80% of the effort ..." goes into gathering, preparing and exploring data. That is "some say", not a measurement, and it should never be repeated as a statistic. He also claims the first division "is more important than" modeling "as measured using time spent by practitioners", while modeling dominates academic teaching. That is his claim; nothing here measures it.</p>
+        <p>His one-line definition, from the conclusion: "data science is the science of learning from data".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Data science in 2065<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Donoho ends with a forecast, and one sentence of it points straight back at Part 2: "Many new common task frameworks will appear; however, the new ones would not always have prediction accuracy for their performance metric."</p>
+        <p>Read it with Breiman in mind. The referee's score is where the predictive culture gets its authority, and Donoho expects the score itself to change: a framework could grade something other than accuracy on the sealed rows. What else could a referee grade? Session 6 gives four eminent statisticians' answers from 2001, and they do not agree.</p>
+      </div>
+    </details>
+
+    <div class="callout tip">
+      <p><strong>Put your own week on the map.</strong> Take last week's work and tag each hour with one of the six divisions. If most of it lands in the first one, you are in good company on Donoho's reading, but you have also produced the only measurement on this page of his "time spent by practitioners" claim, and it is a sample of one.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Run a common task framework on 569 biopsies</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Same biopsies, same split as session 1: 398 training rows and 171 held-out rows, split once with seed 2001. Tonight the held-out rows go behind a wall. You write the referee, submit four rules from earlier sessions, print the leaderboard, and then do what every competitor eventually does: submit the same kind of model 20 times and keep the best. Every output below is what the code prints on scikit-learn 1.9.0.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a hand-drawn machine. 398 training rows feed four prediction rules. The rules go to a referee function that alone can read 171 sealed rows, drawn in terracotta. The sorted leaderboard: logistic regression on 30 features 170 of 171, forest of 100 trees 167, the worst radius rule at 16.76 157, everyone benign 107. Below, 20 forest submissions with seeds 0 to 19 score from 165 to 168, median 167.0; the best kept is 168, one biopsy above the median, marked in terracotta.">
+        <defs>
+          <filter id="s5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s5dHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s5dH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s5dL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s5dS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s5dB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s5dO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s5dP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s5dN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s5dH" x="30" y="24">A MINI COMMON TASK FRAMEWORK</text>
+        <text class="s5dS" x="250" y="24">same split as session 1, the held-out rows now sealed</text>
+
+        <g filter="url(#s5dSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- training rows -->
+          <rect x="30" y="50" width="150" height="60" rx="6" transform="rotate(-0.8 105 80)" fill="url(#s5dHv)" stroke="#6A5ACD"/>
+          <path d="M184 80 L226 80" marker-end="url(#s5dAr)"/>
+          <!-- four rules -->
+          <rect x="230" y="54" width="150" height="52" rx="6" transform="rotate(0.8 305 80)" fill="#FFFFFF"/>
+          <path d="M305 110 L305 136" marker-end="url(#s5dAr)"/>
+          <!-- sealed rows -->
+          <rect x="30" y="146" width="150" height="70" rx="6" transform="rotate(0.6 105 181)" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M96 138 L114 138 L114 153 L96 153 Z" fill="#FFFFFF" stroke="#A8431F"/>
+          <path d="M100 138 L100 133 C100 127 110 127 110 133 L110 138" stroke="#A8431F"/>
+          <path d="M184 181 L226 181" stroke="#A8431F" marker-end="url(#s5dAr)"/>
+          <!-- referee -->
+          <rect x="230" y="142" width="150" height="80" rx="8" transform="rotate(-0.6 305 182)" fill="#FFFFFF"/>
+          <path d="M384 170 C410 150 420 120 436 110" marker-end="url(#s5dAr)"/>
+          <!-- leaderboard panel -->
+          <rect x="440" y="44" width="410" height="166" rx="8" transform="rotate(0.3 645 127)" fill="#FFFFFF"/>
+          <rect x="600" y="70" width="199" height="18" rx="3" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="600" y="104" width="195" height="18" rx="3" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="600" y="138" width="184" height="18" rx="3" fill="#FFFFFF" stroke="#665D4B"/>
+          <rect x="600" y="172" width="125" height="18" rx="3" fill="#FFFFFF" stroke="#D6CDB8"/>
+          <!-- 20 submissions -->
+          <path d="M450 236 L450 252 M470 236 L470 252 M490 236 L490 252 M510 236 L510 252 M530 236 L530 252 M550 236 L550 252 M570 236 L570 252 M590 236 L590 252 M610 236 L610 252 M630 236 L630 252 M650 236 L650 252 M670 236 L670 252 M690 236 L690 252 M710 236 L710 252 M730 236 L730 252 M750 236 L750 252 M770 236 L770 252 M790 236 L790 252 M810 236 L810 252 M830 236 L830 252" stroke="#6A5ACD"/>
+          <path d="M440 246 C400 250 330 250 312 228" marker-end="url(#s5dAr)"/>
+          <!-- the range 165 to 168 -->
+          <path d="M500 282 L800 282" stroke="#8B7FD9" stroke-width="3"/>
+          <path d="M500 274 L500 290 M600 276 L600 288 M700 274 L700 290" stroke="#6A5ACD"/>
+          <circle cx="800" cy="282" r="7" fill="#A8431F" stroke="#A8431F"/>
+        </g>
+
+        <text class="s5dL" x="44" y="76">398 training rows</text>
+        <text class="s5dS" x="44" y="94">competitors see these</text>
+        <text class="s5dL" x="244" y="78">four rules</text>
+        <text class="s5dS" x="244" y="96">fitted on the 398</text>
+        <text class="s5dB" x="44" y="178">171 sealed rows</text>
+        <text class="s5dS" x="44" y="196">referee only</text>
+        <text class="s5dL" x="244" y="176">referee()</text>
+        <text class="s5dS" x="244" y="194">counts right answers</text>
+        <text class="s5dS" x="244" y="208">on the sealed rows</text>
+
+        <text class="s5dH" x="456" y="62">the board, sorted</text>
+        <text class="s5dO" x="590" y="84" text-anchor="end">logistic, 30 features</text>
+        <text class="s5dP" x="590" y="118" text-anchor="end">forest, 100 trees</text>
+        <text class="s5dL" x="590" y="152" text-anchor="end">worst radius &lt;= 16.76</text>
+        <text class="s5dS" x="590" y="186" text-anchor="end">everyone benign</text>
+        <text class="s5dO" x="808" y="84">170</text>
+        <text class="s5dP" x="804" y="118">167</text>
+        <text class="s5dL" x="793" y="152">157</text>
+        <text class="s5dS" x="734" y="186">107</text>
+
+        <text class="s5dS" x="450" y="229">then: the forest again, 20 submissions, seeds 0 to 19</text>
+        <text class="s5dS" x="700" y="270" text-anchor="middle">median 167.0</text>
+        <text class="s5dL" x="500" y="306" text-anchor="middle">165</text>
+        <text class="s5dS" x="600" y="306" text-anchor="middle">166</text>
+        <text class="s5dB" x="800" y="306" text-anchor="middle">168, best kept</text>
+
+        <text class="s5dN" x="30" y="330">The kept 168 is one biopsy above the median, bought by submitting 20 times, not by a better model.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta dot is the score a team would report, and the violet line is everything the same model could have scored</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Split once, then seal.</strong> The split is session 1's, byte for byte. The only new line turns the held-out indices into a set that only the referee will read. Competitors get <code>X[train]</code> and <code>y[train]</code> and nothing else.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · split and seal</span>import numpy as np
+from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+X, y = data.data, data.target        # y: 1 = benign, 0 = malignant
+names = list(data.feature_names)
+
+rng = np.random.default_rng(2001)
+test = []
+for cls in (0, 1):
+    idx = np.flatnonzero(y == cls)
+    test += list(rng.permutation(idx)[: round(0.30 * len(idx))])
+test = np.array(sorted(test))
+train = np.setdiff1d(np.arange(len(y)), test)
+
+SEALED = set(test.tolist())          # the referee's rows
+print(len(train), len(SEALED))       # 398 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the referee.</strong> It takes a prediction function, not predictions: a competitor hands over a rule and never touches the sealed rows. It returns one number, the count of right answers, which is ingredient (c) in six lines.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the referee</span>def referee(predict_fn):
+    rows = sorted(SEALED)
+    return int((predict_fn(X[rows]) == y[rows]).sum())
+
+board = []</div>
+      </div>
+      <div class="step">
+        <p><strong>Submit the do-nothing rule first.</strong> Every leaderboard needs its floor. Calling every biopsy benign is a rule the referee can score like any other.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · everyone benign</span>ok = referee(lambda Z: np.ones(len(Z), dtype=int))
+board.append(("everyone benign", ok))
+print(ok)                            # 107</div>
+      </div>
+      <div class="step">
+        <p><strong>Submit session 3's rule.</strong> One feature, one cut, chosen by exploring the 398 training rows: benign if worst radius is at most 16.76. Session 3 confirmed it once on the held-out rows; here the referee does the confirming.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · worst radius &lt;= 16.76</span>j = names.index("worst radius")
+ok = referee(lambda Z: (Z[:, j] &lt;= 16.76).astype(int))
+board.append(("worst radius &lt;= 16.76", ok))
+print(ok)                            # 157</div>
+      </div>
+      <div class="step">
+        <p><strong>Submit both cultures and print the board.</strong> The same two models as session 1. The logistic regression is wrapped in a pipeline so the scaler is fitted inside the rule, on training rows only. How the forest works is taught in <a href="https://phoebefu6.github.io/learn-ensemble-methods-with-phoebe/courses/02-random-forests.html">Ensemble Methods, session 2 ↗</a>.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the leaderboard</span>from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import make_pipeline
+
+lr = make_pipeline(StandardScaler(),
+                   LogisticRegression(C=1.0, tol=1e-10, max_iter=10000)).fit(X[train], y[train])
+board.append(("logistic, 30 features", referee(lr.predict)))
+
+rf = RandomForestClassifier(n_estimators=100, random_state=0).fit(X[train], y[train])
+board.append(("forest, 100 trees", referee(rf.predict)))
+
+for name, ok in sorted(board, key=lambda b: -b[1]):
+    print(f"{name:24s} {ok} of {len(SEALED)}")
+# logistic, 30 features    170 of 171
+# forest, 100 trees        167 of 171
+# worst radius &lt;= 16.76    157 of 171
+# everyone benign          107 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Now climb the leaderboard.</strong> Submit the forest 20 times, changing nothing but its seed, and keep the best. No team would call this cheating; it is what tuning against a public score looks like, and it is session 3's peek done politely, one submission at a time.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · 20 submissions</span>scores = [referee(RandomForestClassifier(n_estimators=100, random_state=s)
+                  .fit(X[train], y[train]).predict) for s in range(20)]
+print("20 submissions:", min(scores), "to", max(scores),
+      "median", np.median(scores), "best kept", max(scores))
+# 20 submissions: 165 to 168 median 167.0 best kept 168</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Report the median, not the maximum.</strong> Nothing about the model changed across those 20 submissions, yet the kept best is 168 against a median of 167.0. That one biopsy is optimism bought by submitting 20 times, and on a public leaderboard, where every team does the same, it compounds. The sealed rows stay sealed only while each team's number of looks stays small.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Read Donoho's sections on the common task framework and greater data science</strong> in JCGS 26(4). Find the footnotes where he renames Breiman's cultures, and write down the exact words he uses for each.</li>
+      <li><strong>Add a submission limit to the referee.</strong> Make it refuse after three calls per team name, then repeat step 6 with a limit of three. Write down what the best kept score can and cannot be. Your numbers will differ depending on which three seeds you pick.</li>
+      <li><strong>Find a common task framework at work or in your field.</strong> Name its (a), (b) and (c). If one is missing, say which, and what fills the gap.</li>
+      <li><strong>Tag one week of your hours</strong> by the six divisions, by name. Bring the share that landed in Data Gathering, Preparation, and Exploration, and be ready to say why a sample of one does not test Donoho's claim.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 5 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · Which list is the common task framework, as Donoho sets it out from Liberman?</p>
+      <button class="qopt" type="button">A · A large dataset, a deep neural network, and a GPU cluster</button>
+      <button class="qopt" type="button">B · A public training dataset with a label per observation; enrolled competitors with the common task of inferring a prediction rule; and a scoring referee that runs submitted rules against a sequestered test set and reports the score automatically</button>
+      <button class="qopt" type="button">C · A hypothesis, a designed experiment, and a significance test</button>
+      <button class="qopt" type="button">D · A shared codebase, peer review, and a published paper</button>
+      <p class="qwhy">The three ingredients are institutional, not algorithmic. Remove the sequestered test set and every team grades itself; remove the public training data and nobody can enter. Donoho calls the pairing of this framework with the predictive culture the "secret sauce" of machine learning.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · A team submits the same forest with 20 different seeds and reports its best score, 168 of 171. Why is that number optimistic?</p>
+      <button class="qopt" type="button">A · Because the referee's test set was too small to score anything</button>
+      <button class="qopt" type="button">B · Because random forests always overfit their training rows</button>
+      <button class="qopt" type="button">C · Because 168 is below the logistic regression's 170</button>
+      <button class="qopt" type="button">D · Nothing about the model changed between submissions; the 20 scores ran from 165 to 168 with a median of 167.0, so the kept 168 is the top of the seed-to-seed range, one biopsy of optimism bought by looking 20 times</button>
+      <p class="qwhy">Choosing the best of many looks at the sealed rows turns the referee into part of the training loop. The honest report is the median, or better, a fresh sealed set the team has never scored against.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · In Donoho's six divisions of greater data science, where do both of Breiman's cultures sit?</p>
+      <button class="qopt" type="button">A · Both inside Data Modeling: "Each data scientist in practice uses tools and viewpoints from both of Leo Breiman's modeling cultures"</button>
+      <button class="qopt" type="button">B · Generative in Data Modeling, predictive in Computing with Data</button>
+      <button class="qopt" type="button">C · Predictive in Data Gathering, Preparation, and Exploration, because 80 percent of the effort goes there</button>
+      <button class="qopt" type="button">D · In Science about Data Science, because that division holds all the arguments</button>
+      <p class="qwhy">The two-cultures argument is a disagreement inside one division, not a split of the field. And the 80 percent is Donoho's "some say", a hedge, never a measurement.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Donoho (2017), 50 Years of Data Science</span><span class="note">Journal of Computational and Graphical Statistics 26(4), 745-766, doi 10.1080/10618600.2017.1384734; read at source, published version and the 2015 Tukey Centennial preprint; the GDS numbering quirk checked in the published PDF</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Chambers (1993) and Cleveland (2001)</span><span class="note">Quoted via Donoho, not opened here; Cleveland's six areas and allocations as Donoho gives them</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Liberman's lessons and the Pierce, Jelinek, Hansards and DARPA history</span><span class="note">Reported by Donoho from Liberman; no primary source read here</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The Netflix Challenge footnote</span><span class="note">Read in Donoho: $1M prize, the winning algorithm was never implemented</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">"Four major influences act on data analysis today"</span><span class="note">A list Donoho attributes to Tukey; not found in the 1962 paper read at source; source unconfirmed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The build-along on UCI Breast Cancer Wisconsin (Diagnostic)</span><span class="note">Wolberg, Mangasarian, Street and Street (1993), doi 10.24432/C5DW2B, CC BY 4.0; every printed output produced by the code on scikit-learn 1.9.0</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>The arc</b><span>Tukey 1962, Chambers 1993, Cleveland 2001, Breiman 2001, Donoho preprint 2015, published 2017.</span></div>
+      <div class="cheat-item"><b>Donoho's names</b><span>Generative = Breiman's data modelling culture. Predictive = the algorithmic culture.</span></div>
+      <div class="cheat-item"><b>Common task framework</b><span>(a) public labelled training data, (b) enrolled competitors, (c) a referee with a sequestered test set.</span></div>
+      <div class="cheat-item"><b>The secret sauce</b><span>Predictive culture plus the framework, in Donoho's words. Netflix's winner was never implemented.</span></div>
+      <div class="cheat-item"><b>Six divisions, by name</b><span>Both cultures live inside Data Modeling. The 80 percent is "some say", never a statistic.</span></div>
+      <div class="cheat-item"><b>Best of 20 is optimistic</b><span>Forest seeds 0 to 19: 165 to 168, median 167.0. Report the median, not the kept 168.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Five sessions have handed you two cultures, three checks for a useful model, a sealed test set and a leaderboard. Session 6 asks the practical question: faced with a real problem, which culture is this question? It lets the four 2001 discussants, Cox, Efron, Hoadley and Parzen, argue it out in their own words, and it does not pick a winner.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 5 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="04-the-two-cultures-bench.html">← Prev: The two-cultures bench</a> &nbsp;·&nbsp; <a href="06-which-culture-is-this-question.html">Next: Which culture is this question? →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

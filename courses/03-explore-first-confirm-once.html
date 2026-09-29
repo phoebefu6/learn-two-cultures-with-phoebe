@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 3 of 6. John Tukey's 1962 paper, read from the page: data analysis as a science judged by the test of experience, the detective and the judge, and why the rows that confirm must stay untouched. Build-along on 569 real biopsies: explore the 398, confirm on the 171 once.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Explore first, confirm once - learn two cultures with phoebe">
+<meta property="og:description" content="Session 3 of 6. Tukey 1962 in his own words, then a search that scores 163 of 171 and is not a result, and a rule that scores 157 and is.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/03-explore-first-confirm-once.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Explore first, confirm once - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 3 of 6. Tukey's detective and judge, read at source, tested on real rows.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 3 · Explore first, confirm once - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 3 of 6</div>
+    <h1>Explore first, <span class="accent">confirm once</span></h1>
+    <p class="sub">In 1962 John Tukey opened a 67-page paper in the Annals of Mathematical Statistics by admitting that he was no longer sure he was a statistician. What he cared about, he wrote, was data analysis, and he argued that it was a science in its own right, judged by the test of experience rather than by proof. His 1977 book is reported to have given the exploring half a name of its own, and a 1980 paper put the whole argument in its title: we need both exploratory and confirmatory. Tonight we read the 1962 paper at source, separate what it says from what it is quoted as saying, and then run the discipline on 569 real biopsies: explore 398 rows as freely as you like, and open the other 171 exactly once.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders and practitioners</span>
+      <span class="chip audience">Python, pandas</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Tukey, the detective and the judge</span>
+      <span class="a3" style="flex:7">18-40 · Build-along: explore the 398, confirm on the 171 once</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Sessions 1 and 2 kept one habit without naming it: 171 biopsies were set aside before any model existed, and every score was read off them. Tonight names the habit and its author. Tukey did not invent the held-out set, but he drew the line it depends on: one kind of work where you are allowed to look at anything and change your mind as often as you like, and a second kind where you state one claim in advance and test it once. The two colours still mean what they meant: <strong style="color:#7A5C00">ochre for the data modelling culture</strong>, <strong style="color:#6A5ACD">violet for the algorithmic culture</strong>. Tonight's figures are mostly about rows, not cultures, so terracotta does most of the talking.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Tukey's three-part test of a science, in his words, and why mathematics fails it; the difference between what the 1962 paper actually says and what later books and slides attribute to it; a clear rule for what exploration may do and what confirmation may do; and a pandas script that finds a rule on 398 training rows, writes it down, and grades it once on 171 untouched rows, next to two peeks that score higher and prove nothing.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers Tukey 1962, data analysis as a science</span>
+      <h2>A statistician who stopped being sure</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">"The Future of Data Analysis" is not a methods paper. It is a job description for a field that did not yet have a name, and it argues that the field's standard of truth should be experience, not proof. The whole claim rests on a three-part definition, and the figure below draws it as three gates.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tukey's 1962 test of a science drawn as three gates in a row. Gate a1 is intellectual content, gate a2 is organization into an understandable form, gate a3, in terracotta, is reliance on the test of experience as the ultimate standard of validity. Two lanes run through the gates. Mathematics passes a1 and a2 and stops at a3, so by these tests it is not a science. Data analysis passes all three and arrives at a science, defined by a ubiquitous problem rather than by a concrete subject. Below, the price of passing the third gate, from page 6: seek scope and usefulness rather than security, be willing to err moderately often, and use mathematics as a basis for judgment rather than proof.">
+        <defs>
+          <filter id="s3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="62" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3aH { font: 800 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3aL { font: 600 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3aS { font: 400 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+          .s3aB { font: 800 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #7A2E12; }
+          .s3aN { font: 400 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s3aH" x="30" y="26">TUKEY'S TEST OF A SCIENCE, 1962</text>
+        <text class="s3aS" x="290" y="26">three constituents, pp.5-6: a field has to pass all three gates</text>
+
+        <g filter="url(#s3aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- the three gates -->
+          <rect x="230" y="66" width="130" height="184" rx="6" transform="rotate(-0.5 295 158)" fill="#FFFFFF"/>
+          <rect x="400" y="66" width="130" height="184" rx="6" transform="rotate(0.4 465 158)" fill="#FFFFFF"/>
+          <rect x="570" y="66" width="130" height="184" rx="6" transform="rotate(-0.4 635 158)" fill="#FBEDE6" stroke="#A8431F"/>
+          <!-- the two travellers -->
+          <rect x="40" y="140" width="160" height="40" rx="6" transform="rotate(-1.5 120 160)" fill="#FFFFFF" stroke="#665D4B"/>
+          <rect x="40" y="202" width="160" height="40" rx="6" transform="rotate(1.2 120 222)" fill="url(#s3aHc)" stroke="#9C7A1E"/>
+          <!-- lanes -->
+          <path d="M206 160 L556 160" stroke="#665D4B" marker-end="url(#s3aAr)"/>
+          <path d="M562 144 L562 176" stroke="#A8431F" stroke-width="3"/>
+          <path d="M206 222 L724 222" marker-end="url(#s3aAr)"/>
+          <rect x="730" y="192" width="130" height="60" rx="8" transform="rotate(1 795 222)" fill="#FFFFFF"/>
+          <!-- doodle: the rocky road -->
+          <path d="M770 288 C774 280 784 280 788 288 Z M792 290 C795 284 803 284 806 290 Z M810 288 C814 278 826 278 830 288 Z" stroke="#665D4B"/>
+          <path d="M760 292 L842 292" stroke="#D6CDB8"/>
+        </g>
+
+        <text class="s3aH" x="295" y="58" text-anchor="middle">a1</text>
+        <text class="s3aH" x="465" y="58" text-anchor="middle">a2</text>
+        <text class="s3aB" x="635" y="58" text-anchor="middle">a3</text>
+        <text class="s3aL" x="295" y="88" text-anchor="middle">intellectual</text>
+        <text class="s3aS" x="295" y="104" text-anchor="middle">content</text>
+        <text class="s3aL" x="465" y="88" text-anchor="middle">organization</text>
+        <text class="s3aS" x="465" y="104" text-anchor="middle">understandable</text>
+        <text class="s3aB" x="635" y="88" text-anchor="middle">test of</text>
+        <text class="s3aB" x="635" y="102" text-anchor="middle">experience</text>
+        <text class="s3aS" x="635" y="118" text-anchor="middle">ultimate standard</text>
+
+        <text class="s3aL" x="120" y="165" text-anchor="middle">mathematics</text>
+        <text class="s3aL" x="120" y="227" text-anchor="middle">data analysis</text>
+        <text class="s3aB" x="712" y="156">not a science</text>
+        <text class="s3aS" x="712" y="172">judged by proof</text>
+        <text class="s3aL" x="795" y="214" text-anchor="middle">a science</text>
+        <text class="s3aS" x="795" y="229" text-anchor="middle">defined by a</text>
+        <text class="s3aS" x="795" y="243" text-anchor="middle">ubiquitous problem</text>
+        <text class="s3aS" x="800" y="272" text-anchor="middle">rocky road, p.64</text>
+
+        <text class="s3aH" x="30" y="276">WHAT PASSING GATE a3 COSTS, p.6</text>
+        <text class="s3aS" x="30" y="294">(b1) scope and usefulness rather than security  ·  (b2) willing to err moderately often</text>
+        <text class="s3aS" x="30" y="310">(b3) mathematical results as bases for judgment, not as bases for proof</text>
+
+        <text class="s3aN" x="30" y="332">Mathematics passes a1 and a2 and stops at a3: it is judged by proof, not by the test of experience.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta gate is the whole argument: a field whose final judge is experience cannot also demand the security of proof</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The confession, and the three gates<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The paper's first page of argument is personal. "For a long time I have thought I was a statistician, interested in inferences from the particular to the general. But as I have watched mathematical statistics evolve, I have had cause to wonder and to doubt." (Tukey, 1962, p.2). He then says what he cares about instead: "my central interest is in data analysis, which I take to include, among other things: procedures for analyzing data, techniques for interpreting the results of such procedures, ways of planning the gathering of data to make its analysis easier, more precise or more accurate, and all the machinery and results of (mathematical) statistics which apply to analyzing data."</p>
+        <p>To claim data analysis is a science he needs a definition of science, and he gives one with three constituents (pp.5-6): "(a1) intellectual content, (a2) organization into an understandable form, (a3) reliance upon the test of experience as the ultimate standard of validity." Then the sentence that must have stung his readers: "By these tests, mathematics is not a science". Mathematics has content and organisation, but its standard of validity is proof. Data analysis, he argues, passes all three, and is "a science, one defined by a ubiquitous problem rather than by a concrete subject."</p>
+        <p>Gate a3 has a price, and he states it on p.6. "(b1) Data analysis must seek for scope and usefulness rather than security." (b2) It "must be willing to err moderately often in order that inadequate evidence shall more often suggest the right answer." (b3) It "must use mathematical argument and mathematical results as bases for judgment rather than as bases for proof or stamps of validity." Hold on to (b2): a discipline that is allowed to err moderately often needs somewhere to find out when it has.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The right question, sanctification, and a quote that is not there<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The most quoted sentence.</strong> Section 11, "Facing uncertainty" (pp.13-14): "Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question, which can always be made precise." D. R. Cox, replying to Breiman in 2001, gives a close cousin: "Better a rough answer to the right question than an exact answer to the wrong question, an aphorism, due perhaps to Lord Kelvin". Same idea, two attributions; Cox's "perhaps" is his, and nobody has settled the origin here. How you choose the right question in the first place is its own discipline, taught in <a href="https://phoebefu6.github.io/learn-data-thinking-with-phoebe/courses/03-look-before-you-model.html">Data Thinking, session 3 ↗</a>.</p>
+        <p><strong>The danger he names.</strong> On p.13 Tukey warns against "the use of formal data-analytical procedures for sanctification, for the preservation of conclusions from all criticism, for the granting of an imprimatur." A significance test run to bless a conclusion already reached is exactly that. Keep the word; Part 3 shows what sanctification looks like in numbers.</p>
+        <p><strong>The attribution trap.</strong> David Donoho's 2017 "50 Years of Data Science" quotes a list, "Four major influences act on data analysis today", right after his quotations from this paper; a full-text search of the whole 1962 paper, pages 1 to 67, finds no such list, so it can only be cited as a list Donoho attributes to Tukey, source unconfirmed. That is the professional habit this session is about, applied to text: a quote is a hypothesis until you have read it at source.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>"Live with the data before you plunge into modeling."</strong> Leo Breiman spent thirteen years as a free-lance consultant before joining Berkeley in 1980, on projects such as forecasting ozone for the EPA from more than 450 weather variables. When he left consulting, this was the second of the five perceptions he took back to the university (Breiman, 2001, p.201). Tukey's closing line in 1962 asks for the same temperament from a whole profession: "the rocky road of real problems in preference to the smooth road of unreal assumptions, arbitrary criteria, and abstract results without real attachments. Who is for the challenge?" (p.64).</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers exploratory versus confirmatory</span>
+      <h2>The detective and the judge</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The popular story is that Tukey's 1962 paper launched exploratory data analysis. Read at source, it does something subtler. It never uses the words "exploratory data analysis" as a named practice, and it keeps the other half on purpose: Tukey says we should go on "using statistical techniques for the confirmatory appraisal of observations through such conclusion procedures as confidence statements and tests of significance" (p.7). The named pairing came later, and the dates matter when you quote him.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two jobs drawn as two panels joined by a one-way valve. On the left, explore: the 398 training rows, with several hypothesis cards scattered around them, radius, area, texture, a cut here, a plot, and the note that you may look as often as you like. In the middle a terracotta one-way valve labelled write it down. On the right, confirm: the 171 untouched rows receive one pre-stated test, run once, and produce one number. A dashed arrow runs from the right panel back to the left underneath, labelled back through the valve, a peek, which turns the judge back into a detective.">
+        <defs>
+          <filter id="s3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="77" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3bH { font: 800 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3bL { font: 600 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3bS { font: 400 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+          .s3bB { font: 800 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #7A2E12; }
+          .s3bN { font: 400 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s3bH" x="30" y="26">THE DETECTIVE AND THE JUDGE</text>
+        <text class="s3bS" x="260" y="26">two jobs, two sets of rows, and a valve that only opens one way</text>
+
+        <g filter="url(#s3bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- explore panel -->
+          <rect x="30" y="50" width="370" height="200" rx="10" transform="rotate(-0.4 215 150)" fill="#FFFFFF"/>
+          <rect x="48" y="104" width="96" height="124" rx="6" transform="rotate(-1.5 96 166)" fill="url(#s3bHc)" stroke="#9C7A1E"/>
+          <!-- hypothesis cards, hand-placed -->
+          <rect x="170" y="104" width="100" height="34" rx="5" transform="rotate(-3 220 121)" fill="#FFFFFF"/>
+          <rect x="284" y="108" width="100" height="34" rx="5" transform="rotate(2.5 334 125)" fill="#FFFFFF"/>
+          <rect x="170" y="154" width="100" height="34" rx="5" transform="rotate(2 220 171)" fill="#FFFFFF"/>
+          <rect x="284" y="158" width="100" height="34" rx="5" transform="rotate(-2 334 175)" fill="#FFFFFF"/>
+          <rect x="226" y="204" width="100" height="34" rx="5" transform="rotate(-1.5 276 221)" fill="#FFFFFF"/>
+          <!-- doodle: a magnifier over the pile -->
+          <circle cx="126" cy="122" r="13" fill="#FFFFFF"/>
+          <path d="M135 131 L146 142" stroke-width="3"/>
+          <!-- the valve -->
+          <path d="M406 150 L522 150" marker-end="url(#s3bAr)"/>
+          <path d="M446 132 L446 168 L476 150 Z" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M481 132 L481 168" stroke="#A8431F" stroke-width="3"/>
+          <!-- confirm panel -->
+          <rect x="530" y="50" width="320" height="200" rx="10" transform="rotate(0.4 690 150)" fill="#FFFFFF"/>
+          <rect x="548" y="110" width="110" height="60" rx="6" transform="rotate(0.8 603 140)" fill="#FFFFFF" stroke-dasharray="6 4"/>
+          <path d="M664 140 L694 140" marker-end="url(#s3bAr)"/>
+          <rect x="700" y="110" width="130" height="60" rx="6" transform="rotate(-0.8 765 140)" fill="#FFFFFF" stroke="#A8431F"/>
+          <!-- the forbidden way back -->
+          <path d="M690 258 C590 290 330 290 222 258" stroke="#665D4B" stroke-dasharray="6 5" marker-end="url(#s3bAr)"/>
+        </g>
+
+        <text class="s3bH" x="48" y="72">EXPLORE · the 398 training rows</text>
+        <text class="s3bS" x="48" y="88">many looks, many hypotheses, as often as you like</text>
+        <text class="s3bL" x="96" y="182" text-anchor="middle">398</text>
+        <text class="s3bS" x="96" y="198" text-anchor="middle">rows</text>
+        <text class="s3bS" x="220" y="125" text-anchor="middle">radius?</text>
+        <text class="s3bS" x="334" y="129" text-anchor="middle">area?</text>
+        <text class="s3bS" x="220" y="175" text-anchor="middle">texture?</text>
+        <text class="s3bS" x="334" y="179" text-anchor="middle">a cut here?</text>
+        <text class="s3bS" x="276" y="225" text-anchor="middle">a plot</text>
+
+        <text class="s3bB" x="463" y="118" text-anchor="middle">write it down</text>
+        <text class="s3bS" x="463" y="188" text-anchor="middle">one way only</text>
+
+        <text class="s3bH" x="548" y="72">CONFIRM · the 171 untouched rows</text>
+        <text class="s3bS" x="548" y="88">one pre-stated test, run once</text>
+        <text class="s3bL" x="603" y="138" text-anchor="middle">171</text>
+        <text class="s3bS" x="603" y="154" text-anchor="middle">held out</text>
+        <text class="s3bB" x="765" y="138" text-anchor="middle">one test</text>
+        <text class="s3bS" x="765" y="154" text-anchor="middle">one number</text>
+        <text class="s3bS" x="548" y="200">no new cut, no second feature, no rerun</text>
+        <text class="s3bS" x="548" y="216">the number is the result, good or bad</text>
+
+        <text class="s3bB" x="456" y="298" text-anchor="middle">back through the valve: a peek</text>
+
+        <text class="s3bN" x="30" y="320">Anything goes on the left. On the right, a second look turns the judge back into a detective.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta valve is the moment the hypothesis is written down; the dashed arrow is the one move that is never allowed</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three dates, two tiers of evidence<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>1962, read at source.</strong> Data analysis as a science; "confirmatory appraisal" kept, once, on p.7; the words "exploratory data analysis" do not appear as a named practice. On the same page Tukey quotes Martin Wilk: "The hallmark of good science is that it uses models and 'theory' but never believes them."</p>
+        <p><strong>1977, reported.</strong> The book <em>Exploratory Data Analysis</em> (Addison-Wesley) is widely described as casting exploration as detective work. It was not opened for this session, so treat that description as reported.</p>
+        <p><strong>1980, reported, title only.</strong> "We Need Both Exploratory and Confirmatory", The American Statistician 34(1). The title itself is the claim tonight teaches; the text was not opened here.</p>
+        <p>Donoho, writing in 2017 and read at source, is where the detective metaphor reaches today's data science: "Since John Tukey's coining of the term 'exploratory data analysis' (EDA), we all agree that every data scientist devotes serious time and effort to exploring data ... Such detective work adds crucial insights to every data-driven endeavor."</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What exploration is allowed to do<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Anything, as long as it happens on the exploration rows. Plot every feature. Compare class means. Try every cut on every column. Change your mind ten times. Tukey's own words from p.4 describe the attitude: "we need to stress flexibility of attack, willingness to iterate, and willingness to study things as they are, rather than as they, hopefully, should be."</p>
+        <p>What exploration produces is not a result. It is a hypothesis, and its training score is a rumour: the rows that suggested the rule are the rows that score it, so the score is flattered by construction.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What confirmation is allowed to do<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>One pre-stated test, once. Before the confirmation rows are opened, write down the rule, the metric and what would count as failure. Then run it and report what it printed, even when it is disappointing.</p>
+        <p>Everything else is off limits: re-choosing the cut, swapping to a feature that "looks better here", dropping the rows that disagree, or rerunning with a new seed until the number is pleasant. Each of those moves a decision to the wrong side of the valve, and the rows stop being a judge. If you genuinely learned something from the confirmation, the honest move is to treat it as exploration and find fresh rows to confirm on. What a single test score then entitles you to claim is a question with its own session: <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a1-what-a-test-score-entitles-you-to.html">ML Epistemology, leader session 1 ↗</a>.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Two years nobody touched.</strong> In Breiman's EPA ozone project in the mid-1970s, the job was to predict the next day's ozone in the Los Angeles Basin from over 450 meteorological variables. Seven years of data were available. The first five years were used to build the predictor; the last two were set aside as the test set (Breiman, 2001, pp.200-201). Whatever happened on the five years was detective work. The two years were the judge.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers why the confirmatory set must be untouched</span>
+      <h2>A peek is a search the judge helped with</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Nobody sets out to cheat. The damage comes from small, sensible-looking moves: glance at the test score, adjust one setting, glance again. Bruce Hoadley, of the credit-scoring company Fair, Isaac, described it in his 2001 reply to Breiman as "The algorithm tuning dilemma", and it is the reason the rows that confirm must be sealed before the exploring starts.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Before and after. Left, the wrong way, on a pale red panel: search all 30 features and every cut on the 171 held-out rows; the search picks worst concave points and scores 163 of 171, the best number on the page. Below it in terracotta: the same rule on the 398 training rows scores 354 of 398, worse than worst radius there at 367, because the 171 chose it. Right, the right way: search all 30 features on the 398 training rows; worst radius at a cut of 16.76 scores 367 of 398; the hypothesis is written down before the 171 are opened, and one run scores 157 of 171, lower and the only honest number.">
+        <defs>
+          <filter id="s3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="88" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3cH { font: 800 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3cR { font: 800 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #991B1B; }
+          .s3cL { font: 600 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3cS { font: 400 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+          .s3cB { font: 800 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #7A2E12; }
+          .s3cV { font: 800 20px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3cX { font: 800 20px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #991B1B; }
+          .s3cN { font: 400 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s3cH" x="30" y="26">THE SAME SEARCH, ON THE WRONG ROWS AND ON THE RIGHT ONES</text>
+
+        <g filter="url(#s3cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- wrong way panel -->
+          <rect x="30" y="48" width="400" height="250" rx="10" transform="rotate(-0.4 230 173)" fill="#FEF2F2" stroke="#991B1B"/>
+          <rect x="48" y="104" width="170" height="50" rx="6" transform="rotate(-1 133 129)" fill="#FFFFFF" stroke="#991B1B"/>
+          <path d="M222 129 L240 129" marker-end="url(#s3cAr)"/>
+          <rect x="244" y="104" width="170" height="50" rx="6" transform="rotate(1 329 129)" fill="#FFFFFF" stroke="#991B1B"/>
+          <rect x="48" y="232" width="366" height="50" rx="6" transform="rotate(0.4 231 257)" fill="#FBEDE6" stroke="#A8431F"/>
+          <!-- right way panel -->
+          <rect x="450" y="48" width="400" height="250" rx="10" transform="rotate(0.4 650 173)" fill="#FFFFFF"/>
+          <rect x="468" y="104" width="170" height="50" rx="6" transform="rotate(1 553 129)" fill="#FFFFFF"/>
+          <path d="M642 129 L660 129" marker-end="url(#s3cAr)"/>
+          <rect x="664" y="104" width="170" height="50" rx="6" transform="rotate(-1 749 129)" fill="#FFFFFF"/>
+          <rect x="468" y="232" width="366" height="50" rx="6" transform="rotate(-0.4 651 257)" fill="#FFFFFF"/>
+          <!-- doodle: a padlock on the sealed rows -->
+          <rect x="786" y="188" width="28" height="22" rx="3" fill="#FFFFFF"/>
+          <path d="M792 188 C792 172 808 172 808 188"/>
+        </g>
+
+        <text class="s3cR" x="48" y="72">WRONG WAY · search on the 171</text>
+        <text class="s3cS" x="48" y="88">every feature, every cut, chosen by the rows that grade it</text>
+        <text class="s3cL" x="62" y="126">search the 171</text>
+        <text class="s3cS" x="62" y="142">all 30 features</text>
+        <text class="s3cL" x="258" y="126">worst concave points</text>
+        <text class="s3cS" x="258" y="142">picked by the 171</text>
+        <text class="s3cX" x="62" y="196">163 of 171</text>
+        <text class="s3cS" x="62" y="214">the best score on the page</text>
+        <text class="s3cB" x="62" y="254">the same rule on the 398 training rows: 354 of 398</text>
+        <text class="s3cS" x="62" y="270">worse than worst radius there (367): the 171 chose it</text>
+
+        <text class="s3cH" x="468" y="72">RIGHT WAY · explore on the 398</text>
+        <text class="s3cS" x="468" y="88">search freely, write it down, open the 171 once</text>
+        <text class="s3cL" x="482" y="126">search the 398</text>
+        <text class="s3cS" x="482" y="142">all 30 features</text>
+        <text class="s3cL" x="678" y="126">worst radius</text>
+        <text class="s3cS" x="678" y="142">&lt;= 16.76: 367 of 398</text>
+        <text class="s3cV" x="482" y="196">157 of 171</text>
+        <text class="s3cS" x="482" y="214">lower, and the only honest number</text>
+        <text class="s3cL" x="482" y="254">the hypothesis was written before the 171</text>
+        <text class="s3cS" x="482" y="270">one test, run once: whatever it printed was the result</text>
+
+        <text class="s3cN" x="30" y="322">163 beats 157 on the page and loses on the rows it never chose from. Choosing on the grader is fitting to it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta box is the tell: a rule the held-out rows picked does worse than the honest rule on rows they did not see</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The tuning dilemma, and the drift behind it<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Hoadley (2001, p.223): "in industry and academia, there is sometimes a little tinkering, which involves peeking at the test sample. The result is some bias in the test sample or cross-validation results." And the question every modelling team faces: "How do you optimize your results and get an unbiased estimate of the generalization error?" The answer is not to stop tuning. It is to tune on rows that will never grade you.</p>
+        <p>He adds a second reason the judge must be honest: even a clean test score "does not guarantee high performance on future samples, things do change" (pp.221-222), and Fair, Isaac redevelops its core models about every 18 to 24 months. An inflated number today is also the baseline you will measure next year's drift against.</p>
+        <p>The field later built this seal into its institutions. In Donoho's account of the common task framework, the referee's test set "is sequestered" and scored automatically, so no competitor can peek. Session 5 reads that history in full.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the peek does to our two models<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The session 4 bench has a "peek" rung: grade each model on the 398 rows it was fitted on instead of the 171 it never saw. The forest scores 398 of 398 (100.0 percent) on the rows it memorised, against 167 of 171 (97.7 percent) held out. That gap is what peeking hides.</p>
+        <p>The regression goes the other way: 392 of 398 on training (98.5 percent) but 170 of 171 held out (99.4 percent). A held-out set of 171 rows can flatter as well as punish: one biopsy is 0.6 points. The lesson is not that held-out scores are exact. It is that they are the only scores nobody has had a chance to steer, so they are the only ones allowed to carry the claim, with their small-sample wobble stated beside them.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>A later judge, three times over.</strong> Hoadley's Fat Scorecard, the credit model whose 162 score weights had confidence intervals he called "useless", was not left to its original test sample. It had three extra test samples taken one, two and three years later (Hoadley, 2001, p.222), and it held up. That is what an honest later confirmation looks like: fresh rows, gathered after the model was fixed, that nobody could have tuned against.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Explore the 398, confirm on the 171 once</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Same biopsies, same split as sessions 1 and 2: the UCI Breast Cancer Wisconsin (Diagnostic) set, 569 biopsies, 30 nucleus measurements each, split once with seed 2001. This time there is no model library. You explore the training rows with pandas, hunt for the best single-feature rule by hand, write the hypothesis down, open the held-out rows once, and then commit the two classic sins on purpose so you can see what they print. Every output below is what the code prints.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The build-along as a one-way pipeline of five boxes. 398 exploration rows go to class means and the best single cut, which finds worst radius at or below 16.76, 367 of 398. That goes to a terracotta box, write it down, before the 171. Then open the 171 once, with no new cut and no second feature, and the result: 157 of 171. A dashed arrow below runs backwards from the open-once box to the search box, labelled steps 6 and 7 walk back: 158 and 163, neither a result.">
+        <defs>
+          <filter id="s3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="93" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s3dH { font: 800 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3dL { font: 600 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3dS { font: 400 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+          .s3dB { font: 800 11px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #7A2E12; }
+          .s3dV { font: 800 18px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #241F14; }
+          .s3dN { font: 400 12px Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s3dH" x="30" y="26">THE BUILD-ALONG, ONE WAY THROUGH</text>
+        <text class="s3dS" x="290" y="26">steps 1 to 4 see only the 398; step 5 opens the 171, once</text>
+
+        <g filter="url(#s3dSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="60" width="134" height="56" rx="6" transform="rotate(-1 97 88)" fill="url(#s3dHc)" stroke="#9C7A1E"/>
+          <path d="M168 88 L196 88" marker-end="url(#s3dAr)"/>
+          <rect x="202" y="60" width="134" height="56" rx="6" transform="rotate(0.8 269 88)" fill="#FFFFFF"/>
+          <path d="M340 88 L368 88" marker-end="url(#s3dAr)"/>
+          <rect x="374" y="60" width="134" height="56" rx="6" transform="rotate(-0.8 441 88)" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M512 88 L540 88" marker-end="url(#s3dAr)"/>
+          <rect x="546" y="60" width="134" height="56" rx="6" transform="rotate(0.6 613 88)" fill="#FFFFFF" stroke="#A8431F"/>
+          <path d="M684 88 L712 88" marker-end="url(#s3dAr)"/>
+          <rect x="718" y="60" width="134" height="56" rx="8" transform="rotate(-0.6 785 88)" fill="#FFFFFF"/>
+          <!-- the walk back -->
+          <path d="M600 176 C520 200 360 200 280 176" stroke="#665D4B" stroke-dasharray="6 5" marker-end="url(#s3dAr)"/>
+        </g>
+
+        <text class="s3dL" x="97" y="84" text-anchor="middle">398 rows</text>
+        <text class="s3dS" x="97" y="100" text-anchor="middle">exploration only</text>
+        <text class="s3dL" x="269" y="84" text-anchor="middle">class means</text>
+        <text class="s3dS" x="269" y="100" text-anchor="middle">best single cut</text>
+        <text class="s3dB" x="441" y="84" text-anchor="middle">write it down</text>
+        <text class="s3dS" x="441" y="100" text-anchor="middle">before the 171</text>
+        <text class="s3dL" x="613" y="84" text-anchor="middle">open the 171</text>
+        <text class="s3dS" x="613" y="100" text-anchor="middle">once</text>
+        <text class="s3dV" x="785" y="90" text-anchor="middle">157</text>
+        <text class="s3dS" x="785" y="106" text-anchor="middle">of 171</text>
+
+        <text class="s3dS" x="202" y="140">worst radius 367 of 398</text>
+        <text class="s3dS" x="202" y="156">cut 16.76, benign if &lt;=</text>
+        <text class="s3dS" x="546" y="140">no new cut</text>
+        <text class="s3dS" x="546" y="156">no second feature</text>
+
+        <text class="s3dB" x="440" y="214" text-anchor="middle">steps 6 and 7 walk back: 158 and 163, neither a result</text>
+
+        <text class="s3dN" x="30" y="236">Everything left of the terracotta box may be rerun as often as you like. Nothing right of it may.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta box is a comment in your script, and it is the most important line you will write tonight</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Load the biopsies and make the same split as session 1.</strong> Thirty percent of each class is set aside with seed 2001. From here until step 5, the variable <code>test</code> is a list of row numbers you do not look at.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · split, as in session 1</span>import numpy as np
+import pandas as pd
+from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+X, y = data.data, data.target        # y: 1 = benign, 0 = malignant
+names = list(data.feature_names)
+
+rng = np.random.default_rng(2001)
+test = []
+for cls in (0, 1):
+    idx = np.flatnonzero(y == cls)
+    test += list(rng.permutation(idx)[: round(0.30 * len(idx))])
+test = np.array(sorted(test))
+train = np.setdiff1d(np.arange(len(y)), test)
+print(len(train), len(test))         # 398 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Explore: class means, training rows only.</strong> Put the 398 rows in a DataFrame and compare the two classes on three features. Malignant nuclei are bigger and more concave; that is the first clue, not a conclusion.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the detective's first look</span>df = pd.DataFrame(X[train], columns=names)
+df["benign"] = y[train]
+print(df.groupby("benign")[["worst area", "worst concave points", "mean texture"]].mean().round(3))
+#         worst area  worst concave points  mean texture
+# benign
+# 0         1360.329                 0.178        21.597
+# 1          565.400                 0.075        17.905</div>
+      </div>
+      <div class="step">
+        <p><strong>Explore harder: the best single-feature rule.</strong> For every feature, try every observed value as a cut, in both directions, and count how many training biopsies the rule gets right. Keep the top three. This is a brute-force search, and on the exploration rows it is completely allowed.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · search the 398</span>def best_rule(rows, j):
+    v, t = X[rows, j], y[rows]
+    best = (0, None, None)
+    for c in np.unique(v):
+        for side in (0, 1):
+            pred = (v &lt;= c).astype(int) if side == 0 else (v &gt; c).astype(int)
+            ok = (pred == t).sum()
+            if ok &gt; best[0]: best = (ok, c, side)
+    return best
+
+res = sorted(((best_rule(train, j), names[j], j) for j in range(30)), key=lambda z: -z[0][0])[:3]
+for (ok, c, side), n, j in res:
+    print(n, ok, "of", len(train), "cut", c, "benign if &lt;=" if side == 0 else "benign if &gt;")
+# worst radius 367 of 398 cut 16.76 benign if &lt;=
+# worst area 367 of 398 cut 867.1 benign if &lt;=
+# worst perimeter 365 of 398 cut 109.8 benign if &lt;=</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the hypothesis down before the 171 exist for you.</strong> This step prints nothing and matters most. Worst radius and worst area tie on 367; the sort keeps worst radius first, and you commit to it now. State the rule, the metric and the bar it has to clear, in a comment that will still be in the file when someone reviews it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the valve</span># HYPOTHESIS, written before the held-out rows are opened:
+#   rule:   benign if worst radius &lt;= 16.76, malignant otherwise
+#   metric: biopsies right, out of the 171 held out
+#   bar:    beat the base rate of 62.6 percent (session 1)
+# One test. One run. Whatever it prints is the result.
+(ok, c, side), n, j = res[0]</div>
+      </div>
+      <div class="step">
+        <p><strong>Confirm once.</strong> Apply the written rule, unchanged, to the 171 held-out biopsies. It is lower than the 367 of 398 it earned in exploration, and that drop is information: it is what a training score was hiding.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the judge</span>pred = (X[test, j] &lt;= c).astype(int) if side == 0 else (X[test, j] &gt; c).astype(int)
+print("confirm once:", n, "&lt;=", c, (pred == y[test]).sum(), "of", len(test))
+# confirm once: worst radius &lt;= 16.76 157 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Sin on purpose, small: re-choose the cut on the held-out rows.</strong> Same feature, but let the 171 pick the threshold. It gains one biopsy. That one biopsy is not evidence about worst radius; it is the held-out rows fitting themselves.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · the small peek</span>okp, cp, sp = best_rule(test, j)
+print("peek cut", cp, okp, "of", len(test))
+# peek cut 15.85 158 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Sin on purpose, big: search every feature and cut on the held-out rows.</strong> Now the 171 choose the feature as well. The winner scores 163, the best number you will see tonight. Then check it on the 398 rows it never chose from: it does worse there than the worst radius rule you found honestly.</p>
+        <div class="prompt-box good"><span class="label">★ Step 7 · the big peek</span>allp = max(((best_rule(test, k)[0], names[k]) for k in range(30)))
+print("best of 30 features chosen on held-out:", allp)
+# best of 30 features chosen on held-out: (163, 'worst concave points')
+
+k = names.index(allp[1]); okk, ck, sk = best_rule(test, k)
+predtr = (X[train, k] &lt;= ck).astype(int) if sk == 0 else (X[train, k] &gt; ck).astype(int)
+print("same rule on training rows:", (predtr == y[train]).sum(), "of", len(train), "cut", ck)
+# same rule on training rows: 354 of 398 cut 0.1288</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Report 157, not 163.</strong> The peeked rule looks six biopsies better on the 171 and is thirteen biopsies worse on the 398 than the rule you wrote down. The held-out rows stopped being a judge the moment they chose the feature. If you want to know whether worst concave points really is better, that is now a hypothesis, and it needs rows that have not voted yet.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Read the first seven pages of Tukey's 1962 paper</strong>, through the "confirmatory appraisal" passage on p.7. Mark every sentence about what data analysis should be allowed to do, and every sentence about what it must still check.</li>
+      <li><strong>Check one quote at source.</strong> Take a Tukey, Box or Breiman quotation you have seen on a slide or a post. Find it in the primary text. If you cannot, rewrite your citation as "attributed to" or "reported", the way the four major influences list has to be cited.</li>
+      <li><strong>Run the valve with a different hypothesis.</strong> Before touching the 171, write down worst area &lt;= 867.1 as your rule in the step 4 comment, then run step 5 for it once. Write down what it prints, and do not change the rule afterwards.</li>
+      <li><strong>Find a peek at work.</strong> Pick one number from a recent report or deck and ask who chose the model, the threshold or the segment, and on which rows. If the same rows chose it and scored it, write the one-line hypothesis that should have been written first.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 3 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · A slide says "Tukey coined exploratory data analysis in his 1962 paper and listed four major influences on data analysis." What does the 1962 paper, read at source, actually contain?</p>
+      <button class="qopt" type="button">A · Exactly what the slide says; Donoho quotes both, so both must be in the paper</button>
+      <button class="qopt" type="button">B · The case for data analysis as a science judged by "the test of experience", with "confirmatory appraisal" kept on p.7; the words "exploratory data analysis" do not appear as a named practice, the explicit pairing is the 1977 book and the 1980 paper (both reported), and the four influences list is not in the text</button>
+      <button class="qopt" type="button">C · A defence of mathematical proof as the standard of validity for statistics</button>
+      <button class="qopt" type="button">D · The paper titled "We Need Both Exploratory and Confirmatory"</button>
+      <p class="qwhy">The 1962 paper is the programme; the named practice came later. A secondary source quoting a list right after a paper's quotations is not proof the list is in that paper, which is why a quote stays a hypothesis until it is read at source.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · In the build-along, a search over all 30 features on the held-out rows finds worst concave points at 163 of 171, beating the written-down rule's 157. Why is 163 not a result?</p>
+      <button class="qopt" type="button">A · Because 163 is below the base rate</button>
+      <button class="qopt" type="button">B · Because single-feature rules can never be confirmed</button>
+      <button class="qopt" type="button">C · Because worst concave points is not a size measurement</button>
+      <button class="qopt" type="button">D · Because the 171 rows chose the rule they then graded; on the 398 rows it never chose from, the same rule scores 354 of 398, worse than the honest worst radius rule's 367</button>
+      <p class="qwhy">A score is only a judge's verdict when the judge had no hand in picking the defendant. Hoadley calls the mild version "a little tinkering, which involves peeking at the test sample", and says the result is bias.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · The logistic regression scores 392 of 398 on its own training rows and 170 of 171 held out. Why can the held-out score beat the training score?</p>
+      <button class="qopt" type="button">A · 171 rows is a small set: one biopsy is 0.6 points, so a held-out score can flatter as well as punish; 98.5 against 99.4 percent is inside that wobble, and the held-out number is still the one to report because nobody could steer it</button>
+      <button class="qopt" type="button">B · The regression learned more from the held-out rows than from the training rows</button>
+      <button class="qopt" type="button">C · It proves the data modelling culture generalises better than the algorithmic one</button>
+      <button class="qopt" type="button">D · It means the split was done wrong and should be redrawn until training scores higher</button>
+      <p class="qwhy">Held-out scores are unsteered, not exact. Redrawing the split until it looks right would be a peek of its own, the same sin as step 7 with a different lever.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Tukey (1962), The Future of Data Analysis</span><span class="note">Annals of Mathematical Statistics 33(1), 1-67; read at source from a full scan, every quotation checked against the printed page (pp.2, 4, 5-6, 7, 13-14, 64)</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Tukey (1977), Exploratory Data Analysis, and Tukey (1980), We Need Both Exploratory and Confirmatory</span><span class="note">Reported only: the book's "detective work" framing and the 1980 title are cited as widely described, neither text was opened</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Donoho (2017), 50 Years of Data Science</span><span class="note">Journal of Computational and Graphical Statistics 26(4), 745-766; read at source for the EDA and detective work passage and the sequestered test set</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hoadley's comment on Breiman (2001)</span><span class="note">Statistical Science 16(3), 220-224; read at source for the tuning dilemma, drift and redevelopment cycle, and the Fat Scorecard's later test samples</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The "four major influences" list</span><span class="note">Quoted by Donoho after his 1962 quotations; not found in a full-text search of the 1962 paper, so cited only as attributed, source unconfirmed</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The build-along on UCI Breast Cancer Wisconsin (Diagnostic)</span><span class="note">Wolberg, Mangasarian, Street and Street (1993), UCI Machine Learning Repository, doi 10.24432/C5DW2B, CC BY 4.0; every printed output produced by the code on scikit-learn 1.9.0 and pandas</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Three gates of a science</b><span>(a1) content, (a2) organisation, (a3) the test of experience. Mathematics stops at a3; data analysis passes.</span></div>
+      <div class="cheat-item"><b>The price of a3</b><span>"Seek for scope and usefulness rather than security", and be willing to err moderately often.</span></div>
+      <div class="cheat-item"><b>Detective, then judge</b><span>Explore anything on the exploration rows. Confirm with one pre-stated test on untouched rows, once.</span></div>
+      <div class="cheat-item"><b>Write it down first</b><span>Rule, metric and bar in a comment before the held-out rows open. Worst radius: 367 of 398, then 157 of 171.</span></div>
+      <div class="cheat-item"><b>A peek is not a result</b><span>Chosen on the 171: 163 of 171, but only 354 of 398 on rows it never chose from.</span></div>
+      <div class="cheat-item"><b>Check the quote at source</b><span>1962 is the programme; 1977 and 1980 name the pairing (reported). The four influences list is not in 1962.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight you graded one hand-found rule. Session 4 puts both cultures on the bench: the same 171 sealed biopsies, six rungs you can switch between, from all 30 features to the creators' three, a single tree, shuffled labels and the peek you met tonight, with every number read off rows that neither model has seen.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 3 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="02-all-models-are-wrong.html">← Prev: All models are wrong, some are useful</a> &nbsp;·&nbsp; <a href="04-the-two-cultures-bench.html">Next: The two-cultures bench →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 4 of 6. 569 real biopsies, one fixed held-out set of 171, a logistic regression and a random forest computed in your browser. Two numbers per culture, a base rate, a break button that shuffles the labels, and a peek switch that grades on the training rows.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The two-cultures bench - learn two cultures with phoebe">
+<meta property="og:description" content="Session 4 of 6. Both cultures on the same real biopsies, computed live: held-out accuracy and what each model lets you say, side by side. Then break it on purpose.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/04-the-two-cultures-bench.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The two-cultures bench - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 4 of 6. A regression and a forest on 569 real biopsies, counted live.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 4 · The two-cultures bench - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 4 of 6</div>
+    <h1>The two-cultures <span class="accent">bench</span></h1>
+    <p class="sub">Three sessions of argument, and now a count. The 569 real biopsies of the UCI Breast Cancer Wisconsin (Diagnostic) set sit inside this page, with the same fixed 171 held out that the session 1 build-along used. A logistic regression and a random forest are fitted in your browser, from scratch, every time you move a lever. Each culture gets two numbers: how many held-out biopsies it gets right, and how much of itself a person would have to read to explain it. Three levers change the models: how many features they may use, how big the forest is, and whether the training labels are real. A fourth changes the grader, and it is the one that lies.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Bench night</span>
+      <span class="chip audience">Bring your session 1 seed range</span>
+      <span class="chip audience">No code tonight, all clicking</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-14 · How to read the bench</span>
+      <span class="a3" style="flex:6">14-40 · Six rungs, in order</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">A bench is a fixed set of rows and a fixed grader, so that when two models give two answers the only thing that differed was the model. Nothing on this bench is simulated. The biopsies are the real 1995 file, each value stored exactly; the split is the one seeded in session 1; both models are fitted by code you can read in the page source, and a separate Python reimplementation of the same algorithm reproduces every count to the biopsy.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">measured = counted from the 569 real rows</span>
+      <span class="pill">ochre = data modelling · violet = algorithmic</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The measured answer to "which culture wins on this data" at six settings, the habit of reading accuracy and explanation size together, the base rate as the line every score is read against, and two ways a bench can lie to you: one it catches, and one you have to refuse to click.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers what the bench measures</span>
+      <h2>Two numbers per culture, one line under both</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Breiman's culture is judged by accuracy on unseen rows. Box's and Cox's is judged by whether a person can read the model and learn something true from it. The bench prints both for both, so neither culture is graded only on the other's terms.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bench sketched as a workbench. On the left a hatched pile of 569 biopsies is split into 398 fitting rows and 171 held-out rows. The fitting rows feed two models: an ochre logistic regression and a violet random forest. Each model has two dials: held-out accuracy, and the size of what a person would have to read, 31 coefficients for the regression and 1,647 yes or no questions for a forest of 100 trees. Under both dials runs a terracotta base-rate line at 62.6 percent, the score for calling every biopsy benign.">
+        <defs>
+          <filter id="s4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4aH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s4aL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s4aS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s4aB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s4aO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s4aP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s4aV { font: 800 16px Inter, sans-serif; fill: #4A3800; }
+          .s4aU { font: 800 16px Inter, sans-serif; fill: #3F3294; }
+          .s4aN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s4aH" x="30" y="26">WHAT EVERY SETTING PRINTS</text>
+        <text class="s4aS" x="226" y="26">both numbers for both cultures, and the line both must clear</text>
+
+        <g filter="url(#s4aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="100" width="110" height="80" rx="6" transform="rotate(-1.2 85 140)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <path d="M146 126 L200 96" marker-end="url(#s4aAr)"/>
+          <path d="M146 156 L200 236" marker-end="url(#s4aAr)"/>
+          <rect x="206" y="74" width="100" height="40" rx="5" transform="rotate(0.8 256 94)" fill="#FFFFFF"/>
+          <rect x="206" y="226" width="100" height="40" rx="5" transform="rotate(-0.8 256 246)" fill="#FBEDE6" stroke="#A8431F"/>
+          <path d="M312 90 L372 72" marker-end="url(#s4aAr)"/>
+          <path d="M312 100 L372 150" marker-end="url(#s4aAr)"/>
+          <!-- ochre column -->
+          <rect x="380" y="46" width="220" height="80" rx="10" transform="rotate(-0.4 490 86)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <circle cx="420" cy="92" r="20" stroke="#7A5C00"/>
+          <path d="M420 92 L432 78" stroke="#7A5C00"/>
+          <!-- violet column -->
+          <rect x="380" y="136" width="220" height="80" rx="10" transform="rotate(0.4 490 176)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <circle cx="420" cy="182" r="20" stroke="#6A5ACD"/>
+          <path d="M420 182 L434 172" stroke="#6A5ACD"/>
+          <!-- grader -->
+          <path d="M312 246 L640 246" stroke="#A8431F" marker-end="url(#s4aAr)"/>
+          <path d="M606 86 L640 86 M606 176 L640 176" />
+          <rect x="648" y="56" width="200" height="150" rx="10" transform="rotate(0.3 748 131)" fill="#FFFFFF"/>
+          <path d="M660 186 L836 186" stroke="#A8431F" stroke-width="3" stroke-dasharray="6 4"/>
+        </g>
+
+        <text class="s4aL" x="42" y="136">569</text>
+        <text class="s4aS" x="42" y="152">real biopsies</text>
+        <text class="s4aL" x="220" y="98">398 fit</text>
+        <text class="s4aB" x="220" y="250">171 held out</text>
+        <text class="s4aO" x="452" y="72">logistic regression</text>
+        <text class="s4aS" x="452" y="90">accuracy on the 171</text>
+        <text class="s4aV" x="452" y="114">31 numbers</text>
+        <text class="s4aP" x="452" y="162">random forest</text>
+        <text class="s4aS" x="452" y="180">accuracy on the 171</text>
+        <text class="s4aU" x="452" y="204">1,647 questions</text>
+        <text class="s4aH" x="664" y="80">THE GRADER</text>
+        <text class="s4aS" x="664" y="100">counts right answers</text>
+        <text class="s4aS" x="664" y="116">on the 171, once</text>
+        <text class="s4aS" x="664" y="140">and the disagreements:</text>
+        <text class="s4aS" x="664" y="156">which culture was right</text>
+        <text class="s4aB" x="664" y="178">base rate 62.6%</text>
+        <text class="s4aS" x="664" y="200">every biopsy "benign"</text>
+
+        <text class="s4aN" x="30" y="300">Accuracy is Breiman's number. The count of things to read is the number Box and Cox would ask for. The bench prints both.</text>
+        <text class="s4aN" x="30" y="318">Numbers shown are the default setting: all 30 features, 100 trees, real labels, graded on the held-out 171.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta path is the grader's only input, and nothing upstream is allowed to touch it</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What each readout means<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Held-out accuracy.</strong> Right answers out of the 171 biopsies neither model saw while fitting. Each biopsy is 0.58 points, so read the count, not the decimal.</p>
+        <p><strong>Numbers to read the whole model</strong> (ochre). One coefficient per feature plus an intercept. The bench lists the three largest, standardised so they are comparable, with their signs: a minus leans towards malignant, because benign is coded 1.</p>
+        <p><strong>Yes or no questions inside it</strong> (violet). Every internal node in every tree is one question of the form "is worst area at or below this threshold?". The deepest path is how many questions one biopsy may have to answer. The bench also shuffles one feature at a time across the scored rows and counts the biopsies lost: Breiman's own importance idea from his hepatitis example, done on the held-out rows. Importance says which features matter, never in which direction.</p>
+        <p><strong>Sign surprises</strong> (ochre, small print). How many coefficients point against their own feature's correlation with benign on the training rows. A readable model is only as honest as what it lets you read; session 2 explains where these come from.</p>
+        <p><strong>Disagreements.</strong> The biopsies on which the two cultures give different answers, and which culture was right on each. Every other biopsy gets the same answer from both, so on this data the entire argument lives in these few rows.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How the two engines are built, and how they are checked<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The regression</strong> standardises each feature on the 398 fitting rows, then minimises the log loss plus half the squared size of the weights (scikit-learn's default <code>C=1</code> objective, intercept not penalised) by Newton's method until the step is below 10<sup>-10</sup>. scikit-learn 1.9.0 gives the same held-out counts, with every coefficient within 0.000001 of the bench's.</p>
+        <p><strong>The forest</strong> grows each tree on a bootstrap of the fitting rows drawn from a seeded generator, tries the square root of the number of features at every split (5 of 30, or 1 of 3), picks the split with the best Gini gain, and grows until every leaf is pure. The forest averages its trees' leaf shares and says benign above one half. A plain-Python copy of the same seeded algorithm reproduces every count on this page exactly.</p>
+        <p><strong>The cross-engine tolerance.</strong> scikit-learn's own forest uses a different random stream, so it cannot match to the biopsy. Over its seeds 0 to 19 it scores 165 to 168 of 171 with all 30 features (median 167) and 165 to 169 with three (median 167). The bench's forest sits inside both ranges. Any forest-versus-regression gap smaller than that range is a gap between random draws, not between cultures.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The creators' own model had three features.</strong> The file's documentation, written by Wolberg, Street and Mangasarian in 1995, reports that the best predictive accuracy came from one separating plane in the space of just three features, worst area, worst smoothness and mean texture, with an estimated 97.5 percent from repeated ten-fold cross-validation, and that the classifier "has correctly diagnosed 176 consecutive new patients as of November 1995". That is their figure with their method; the bench's "creators' 3" lever lets both cultures try the same three features on our split.</p>
+    </div>
+  </section>
+
+  <section class="section" id="bench">
+    <div class="section-kicker">
+      <span class="klabel">Build-along · the bench</span>
+      <h2>Six rungs, computed in front of you</h2>
+      <span class="tag demo">★ 26 min · the main event</span>
+    </div>
+    <p class="lede">Work through the six settings in the table under the bench, in order. At each one, read the verdict line, then both columns top to bottom, then the disagreement line. Say out loud which number moved and which did not before moving on. The first four change the models. The fifth changes the grader. The sixth breaks the data on purpose.</p>
+
+    <div id="tc-bench"></div>
+
+    <table class="clean">
+      <tr><th>Rung</th><th>Set the levers to</th><th>What to watch</th></tr>
+      <tr><td>1</td><td>All 30 · 100 · Held-out · Real</td><td>The default. The regression is ahead, and the whole gap is 3 biopsies</td></tr>
+      <tr><td>2</td><td>The creators' 3 · 100 · Held-out · Real</td><td>The regression shrinks to 4 numbers; the forest grows; the lead changes hands</td></tr>
+      <tr><td>3</td><td>All 30 · 1 tree · Held-out · Real</td><td>A single tree: 19 questions, readable, and 12 biopsies behind</td></tr>
+      <tr><td>4</td><td>All 30 · 10 · Held-out · Real</td><td>Ten trees already recover everything the hundred do</td></tr>
+      <tr><td>5</td><td>All 30 · 100 · Training rows · Real</td><td>The peek: a perfect score that means nothing</td></tr>
+      <tr><td>6</td><td>All 30 · 100 · Held-out · Shuffled</td><td>The break: both cultures fall towards the base rate</td></tr>
+    </table>
+
+    <div class="callout tip">
+      <p><strong>Read it in this order.</strong> Base rate, then the two accuracy counts, then the disagreement line, then the second numbers. It is tempting to read the two big percentages and stop. On this data the percentages differ by a few biopsies at every honest rung, and the second numbers differ by a factor of fifty.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what the four honest rungs find</span>
+      <h2>The readable model wins, then it doesn't, and neither result is a verdict</h2>
+      <span class="tag concept">7 min live</span>
+    </div>
+    <p class="lede">On all 30 features the logistic regression is right on 170 of the 171 held-out biopsies and the forest on 167. Restrict both to the three features the dataset's creators chose and the order flips: forest 168, regression 167. Breiman's Table 2 had forests halving tree errors; on this file, the data modelling culture holds its own.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Held-out biopsies correct out of 171 at four honest rungs, ochre regression beside violet forest, over a terracotta base-rate line at 107. All 30 features and 100 trees: regression 170, forest 167. The creators' 3 features: regression 167, forest 168. All 30 with a single tree: regression 170, forest 158. All 30 with 10 trees: regression 170, forest 167. The axis starts at 100 so the differences are visible; a note says so.">
+        <defs>
+          <filter id="s4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="59" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#7A5C00" stroke-width="1" opacity=".55"/></pattern>
+          <pattern id="s4bHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".55"/></pattern>
+        </defs>
+        <style>
+          .s4bH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s4bL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s4bS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s4bB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s4bO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s4bP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s4bN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s4bH" x="30" y="26">HELD-OUT BIOPSIES CORRECT, OUT OF 171</text>
+        <text class="s4bS" x="330" y="26">axis starts at 100 · each unit is one biopsy · 7px per biopsy</text>
+
+        <g filter="url(#s4bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- baseline x = 230 + (v - 100) * 7 ; 107 -> 279 ; 171 -> 727 -->
+          <path d="M230 50 L230 290" stroke="#D6CDB8"/>
+          <path d="M279 50 L279 290" stroke="#A8431F" stroke-dasharray="6 4"/>
+          <path d="M727 50 L727 290" stroke="#D6CDB8" stroke-dasharray="3 4"/>
+          <!-- rung 1 -->
+          <rect x="230" y="62" width="490" height="20" rx="3" fill="url(#s4bHc)" stroke="#7A5C00"/>
+          <rect x="230" y="86" width="469" height="20" rx="3" fill="url(#s4bHv)" stroke="#6A5ACD"/>
+          <!-- rung 2 -->
+          <rect x="230" y="122" width="469" height="20" rx="3" fill="url(#s4bHc)" stroke="#7A5C00"/>
+          <rect x="230" y="146" width="476" height="20" rx="3" fill="url(#s4bHv)" stroke="#6A5ACD"/>
+          <!-- rung 3 -->
+          <rect x="230" y="182" width="490" height="20" rx="3" fill="url(#s4bHc)" stroke="#7A5C00"/>
+          <rect x="230" y="206" width="406" height="20" rx="3" fill="url(#s4bHv)" stroke="#6A5ACD"/>
+          <!-- rung 4 -->
+          <rect x="230" y="242" width="490" height="20" rx="3" fill="url(#s4bHc)" stroke="#7A5C00"/>
+          <rect x="230" y="266" width="469" height="20" rx="3" fill="url(#s4bHv)" stroke="#6A5ACD"/>
+        </g>
+
+        <text class="s4bL" x="218" y="80" text-anchor="end">All 30, 100 trees</text>
+        <text class="s4bS" x="218" y="96" text-anchor="end">31 numbers · 1,647 questions</text>
+        <text class="s4bL" x="218" y="140" text-anchor="end">The creators' 3, 100 trees</text>
+        <text class="s4bS" x="218" y="156" text-anchor="end">4 numbers · 2,700 questions</text>
+        <text class="s4bL" x="218" y="200" text-anchor="end">All 30, one tree</text>
+        <text class="s4bS" x="218" y="216" text-anchor="end">31 numbers · 19 questions</text>
+        <text class="s4bL" x="218" y="260" text-anchor="end">All 30, 10 trees</text>
+        <text class="s4bS" x="218" y="276" text-anchor="end">31 numbers · 152 questions</text>
+
+        <text class="s4bO" x="740" y="77">170</text>
+        <text class="s4bP" x="740" y="101">167</text>
+        <text class="s4bO" x="740" y="137">167</text>
+        <text class="s4bP" x="740" y="161">168</text>
+        <text class="s4bO" x="740" y="197">170</text>
+        <text class="s4bP" x="648" y="221">158</text>
+        <text class="s4bO" x="740" y="257">170</text>
+        <text class="s4bP" x="740" y="281">167</text>
+        <text class="s4bS" x="776" y="77">regression</text>
+        <text class="s4bS" x="776" y="101">forest</text>
+
+        <text class="s4bB" x="286" y="310">base rate 107</text>
+        <text class="s4bS" x="700" y="310">all 171</text>
+        <text class="s4bN" x="30" y="338">Every honest rung clears the base rate by 50 or more biopsies. The cultures differ by 1 to 3, except the lone tree.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the flip at the second rung is one biopsy, inside the forest's own seed range of 165 to 169</figcaption>
+    </figure>
+
+    <table class="clean">
+      <tr><th>Rung</th><th>Regression (ochre)</th><th>Forest (violet)</th><th>Disagree on</th><th>Second numbers</th></tr>
+      <tr><td>All 30, 100 trees</td><td>170 of 171, 99.4%</td><td>167, 97.7%</td><td>3 (regression right on all 3)</td><td>31 numbers vs 1,647 questions, depth 11</td></tr>
+      <tr><td>The creators' 3, 100 trees</td><td>167, 97.7%</td><td>168, 98.2%</td><td>5 (regression 2, forest 3)</td><td>4 numbers vs 2,700 questions, depth 13</td></tr>
+      <tr><td>All 30, 1 tree</td><td>170, 99.4%</td><td>158, 92.4%</td><td>12 (regression right on all 12)</td><td>31 numbers vs 19 questions, depth 8</td></tr>
+      <tr><td>All 30, 10 trees</td><td>170, 99.4%</td><td>167, 97.7%</td><td>3 (regression 3)</td><td>31 numbers vs 152 questions, depth 9</td></tr>
+    </table>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the readable model does so well here<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The creators' documentation says the two classes are linearly separable using all 30 features. A boundary that is close to a flat plane is exactly what a logistic regression draws, so on this file the data modelling culture's guess about the inside of the box happens to be nearly right. Breiman's argument was never that the equation is always wrong; it was that nobody checks. Here the check, 170 of 171 on unseen biopsies, is the credential.</p>
+        <p>Notice also what three features do to each culture. The regression becomes a model a clinician could hold in one hand: four numbers, with worst area carrying most of the weight (standardised coefficient -4.63), and no sign surprises. The forest, given fewer features to choose between, grows <em>larger</em>, 2,700 questions against 1,647, because each tree has to carve the same boundary out of fewer directions.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The lone tree, and Breiman's grades<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Set the forest to one tree. It asks 19 questions, never more than 8 on one biopsy, and you could draw it on a whiteboard, which is Breiman's "A+ on interpretability". It is also 12 biopsies behind the regression, every one of them a biopsy the regression gets right: "a B on prediction". Ten trees close almost all of that gap with 152 questions, and a hundred add nothing further. The step from a readable tree to an unreadable forest is where the Occam dilemma of session 1 lives, and on this data it is paid for in the first ten trees.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Hoadley's Fat Scorecard, in the same issue.</strong> Bruce Hoadley of Fair, Isaac reported fitting a plain logistic regression on credit data and finding that "all models fit with anywhere from 27 to 36 characteristics had the same performance on the test sample". His 27-characteristic scorecard slightly outperformed a neural network with 2,000 connection weights. He called it an excellent algorithmic model made from a simple data modelling tool. The bench's first rung is the same shape of result on a different domain.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the peek and the break</span>
+      <h2>Two ways a bench can lie, and how this one tells you</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A bench earns trust by being able to report a worse number. Rung 6 proves this one can: shuffle the training labels so no real signal is left, and both cultures fall from the high nineties towards the base rate. Rung 5 shows the opposite failure, a number that looks better than anything honest, produced by grading a model on the rows it memorised.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels. Left, the break: with the training labels shuffled, the regression falls from 170 to 116 of 171 correct and the forest from 167 to 114, both within 9 biopsies of the base rate of 107, while the forest grows from 1,647 to 6,730 questions memorising noise. Right, the peek: graded on its own 398 training rows the forest scores 398 of 398, 100 percent, against 167 of 171 on held-out rows; the regression is 392 of 398 on training, 98.5 percent, and 170 of 171 held out, 99.4 percent.">
+        <defs>
+          <filter id="s4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="s4cHv" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6A5ACD" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="s4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s4cH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s4cL { font: 600 12px Inter, sans-serif; fill: #241F14; }
+          .s4cS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s4cB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s4cO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s4cP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s4cR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .s4cN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s4cH" x="40" y="30">THE BREAK · labels shuffled</text>
+        <text class="s4cH" x="470" y="30">THE PEEK · graded on training rows</text>
+
+        <g filter="url(#s4cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="44" width="400" height="200" rx="12" transform="rotate(-0.3 230 144)" fill="#FFFFFF"/>
+          <rect x="460" y="44" width="390" height="200" rx="12" transform="rotate(0.3 655 144)" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <!-- break: two falling arrows -->
+          <path d="M80 70 L80 170" stroke="#7A5C00" marker-end="url(#s4cAr)"/>
+          <path d="M140 76 L140 176" stroke="#6A5ACD" marker-end="url(#s4cAr)"/>
+          <path d="M56 196 L200 196" stroke="#A8431F" stroke-width="3" stroke-dasharray="6 4"/>
+          <!-- forest swelling -->
+          <rect x="250" y="120" width="30" height="40" rx="3" fill="url(#s4cHv)" stroke="#6A5ACD"/>
+          <rect x="300" y="72" width="100" height="88" rx="3" fill="url(#s4cHv)" stroke="#6A5ACD"/>
+          <!-- peek: a loop from training rows back into the grader -->
+          <rect x="490" y="80" width="120" height="40" rx="5" fill="#FFFFFF"/>
+          <path d="M616 100 C680 100 680 170 616 170" stroke="#991B1B" marker-end="url(#s4cAr)"/>
+          <rect x="490" y="150" width="120" height="40" rx="5" fill="#FFFFFF" stroke="#991B1B"/>
+        </g>
+
+        <text class="s4cO" x="54" y="64">170</text>
+        <text class="s4cP" x="128" y="68">167</text>
+        <text class="s4cO" x="54" y="188">116</text>
+        <text class="s4cP" x="150" y="188">114</text>
+        <text class="s4cB" x="56" y="214">base rate 107</text>
+        <text class="s4cS" x="56" y="232">both land within 9 biopsies of it</text>
+        <text class="s4cP" x="244" y="178">1,647</text>
+        <text class="s4cP" x="316" y="178">6,730</text>
+        <text class="s4cS" x="244" y="196">questions: the forest grows</text>
+        <text class="s4cS" x="244" y="212">4 times bigger fitting noise</text>
+
+        <text class="s4cL" x="502" y="104">398 fitting rows</text>
+        <text class="s4cR" x="502" y="174">graded on them</text>
+        <text class="s4cR" x="690" y="120">forest 398 of 398</text>
+        <text class="s4cS" x="690" y="138">100.0%, memorised</text>
+        <text class="s4cO" x="690" y="164">regression 392</text>
+        <text class="s4cS" x="690" y="182">98.5%, below its</text>
+        <text class="s4cS" x="690" y="198">held-out 99.4%</text>
+        <text class="s4cS" x="490" y="228">the held-out 171 can flatter as well as punish</text>
+
+        <text class="s4cN" x="30" y="276">The break proves the bench measures signal. The peek proves a grader that has seen the rows measures memory.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the red panel is the only setting whose top number is higher than any honest one, and it is the one to distrust</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the break does not reach exactly 62.6 percent<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>With the labels shuffled, there is nothing true left to learn, so a model's best move is to call most biopsies benign. The regression lands on 116 of 171 and the forest on 114, against the do-nothing 107. The residue is what one particular shuffle leaves behind by chance: the bench uses one fixed permutation so every visitor sees the same numbers, and a different permutation would give a slightly different residue. The honest reading is the size of the fall, 54 and 53 biopsies, not the exact landing point. The forest, meanwhile, grows 6,730 questions deep into nothing, four times its honest size: a complex model will always find something to fit.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The peek in real projects<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Nobody sets a switch that says "grade on the training rows". The peek arrives by degrees: tuning a setting until the test score improves, choosing among ten candidate models by their test score, re-splitting after a disappointing result. Hoadley names it in his comment on Breiman, "in industry and academia, there is sometimes a little tinkering, which involves peeking at the test sample. The result is some bias in the test sample or cross-validation results", and asks the question that has no easy answer: "How do you optimize your results and get an unbiased estimate of the generalization error?" Session 3 is about the discipline that answers it; session 5 is about the institution, the common task framework, that enforces it.</p>
+      </div>
+    </details>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li><strong>Fill the six-rung table</strong> from the bench yourself: both counts, the disagreement split and both second numbers. Circle the rung you would defend to a clinician, and the one you would defend to a data science lead.</li>
+      <li><strong>Compare with your session 1 seed range.</strong> Is the forest's score at rung 1 inside the 20-seed range you recorded? What does that say about the 3-biopsy gap?</li>
+      <li><strong>Write the peek in your own project.</strong> Name one decision in your last model build that used the test set before the final grade. Say what an untouched set would have cost you.</li>
+      <li><strong>Read Donoho's section 6</strong> on the common task framework before session 5. Mark the three ingredients.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 4 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · With the creators' 3 features the forest gets 168 of 171 and the regression 167. What is the honest conclusion?</p>
+      <button class="qopt" type="button">A · The algorithmic culture wins whenever features are few</button>
+      <button class="qopt" type="button">B · It is a tie in practice: one biopsy, and scikit-learn's own forest ranges from 165 to 169 across seeds on the same three features; what differs decisively is that the regression is 4 readable numbers and the forest 2,700 questions</button>
+      <button class="qopt" type="button">C · The regression is broken because it lost a biopsy</button>
+      <button class="qopt" type="button">D · The creators' 97.5 percent has been disproved</button>
+      <p class="qwhy">A one-biopsy lead inside the forest's own seed-to-seed range is noise between random draws, not a difference between cultures. The creators' figure used a different method and repeated cross-validation, so it is not comparable to one fixed split.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · Why does the break button make the bench more trustworthy rather than less?</p>
+      <button class="qopt" type="button">A · Because shuffled labels make the models faster</button>
+      <button class="qopt" type="button">B · Because it shows the forest is always worse than the regression</button>
+      <button class="qopt" type="button">C · Because it reaches exactly the base rate</button>
+      <button class="qopt" type="button">D · Because a bench that cannot report a worse number measures nothing; with the signal destroyed both cultures fall by more than 50 biopsies, to within 9 of the 107 base rate, so the high scores elsewhere are signal, not an artefact of the split or the code</button>
+      <p class="qwhy">The break is a placebo. If scores stayed high with the labels shuffled, the bench would be measuring a leak or a bug. The residue above 107 is one fixed shuffle's chance pattern, and the page says so rather than hiding it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · Graded on the training rows, the forest scores 398 of 398. Graded on the held-out rows, 167 of 171. Which number goes in the report?</p>
+      <button class="qopt" type="button">A · 167 of 171: a fully grown forest can memorise every row it was fitted on, so the training score measures memory; only rows the model never saw test prediction, which is Breiman's own criterion</button>
+      <button class="qopt" type="button">B · 398 of 398, because it uses more rows</button>
+      <button class="qopt" type="button">C · The average of the two</button>
+      <button class="qopt" type="button">D · Whichever is higher, since both are real counts</button>
+      <p class="qwhy">Both are real counts; only one answers the question. The regression shows the subtler lesson in the same rung: its held-out 99.4 percent is higher than its training 98.5 percent, because 171 rows is small and can flatter a model as easily as punish it.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Every count, percentage and size on the bench</span><span class="note">Computed in the browser from the 569 real rows of UCI Breast Cancer Wisconsin (Diagnostic), doi 10.24432/C5DW2B, CC BY 4.0; reproduced exactly by an independent Python run of the same seeded algorithm before any page quoted it</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The regression, cross-checked against scikit-learn 1.9.0</span><span class="note">Same held-out counts, coefficients within 0.000001</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The forest, against scikit-learn's forest</span><span class="note">Different random stream, so a stated tolerance instead of a match: 165 to 168 of 171 (all 30) and 165 to 169 (the creators' 3) over seeds 0 to 19</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The creators' three features and their 97.5 percent</span><span class="note">Quoted from the dataset's documentation (wdbc.names, 1995); their method, not reproduced here</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Hoadley's Fat Scorecard and the tuning dilemma</span><span class="note">Statistical Science 16(3), comment on Breiman, read at source</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Any general verdict between the cultures</span><span class="note">Not claimed. One file of 569 biopsies, nearly linearly separable; other data would order the rungs differently</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Two numbers per culture</b><span>Held-out accuracy, and how much you must read to explain it: 31 numbers or 1,647 questions.</span></div>
+      <div class="cheat-item"><b>Base rate first</b><span>107 of 171, 62.6 percent, for calling everything benign. Every score is read against it.</span></div>
+      <div class="cheat-item"><b>Count the disagreements</b><span>At rung 1 the cultures differ on 3 biopsies. That is the whole argument, on this data.</span></div>
+      <div class="cheat-item"><b>Gap smaller than seed noise</b><span>The forest's own seeds span 165 to 169. A one-biopsy lead is a tie.</span></div>
+      <div class="cheat-item"><b>The break</b><span>Shuffle the labels: 170 to 116, 167 to 114. A bench must be able to fall.</span></div>
+      <div class="cheat-item"><b>The peek</b><span>398 of 398 on training rows is memory. Only the untouched 171 measures prediction.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The bench worked because the 171 rows were fixed before either model existed and graded once. David Donoho argues that exactly this arrangement, a shared dataset, a sequestered test set and a referee, is "the secret sauce" of machine learning. Session 5 reads his "50 Years of Data Science", from Tukey's 1962 manifesto to the six divisions of what he calls greater data science.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 4 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="03-explore-first-confirm-once.html">← Prev: Explore first, confirm once</a> &nbsp;·&nbsp; <a href="05-fifty-years-of-data-science.html">Next: Fifty years of data science →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/two-cultures-data.js?v=1"></script>
+<script src="../assets/two-cultures-bench.js?v=1"></script>
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>

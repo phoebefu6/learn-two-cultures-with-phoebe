@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Session 6 of 6. The four replies to Breiman in their own words, Cox, Efron, Hoadley and Parzen, his rejoinder, and a way to choose a culture per question that keeps their disagreement intact. Build-along: the creators' three features as a scorecard a person can read.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Which culture is this question? - learn two cultures with phoebe">
+<meta property="og:description" content="Session 6 of 6. Four eminent replies, one rejoinder, no verdict. Three questions to ask before choosing a culture, each owned by a different discussant.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/courses/06-which-culture-is-this-question.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Which culture is this question? - learn two cultures with phoebe">
+<meta name="twitter:description" content="Session 6 of 6. Cox, Efron, Hoadley, Parzen and Breiman, and how to choose without pretending they agreed.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-two-cultures-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Session 6 · Which culture is this question? - learn two cultures with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=1">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-two-cultures-with-phoebe</a> / Session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn The Two Cultures with Phoebe · Session 6 of 6</div>
+    <h1>Which culture is <span class="accent">this question?</span></h1>
+    <p class="sub">Breiman's paper was printed with four replies and his answer to them. D. R. Cox called it a caricature and disagreed with its main thrust. Brad Efron found it stimulating and worried it was a confession of "a born-again black boxist". Bruce Hoadley, from a credit-scoring company, said it described how statistics is practised in business. Emanuel Parzen said there are not two cultures but many. Breiman replied to each, and nobody changed sides. Tonight we read all five in their own words, turn each discussant's strongest point into one question you can ask of a real problem, and leave the disagreement standing, because it is still true.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Advanced</span>
+      <span class="chip audience">Leaders and practitioners</span>
+      <span class="chip audience">Python, scikit-learn</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Four replies and a rejoinder</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: a scorecard and six questions</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where we start</h2>
+    </div>
+    <p class="lede">Five sessions have given you Breiman's distinction, Box's standard for a useful model, Tukey's discipline of exploring before confirming, a bench on which both cultures scored within a few biopsies of each other, and Donoho's claim that a working data scientist uses both. What they have not given you is a rule for choosing, because the people who argued it most carefully never agreed on one. The honest version of a rule is a set of questions, each one somebody's objection to somebody else.</p>
+
+    <div class="legend">
+      <span class="pill">🎫 Clear all three quiz questions to stamp your passport</span>
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">★ Build-along = run the code yourself</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Each discussant's strongest point in his own words, three questions to ask before choosing a culture with the name of the person who would insist on each, the bench's results read as a trade-off frontier rather than a scoreboard, and a four-number scorecard on real biopsies that a person could check by hand.</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the four comments and the rejoinder</span>
+      <h2>Four replies, and nobody changed sides</h2>
+      <span class="tag concept">7 min live</span>
+    </div>
+    <p class="lede">Breiman's own summary of the discussion: "Manny Parzen and Bruce Hoadley are more or less in agreement, Brad Efron has serious reservations and D. R. Cox is in downright disagreement." Each reply is worth reading for what it concedes as much as for what it attacks.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A hand-drawn map of where the five voices stand, one reading of their texts rather than a measurement. Horizontal axis: what checks a model, from fit to a question and subject knowledge on the left to accuracy on unseen rows on the right. Vertical axis: what the model is for, from understanding a mechanism at the top to making decisions at the bottom. Cox sits top left: start from a question, prediction under changed conditions needs process understanding. Efron sits upper left, nearer the centre: open the black boxes, and prediction needs theory. Parzen sits in the middle: many cultures, management and science both. Hoadley sits bottom right: credit decisions, test-sample performance, but interpretable scorecards. Breiman sits right of centre, lower half: accuracy first, then extract information.">
+        <defs>
+          <filter id="s6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6aH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s6aL { font: 700 12px Inter, sans-serif; fill: #241F14; }
+          .s6aS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s6aO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s6aP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s6aB { font: 800 12px Inter, sans-serif; fill: #7A2E12; }
+          .s6aA { font: 700 11px Inter, sans-serif; fill: #665D4B; letter-spacing: .05em; }
+          .s6aN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s6aH" x="30" y="26">WHERE THE FIVE VOICES STAND</text>
+        <text class="s6aS" x="250" y="26">one reading of the texts, not a measurement · ochre side leans data modelling, violet algorithmic</text>
+
+        <g filter="url(#s6aSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="90" y="44" width="365" height="296" rx="6" transform="rotate(-0.2 272 192)" fill="#FBF5E3" stroke="#E6D39A"/>
+          <rect x="455" y="44" width="365" height="296" rx="6" transform="rotate(0.2 637 192)" fill="#F3F1FC" stroke="#D2CCF2"/>
+          <path d="M90 340 L822 340" marker-end="url(#s6aAr)"/>
+          <path d="M90 340 L90 40" marker-end="url(#s6aAr)"/>
+          <circle cx="170" cy="90" r="7" fill="#7A5C00" stroke="#7A5C00"/>
+          <circle cx="372" cy="140" r="7" fill="#7A5C00" stroke="#7A5C00"/>
+          <circle cx="455" cy="190" r="7" fill="#FFFFFF" stroke="#241F14"/>
+          <circle cx="600" cy="245" r="8" fill="#A8431F" stroke="#A8431F"/>
+          <circle cx="740" cy="300" r="7" fill="#6A5ACD" stroke="#6A5ACD"/>
+        </g>
+
+        <text class="s6aO" x="182" y="86">Cox</text>
+        <text class="s6aS" x="182" y="102">start with a question;</text>
+        <text class="s6aS" x="182" y="116">new conditions need process</text>
+        <text class="s6aO" x="384" y="136">Efron</text>
+        <text class="s6aS" x="384" y="152">open the boxes;</text>
+        <text class="s6aS" x="384" y="166">prediction needs theory</text>
+        <text class="s6aL" x="467" y="186">Parzen</text>
+        <text class="s6aS" x="467" y="202">many cultures: management</text>
+        <text class="s6aS" x="467" y="216">and science, both</text>
+        <text class="s6aB" x="614" y="241">Breiman</text>
+        <text class="s6aS" x="614" y="257">accuracy first, then information</text>
+        <text class="s6aP" x="728" y="296" text-anchor="end">Hoadley</text>
+        <text class="s6aS" x="728" y="312" text-anchor="end">decisions, test samples,</text>
+        <text class="s6aS" x="728" y="326" text-anchor="end">and readable scorecards</text>
+
+        <text class="s6aA" x="455" y="364" text-anchor="middle">WHAT CHECKS A MODEL: FIT TO A QUESTION ... ACCURACY ON UNSEEN ROWS</text>
+        <text class="s6aA" x="40" y="330" transform="rotate(-90 40 330)" text-anchor="start">FOR DECISIONS ... FOR A MECHANISM</text>
+
+        <text class="s6aN" x="30" y="400">Nobody sits in a corner. Even Cox concedes that "a directly empirical approach is better" in some situations.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta dot is Breiman, and he is not in the far corner either: he wanted accuracy so that the information would be reliable</figcaption>
+    </figure>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Cox: start from the question, and beware changed conditions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Cox calls the paper's picture of mainstream statistics "a caricature" and adds that "like all good caricatures, it contains enough truth and exposes enough weaknesses to be thought-provoking". His first move is on the starting point: "Professor Breiman takes data as his starting point. I would prefer to start with an issue, a question or a scientific hypothesis."</p>
+        <p>He concedes, "although it goes somewhat against the grain to do so, that there are situations where a directly empirical approach is better", naming short term economic forecasting and real-time flood forecasting. Then comes the objection that has aged best: "Often the prediction is under quite different conditions from the data". His examples are the likely course of the v-CJD epidemic in the United Kingdom, and the effect on annual cancer incidence in the United States of cutting the medical use of X-rays by 10 percent. A model graded on held-out rows drawn from today's conditions says nothing about a world the data never contained. That question now has its own discipline: <a href="https://phoebefu6.github.io/learn-causal-inference-with-phoebe/">Causal Inference ↗</a>.</p>
+        <p>He ends with an aphorism, "Better a rough answer to the right question than an exact answer to the wrong question", which he says is "due perhaps to Lord Kelvin". Tukey had printed a longer version in 1962, as session 3 showed: two attributions for one idea, neither origin confirmed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Efron: a hundred years of unbiasedness, and two rules<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Efron restates Breiman's point historically: the twentieth century was "100 years of unbiasedness", powerful but "purchased at a price", because it needs a high ratio of sample size to unknown parameters. The new algorithms, "black boxes with enormous numbers of adjustable parameters ('knobs to twiddle')", must be succeeding through some form of biased estimation, and there is little theory for that. Hence his two rules of faddish wandering: "Rule 1. New methods always look better than old ones." "Rule 2. Complicated methods are harder to criticize than simple ones."</p>
+        <p>He also disputes the 2 percent, says estimation and testing are themselves a form of prediction, and closes: "The whole point of science is to open up black boxes, understand their insides, and build better boxes for the purposes of mankind."</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Hoadley and Parzen, and Breiman's rejoinder<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Hoadley</strong> describes Fair, Isaac's credit scoring since the 1960s as an algorithmic culture built by engineers: prediction characteristics, segments that turn out to be the leaves of a shallow tree, scorecards fitted to maximise separation, "no formal tests of fit and no tests of score weight statistical significance". He pushes back twice: test-sample performance "does not guarantee high performance on future samples, things do change", and accuracy need not cost interpretability, since regulators require "super interpretability". His "Ping-Pong theorem": given each other's best score and the data, Breiman's forest could beat his scorecard and his scorecard could then beat the forest.</p>
+        <p><strong>Parzen</strong> renames the two goals "management" (profit, practical predictions) and "science" (truth, understanding), notes that Student's t-test was invented as a management tool at Guinness, and says "statistics has many cultures".</p>
+        <p><strong>Breiman's rejoinder</strong> agrees with Cox that data models suit well-understood mechanisms and situations with too little data, then parts company: "Given a statistical problem, find a good solution". To Efron's rules: "Prove that you've got a better mousetrap and I'll buy it." To Hoadley: "In both stock prediction and credit rating, the priority is accuracy. Interpretability is a secondary goal that can be finessed." To Parzen: he keeps two cultures because the division "is pretty clear cut", and he puts Bayesians in the data modelling culture.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>The X-ray question.</strong> Cox's example is worth running in your head. You have excellent records of cancer incidence and of medical X-ray use. A forest graded on held-out years would predict next year's incidence well, because next year looks like the data. Now the question is what happens if X-ray use falls by 10 percent, a world none of the rows came from. Accuracy on unseen rows from the old world is silent on it. That is the case where Cox's culture, a model of the process linked "with other sources of information", has no competitor, and Breiman agreed in his rejoinder: "I agree."</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the questions to ask before choosing</span>
+      <h2>Three questions, three owners</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The discussants disagree about which culture should be the default. They largely agree about which facts about a problem should decide it. Turn each one's strongest point into a question and ask them in order. The answer is a culture for this question, with the name of the person who would dissent.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree of three questions, each owned by one discussant. First, Cox's: will the model be used under the same conditions the data came from? If no, model the process with subject knowledge, the data modelling culture, and look to causal inference. If yes, second, Hoadley's: must a person read, sign off or regulate the model? If yes, build a readable model and grade it on held-out rows, both cultures at once, like a scorecard. If no, third, Breiman's: are there enough rows to hold some out? If yes, the algorithmic culture, judged on held-out accuracy. If no, a simple data model for qualitative understanding, as Breiman himself conceded.">
+        <defs>
+          <filter id="s6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6bH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s6bL { font: 700 12px Inter, sans-serif; fill: #241F14; }
+          .s6bS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s6bO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s6bP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s6bB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s6bE { font: 700 11px Inter, sans-serif; fill: #665D4B; }
+          .s6bN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s6bH" x="30" y="26">ASK IN THIS ORDER</text>
+        <text class="s6bS" x="160" y="26">each question is one discussant's; none of them signed the whole tree</text>
+
+        <g filter="url(#s6bSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="50" width="250" height="60" rx="8" transform="rotate(-0.5 155 80)" fill="#FFFFFF"/>
+          <rect x="330" y="140" width="250" height="60" rx="8" transform="rotate(0.5 455 170)" fill="#FFFFFF"/>
+          <rect x="330" y="240" width="250" height="60" rx="8" transform="rotate(-0.5 455 270)" fill="#FFFFFF"/>
+          <rect x="630" y="44" width="220" height="64" rx="8" transform="rotate(0.4 740 76)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="630" y="136" width="220" height="64" rx="8" transform="rotate(-0.4 740 168)" fill="#FBEDE6" stroke="#A8431F"/>
+          <rect x="630" y="222" width="220" height="56" rx="8" transform="rotate(0.4 740 250)" fill="#F3F1FC" stroke="#6A5ACD"/>
+          <rect x="630" y="290" width="220" height="44" rx="8" transform="rotate(-0.4 740 312)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <path d="M282 76 L624 76" marker-end="url(#s6bAr)"/>
+          <path d="M155 114 L155 170 L324 170" marker-end="url(#s6bAr)"/>
+          <path d="M582 166 L624 166" marker-end="url(#s6bAr)"/>
+          <path d="M455 204 L455 234" marker-end="url(#s6bAr)"/>
+          <path d="M582 256 L624 250" marker-end="url(#s6bAr)"/>
+          <path d="M582 284 L624 308" marker-end="url(#s6bAr)"/>
+        </g>
+
+        <text class="s6bB" x="44" y="72">1 · COX</text>
+        <text class="s6bL" x="44" y="90">Same conditions as the data?</text>
+        <text class="s6bS" x="44" y="104">or a world the rows never saw</text>
+        <text class="s6bE" x="440" y="70" text-anchor="middle">no</text>
+        <text class="s6bE" x="164" y="150">yes</text>
+
+        <text class="s6bB" x="344" y="162">2 · HOADLEY</text>
+        <text class="s6bL" x="344" y="180">Must a person read or sign it?</text>
+        <text class="s6bS" x="344" y="194">a clinician, a regulator, a judge</text>
+        <text class="s6bE" x="600" y="158" text-anchor="middle">yes</text>
+        <text class="s6bE" x="466" y="224">no</text>
+
+        <text class="s6bB" x="344" y="262">3 · BREIMAN</text>
+        <text class="s6bL" x="344" y="280">Enough rows to hold some out?</text>
+        <text class="s6bE" x="600" y="244" text-anchor="middle">yes</text>
+        <text class="s6bE" x="600" y="306" text-anchor="middle">no</text>
+
+        <text class="s6bO" x="644" y="68">Model the process</text>
+        <text class="s6bS" x="644" y="84">subject knowledge, other sources</text>
+        <text class="s6bS" x="644" y="98">and causal inference</text>
+        <text class="s6bB" x="644" y="160">Readable, graded on held-out</text>
+        <text class="s6bS" x="644" y="176">both cultures at once:</text>
+        <text class="s6bS" x="644" y="190">the scorecard route</text>
+        <text class="s6bP" x="644" y="246">Algorithmic culture</text>
+        <text class="s6bS" x="644" y="262">judged on unseen rows</text>
+        <text class="s6bO" x="644" y="310">Simple data model</text>
+        <text class="s6bS" x="644" y="324">for qualitative understanding</text>
+
+        <text class="s6bN" x="30" y="352">Efron's question runs through every branch: whatever you chose, can anyone criticise it? Complicated is harder to check.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta leaf is the one both cultures can live in, and it is where Hoadley said the business already was</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the order matters<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>Cox's question comes first</strong> because it can make the other two irrelevant. If the model will be used to predict the consequence of an intervention or under conditions the data never covered, held-out accuracy from the old conditions is not evidence, and a readable model built on the same rows is no better placed. Breiman agreed that this case needs "some understanding of the underlying process".</p>
+        <p><strong>Hoadley's question comes second</strong> because it constrains the form without choosing the culture. A scorecard, a short tree or a regression on a handful of features can be read and still be graded the algorithmic way, on rows it never saw. On the session 4 bench the regression on the creators' three features did exactly that: four numbers, 167 of 171 held out.</p>
+        <p><strong>Breiman's question comes last</strong> because it only decides between the remaining options. With rows to spare, hold some out and let the most accurate model win; his rejoinder concedes that with too little data "simple models can then be useful in giving qualitative understanding".</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the tree deliberately leaves out<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It says nothing about which of several equally accurate models to believe, which is the Rashomon problem Breiman named and <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a2-equally-good-differently-wrong.html">ML Epistemology, leader session 2 ↗</a> teaches. It says nothing about what a test score entitles you to claim beyond the rows it was measured on: <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/courses/a1-what-a-test-score-entitles-you-to.html">leader session 1 ↗</a>. And it takes no side between frequentist and Bayesian data models: <a href="https://phoebefu6.github.io/learn-bayesian-with-phoebe/courses/a5-the-prior-argument.html">Bayesian, leader session 5 ↗</a>. A choice of culture is the first decision, not the last one.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Fraud control at 0.5 percent.</strong> Hoadley's comment describes a transaction fraud system where staff can review only 0.5 percent of transactions, so what the client wants is "a score that will maximize the dollars saved", not the lowest misclassification error. The culture question and the metric question are separate: an algorithmic model can still be optimising the wrong number. He called the challenge maximising "the generalization dollars saved, not generalization error".</p>
+    </div>
+  </section>
+
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers using both cultures</span>
+      <h2>A frontier, not a scoreboard</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">Donoho's reading of the whole exchange, sixteen years later: "Each data scientist in practice uses tools and viewpoints from both of Leo Breiman's modeling cultures." The session 4 bench shows what that looks like when both numbers are plotted at once. No model is best on both. Some models are worse than another on both, and those are the only ones you can rule out.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The six models from the session 4 bench plotted by two numbers. Horizontal axis, on a log scale: how much a person must read, from 4 numbers to 2,700 questions. Vertical axis: held-out biopsies correct out of 171, from 155 to 171. The ochre regression on 3 features sits at 4 numbers and 167 correct; the ochre regression on 30 features at 31 numbers and 170. The violet single tree at 19 questions and 158; 10 trees at 152 and 167; 100 trees at 1,647 and 167; 100 trees on 3 features at 2,700 and 168. A dashed frontier joins the 3-feature regression to the 30-feature regression; every forest lies below and to the right of it.">
+        <defs>
+          <filter id="s6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6cH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s6cS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s6cO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s6cP { font: 800 12px Inter, sans-serif; fill: #3F3294; }
+          .s6cB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s6cA { font: 700 11px Inter, sans-serif; fill: #665D4B; letter-spacing: .05em; }
+          .s6cN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s6cH" x="30" y="26">BOTH NUMBERS AT ONCE, FROM THE SESSION 4 BENCH</text>
+        <text class="s6cS" x="400" y="26">up is more accurate · left is more readable · log scale across</text>
+
+        <g filter="url(#s6cSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M90 300 L830 300" marker-end="url(#s6cAr)"/>
+          <path d="M90 300 L90 34" marker-end="url(#s6cAr)"/>
+          <path d="M90 56 L820 56" stroke="#D6CDB8" stroke-dasharray="3 5"/>
+          <path d="M114 105 L323 56" stroke="#A8431F" stroke-dasharray="6 4"/>
+          <circle cx="114" cy="105" r="7" fill="#7A5C00" stroke="#7A5C00"/>
+          <circle cx="323" cy="56" r="7" fill="#7A5C00" stroke="#7A5C00"/>
+          <circle cx="273" cy="251" r="7" fill="#6A5ACD" stroke="#6A5ACD"/>
+          <circle cx="486" cy="105" r="7" fill="#6A5ACD" stroke="#6A5ACD"/>
+          <circle cx="730" cy="105" r="7" fill="#6A5ACD" stroke="#6A5ACD"/>
+          <circle cx="780" cy="89" r="7" fill="#6A5ACD" stroke="#6A5ACD"/>
+        </g>
+
+        <text class="s6cO" x="126" y="126">regression, creators' 3</text>
+        <text class="s6cS" x="126" y="140">4 numbers · 167</text>
+        <text class="s6cO" x="335" y="52">regression, all 30</text>
+        <text class="s6cS" x="335" y="78">31 numbers · 170</text>
+        <text class="s6cP" x="285" y="247">one tree</text>
+        <text class="s6cS" x="285" y="262">19 questions · 158</text>
+        <text class="s6cP" x="498" y="126">10 trees</text>
+        <text class="s6cS" x="498" y="140">152 · 167</text>
+        <text class="s6cP" x="718" y="126" text-anchor="end">100 trees</text>
+        <text class="s6cS" x="718" y="140" text-anchor="end">1,647 · 167</text>
+        <text class="s6cP" x="792" y="85">100 trees, 3</text>
+        <text class="s6cS" x="792" y="100">2,700 · 168</text>
+        <text class="s6cB" x="214" y="104">the frontier</text>
+
+        <text class="s6cS" x="84" y="304" text-anchor="end">155</text>
+        <text class="s6cS" x="84" y="60" text-anchor="end">170</text>
+        <text class="s6cS" x="114" y="318" text-anchor="middle">4</text>
+        <text class="s6cS" x="323" y="318" text-anchor="middle">31</text>
+        <text class="s6cS" x="486" y="318" text-anchor="middle">152</text>
+        <text class="s6cS" x="730" y="318" text-anchor="middle">1,647</text>
+        <text class="s6cA" x="460" y="342" text-anchor="middle">HOW MUCH A PERSON MUST READ (NUMBERS OR YES/NO QUESTIONS)</text>
+        <text class="s6cA" x="40" y="250" transform="rotate(-90 40 250)" text-anchor="start">HELD-OUT CORRECT OF 171</text>
+
+        <text class="s6cN" x="30" y="376">On this data every forest is beaten on both numbers by some regression. On other data the frontier moves.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta dashes are the only models worth arguing about here, and both are ochre; that is a fact about 569 biopsies, not about the cultures</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading the frontier honestly<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A model is ruled out only when another model is at least as good on both numbers and better on one. The 30-feature forest (1,647 questions, 167) is ruled out by the 30-feature regression (31 numbers, 170). Between the two regressions there is a genuine choice: three more biopsies right, or 27 fewer numbers to read. Which one to ship is Hoadley's question from Part 2, not a statistical one.</p>
+        <p>Two cautions from earlier sessions. The forest's own seeds move it between 165 and 169, so the vertical positions of the violet dots are each a range of about four biopsies. And the creators documented that these classes are linearly separable using all 30 features, which is the best possible case for the data modelling culture. Breiman's microarray example, 81 samples and 4,682 genes, is the opposite case, and there he reports the forest's error "was low" with no variable deletion at all.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The Ping-Pong theorem as a working method<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Hoadley's "Ping-Pong theorem" is a joke with a method inside it. Reveal your best held-out score to the other culture and let them try to beat it; then take their score back. Each round, the target is a number both sides can see and neither can argue with. Donoho's common task framework, session 5, is the same game run by a referee. Played inside one team, it is the honest way to use both cultures: build the readable model, let the algorithmic one challenge it on the same untouched rows, and keep whichever the question in Part 2 says you can live with.</p>
+      </div>
+    </details>
+
+    <div class="callout example">
+      <span class="ex-pill">Real world</span>
+      <p><strong>Trees fitted to explain the network.</strong> In his rejoinder Breiman tells of a machine learning researcher at a money management firm who used large neural nets for stock prediction. Asked how he explained them to clients: "Simple," he said; "We fit binary trees to the inputs and outputs of the neural nets and show the trees to the clients. Keeps them happy!" Breiman offers it as evidence that interpretability "can be finessed". Hoadley's regulators would call it the reason interpretability cannot be.</p>
+    </div>
+  </section>
+
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>A scorecard a person can check, and six questions to place</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">First the terracotta leaf of Part 2: the regression on the dataset creators' three features, printed as a formula a clinician could evaluate with a calculator, and graded on the same held-out 171. Then the three questions, applied to six real problems from the papers you have read. The outputs of the code are what it prints; the placements are yours to argue.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The four-number scorecard drawn as a mechanism. Three measurements of one biopsy, worst area, worst smoothness and mean texture, each enter a box that subtracts the training mean and divides by the training spread, then multiplies by a weight: minus 4.63, minus 1.36 and minus 1.02. The three products and an intercept of plus 0.30 are summed. If the sum is above zero the biopsy is called benign. On the held-out 171 the scorecard is right on 167.">
+        <defs>
+          <filter id="s6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="s6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#241F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .s6dH { font: 800 12px Inter, sans-serif; fill: #241F14; }
+          .s6dL { font: 700 12px Inter, sans-serif; fill: #241F14; }
+          .s6dS { font: 400 11px Inter, sans-serif; fill: #665D4B; }
+          .s6dO { font: 800 12px Inter, sans-serif; fill: #4A3800; }
+          .s6dB { font: 800 11px Inter, sans-serif; fill: #7A2E12; }
+          .s6dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .s6dN { font: 400 12px Inter, sans-serif; fill: #665D4B; }
+        </style>
+
+        <text class="s6dH" x="30" y="26">FOUR NUMBERS, ONE SUM, ONE LINE</text>
+
+        <g filter="url(#s6dSk)" fill="none" stroke="#241F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="48" width="170" height="40" rx="6" transform="rotate(-1 115 68)" fill="#FFFFFF"/>
+          <rect x="30" y="106" width="170" height="40" rx="6" transform="rotate(0.8 115 126)" fill="#FFFFFF"/>
+          <rect x="30" y="164" width="170" height="40" rx="6" transform="rotate(-0.6 115 184)" fill="#FFFFFF"/>
+          <path d="M206 68 L256 68" marker-end="url(#s6dAr)"/>
+          <path d="M206 126 L256 126" marker-end="url(#s6dAr)"/>
+          <path d="M206 184 L256 184" marker-end="url(#s6dAr)"/>
+          <rect x="262" y="48" width="220" height="40" rx="6" transform="rotate(0.4 372 68)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="262" y="106" width="220" height="40" rx="6" transform="rotate(-0.4 372 126)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <rect x="262" y="164" width="220" height="40" rx="6" transform="rotate(0.4 372 184)" fill="#FBF5E3" stroke="#7A5C00"/>
+          <path d="M488 68 C530 68 540 116 568 122" marker-end="url(#s6dAr)"/>
+          <path d="M488 126 L566 126" marker-end="url(#s6dAr)"/>
+          <path d="M488 184 C530 184 540 136 568 130" marker-end="url(#s6dAr)"/>
+          <circle cx="600" cy="126" r="28" fill="#7A5C00" stroke="#7A5C00"/>
+          <path d="M632 126 L690 126" marker-end="url(#s6dAr)"/>
+          <rect x="696" y="96" width="160" height="60" rx="8" transform="rotate(-0.5 776 126)" fill="#FBEDE6" stroke="#A8431F"/>
+        </g>
+
+        <text class="s6dL" x="44" y="72">worst area</text>
+        <text class="s6dL" x="44" y="130">worst smoothness</text>
+        <text class="s6dL" x="44" y="188">mean texture</text>
+        <text class="s6dO" x="274" y="72">(x - 861) / 518.1 x -4.63</text>
+        <text class="s6dO" x="274" y="130">(x - 0.132) / 0.02318 x -1.36</text>
+        <text class="s6dO" x="274" y="188">(x - 19.28) / 4.208 x -1.02</text>
+        <text class="s6dW" x="600" y="131" text-anchor="middle">sum</text>
+        <text class="s6dS" x="600" y="172" text-anchor="middle">+0.30 intercept</text>
+        <text class="s6dB" x="710" y="120">benign if above 0</text>
+        <text class="s6dL" x="710" y="140">167 of 171 held out</text>
+
+        <text class="s6dN" x="30" y="236">Every step can be checked by hand, and it was graded the algorithmic way, on rows it never saw.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the terracotta box is the only output, and the whole model fits on the left of the arrow</figcaption>
+    </figure>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Fit the creators' three features on the session 1 split.</strong> Same seed, same 398 and 171, same penalty as the bench.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · three features</span>import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+data = load_breast_cancer()
+X, y, names = data.data, data.target, list(data.feature_names)
+rng = np.random.default_rng(2001)
+test = []
+for cls in (0, 1):
+    idx = np.flatnonzero(y == cls)
+    test += list(rng.permutation(idx)[: round(0.30 * len(idx))])
+test = np.array(sorted(test))
+train = np.setdiff1d(np.arange(len(y)), test)
+
+three = ["worst area", "worst smoothness", "mean texture"]
+cols = [names.index(n) for n in three]
+sc = StandardScaler().fit(X[train][:, cols])
+lr = LogisticRegression(C=1.0, tol=1e-10, max_iter=10000)
+lr.fit(sc.transform(X[train][:, cols]), y[train])
+print("held out", (lr.predict(sc.transform(X[test][:, cols])) == y[test]).sum(), "of", len(test))
+# held out 167 of 171</div>
+      </div>
+      <div class="step">
+        <p><strong>Print it as a scorecard.</strong> The means and spreads come from the training rows only, so the formula is exactly what the model computes.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · the formula</span>print(f"score = {lr.intercept_[0]:+.2f}")
+for n, w, m, s in zip(three, lr.coef_[0], sc.mean_, sc.scale_):
+    print(f"   {w:+.2f} x ({n} - {m:.4g}) / {s:.4g}")
+print("benign if score > 0")
+# score = +0.30
+#    -4.63 x (worst area - 861) / 518.1
+#    -1.36 x (worst smoothness - 0.132) / 0.02318
+#    -1.02 x (mean texture - 19.28) / 4.208
+# benign if score > 0</div>
+      </div>
+      <div class="step">
+        <p><strong>Check it by hand.</strong> Pick any held-out biopsy, compute the score with a calculator from the three printed lines, and compare with <code>lr.decision_function</code>. They must agree. That agreement is what "a person can read it" means in practice; no forest offers it.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · your turn</span>i = test[0]
+by_hand = lr.intercept_[0] + sum(w * (X[i, c] - m) / s
+          for w, c, m, s in zip(lr.coef_[0], cols, sc.mean_, sc.scale_))
+print(by_hand, lr.decision_function(sc.transform(X[[i]][:, cols]))[0])
+# the two numbers are equal; which biopsy you pick changes them</div>
+      </div>
+      <div class="step">
+        <p><strong>Place six real questions.</strong> Each comes from a paper you have read. For each, answer the three questions in order, name the culture, and name the discussant who would dissent and why.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · six questions</span>1. Next-day ozone in the Los Angeles Basin, for morning alerts        (Breiman 2001)
+2. Does this compound contain chlorine, from its mass spectrum        (Breiman 2001)
+3. Cancer incidence if medical X-ray use fell by 10 percent             (Cox 2001)
+4. Is there gender discrimination in this faculty's salaries?           (Breiman 2001)
+5. A credit score that regulators must approve before it is used        (Hoadley 2001)
+6. Which of 4,682 genes matter for three lymphoma classes, 81 samples   (Breiman 2001)</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the culture memo.</strong> One paragraph per question, in the same four lines every time. The dissent line is not optional: it is where the next reviewer will push.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · the memo template</span>Question:   ...
+Answers:    same conditions? / must a person read it? / rows to hold out?
+Culture:    data modelling / algorithmic / both (readable, graded on held-out)
+Dissent:    who would disagree, in their words, and what would change their mind</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Question 4 is the trap.</strong> Breiman's objection to the salary study was not that it used the wrong culture. It was that nobody first asked "Can the data gathered answer the question posed?" When the honest answer to that is no, neither culture helps, and the memo should say so.</p>
+    </div>
+  </section>
+
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>After the last session</h2>
+      <span class="tag exercise">45 min</span>
+    </div>
+    <ol>
+      <li><strong>Read the four comments and the rejoinder</strong> (Statistical Science 16(3), pages 216 to 231). Underline one concession in each comment; they are easier to miss than the attacks.</li>
+      <li><strong>Write culture memos for two models at work,</strong> one you built and one you inherited. Use the four-line template. Show them to a colleague and ask them to argue the dissent line.</li>
+      <li><strong>Plot your own frontier.</strong> For one problem, fit a readable model and an algorithmic one on the same untouched rows, and plot held-out score against how much a person must read. Say which models are ruled out and which choice remains.</li>
+      <li><strong>Play one round of Ping-Pong.</strong> Give a colleague your best held-out score and your training data, and ask them to beat it with the other culture. Record both numbers and the size of the gap against your seed noise.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+    <p>Clear all three and session 6 gets stamped in your passport.</p>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">1 · What is the objection in Cox's comment that Breiman accepted in his rejoinder?</p>
+      <button class="qopt" type="button">A · That random forests overfit small datasets</button>
+      <button class="qopt" type="button">B · That prediction is often needed "under quite different conditions from the data", like the effect of cutting medical X-rays by 10 percent, and then accuracy on rows from the old conditions says little without some understanding of the underlying process</button>
+      <button class="qopt" type="button">C · That the 98 percent figure was too high</button>
+      <button class="qopt" type="button">D · That decision trees cannot be interpreted</button>
+      <p class="qwhy">Breiman quoted the passage and answered "I agree." The disagreement that remained was about how often problems are like that, and whether data models should be the default elsewhere.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="3">
+      <p class="qtext">2 · Hoadley's "Ping-Pong theorem" says each culture could beat the other's revealed best score. What does that imply for practice?</p>
+      <button class="qopt" type="button">A · That the algorithmic culture always wins in the end</button>
+      <button class="qopt" type="button">B · That the data modelling culture always wins in the end</button>
+      <button class="qopt" type="button">C · That held-out scores are meaningless</button>
+      <button class="qopt" type="button">D · That neither culture owns accuracy: with a visible target and the same data, either can be pushed further, so the useful move is to let them challenge each other on the same untouched rows and choose by what the problem requires, such as whether a regulator must read it</button>
+      <p class="qwhy">Hoadley's own conclusion was that "all the competing models in this game of Ping-Pong would surely be algorithmic models. But some of them could be interpretable." Graded one way, readable the other: the terracotta leaf.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">3 · After six sessions, which statement is the honest one?</p>
+      <button class="qopt" type="button">A · The choice of culture depends on facts about the question, the conditions of use, who must read the model and how much data can be held out, and the people who argued it most carefully still disagreed about the default</button>
+      <button class="qopt" type="button">B · Breiman won the argument, and data models are obsolete</button>
+      <button class="qopt" type="button">C · Cox won the argument, and black boxes should be avoided</button>
+      <button class="qopt" type="button">D · The bench proved logistic regression is better than random forests</button>
+      <p class="qwhy">The bench measured one nearly separable dataset; Breiman's examples and Cox's examples point in different directions because they are different problems. Donoho's resolution, use both, is a practice, not a verdict on who was right.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Comments by D. R. Cox, B. Efron, B. Hoadley and E. Parzen, and Breiman's rejoinder</span><span class="note">Statistical Science 16(3), 216-231; read at source, every quotation checked against the published text</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Donoho (2017) on using both cultures</span><span class="note">Journal of Computational and Graphical Statistics 26(4), 745-766; read at source</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The five-voice map and the three-question tree</span><span class="note">A synthesis of the texts, labelled as one reading; no discussant proposed either</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">The frontier and the scorecard</span><span class="note">Bench canon from session 4 and a build-along run on scikit-learn 1.9.0 against UCI Breast Cancer Wisconsin (Diagnostic), doi 10.24432/C5DW2B</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">"Due perhaps to Lord Kelvin"</span><span class="note">Cox's own hedge; the origin of the aphorism is not confirmed, and Tukey printed a longer version in 1962</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <section class="cheat" id="cheatsheet">
+    <h3>Session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>1 · Cox</b><span>Will it be used under the same conditions as the data? If not, model the process.</span></div>
+      <div class="cheat-item"><b>2 · Hoadley</b><span>Must a person read or sign it? Then readable, and graded on held-out rows.</span></div>
+      <div class="cheat-item"><b>3 · Breiman</b><span>Rows to hold out? Then let accuracy on unseen rows choose.</span></div>
+      <div class="cheat-item"><b>Efron, throughout</b><span>Can anyone criticise what you chose? Complicated is harder to check.</span></div>
+      <div class="cheat-item"><b>A frontier, not a scoreboard</b><span>Rule out a model only when another beats it on both numbers.</span></div>
+      <div class="cheat-item"><b>The memo's dissent line</b><span>Name who would disagree, in their words. The argument was never settled.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>That is the whole argument: Breiman's two cultures, Box's useful models, Tukey's untouched confirmation, the bench, Donoho's fifty years and the replies that kept it honest. Where it goes from here, why to believe a model at all and what a benchmark can license, is the subject of <a href="https://phoebefu6.github.io/learn-ml-epistemology-with-phoebe/">ML Epistemology ↗</a>. Back to the <a href="../index.html">course home</a> for your passport.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Session 6 of 6 · learn-two-cultures-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="05-fifty-years-of-data-science.html">← Prev: Fifty years of data science</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+</body>
+</html>
